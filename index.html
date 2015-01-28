@@ -1,18 +1,18 @@
 ---
 layout: workshop
 root: .
-venue: Some University
-address: 456 Main St #123 Somewhere, SW
-country: Canada
-language: fr
-latlng: 12.34, -56.78
-humandate: Jan 02-03, 2015
+venue: Washington State University
+address: TBD
+country: United-States
+language: en
+latlng: TBD
+humandate: Apr 27-28, 2015
 humantime: 9:00 am - 4:30 pm
-startdate: 2015-01-02
-enddate: 2015-01-03
-instructor: ["A Nice Human", "Some Human", "Another Nice-Human"]
-helper: ["More NicePeople", "Smart Human"]
-contact: someone@somewhere.org
+startdate: 2015-04-27
+enddate: 2015-04-28
+instructor: ["Karl Broman", "Kara Woo"]
+helper: ["TBD"]
+contact:
 etherpad: # FIXME (insert the URL for your Etherpad if you're using one)
 eventbrite: # FIXME (delete this if not used, otherwise uncomment and provide 1234567890AB key for Eventbrite registration)
 ---
@@ -68,8 +68,13 @@ eventbrite: # FIXME (delete this if not used, otherwise uncomment and provide 12
   workshop is only open to people from a particular institution.
 -->
 <p>
-  <strong>Who:</strong>
-  The course is aimed at graduate students and other researchers.
+  <strong>Who:</strong> The course is aimed at researchers who are
+  familiar with basic programming concepts (like loops, conditionals, arrays,
+  and functions) but need help to translate this knowledge into practical tools
+  to help them work more productively. First priority for registration will be
+  given to affiliates of the <a href="http://cereo.wsu.edu/">Center for
+  Environmental Research, Education, and Outreach</a>, followed by the WSU
+  community, and finally researchers from University of Idaho.
 </p>
 
 <!--
@@ -84,10 +89,12 @@ eventbrite: # FIXME (delete this if not used, otherwise uncomment and provide 12
 <p>
   <strong>Where:</strong>
   {{page.address}}.
+<!-- Uncomment when we have an address
   Get directions with
   <a href="//www.openstreetmap.org/?mlat={{page.latlng | replace:',','&mlon='}}&zoom=16">OpenStreetMap</a>
   or
   <a href="//maps.google.com/maps?q={{page.latlng}}">Google Maps</a>.
+-->
 </p>
 {% endif %}
 
@@ -117,7 +124,7 @@ eventbrite: # FIXME (delete this if not used, otherwise uncomment and provide 12
   {% if page.contact %}
     <a href='mailto:{{page.contact}}'>{{page.contact}}</a>
   {% else %}
-    <a href='mailto:{{site.contact}}'>{{site.contact}}</a>
+    <a href='mailto:{{site.swc_contact}}'>{{site.swc_contact}}</a>
   {% endif %}
   for more information.
 </p>
@@ -133,6 +140,12 @@ eventbrite: # FIXME (delete this if not used, otherwise uncomment and provide 12
 -->
 <h2>Schedule</h2>
 
+<p>
+  TBD
+</p>
+
+<!-- uncomment the table below once we have a better idea of the schedule -->
+<!--
 <div class="row-fluid">
   <div class="span6">
     <h3>Day 1</h3>
@@ -157,6 +170,7 @@ eventbrite: # FIXME (delete this if not used, otherwise uncomment and provide 12
     </table>
   </div>
 </div>
+-->
 
 <!--
   ETHERPAD
@@ -212,6 +226,7 @@ eventbrite: # FIXME (delete this if not used, otherwise uncomment and provide 12
       <li><a href="{{site.swc_lessons}}/ref/01-shell.html">Reference...</a></li>
     </ul>
   </div>
+  <!--
   <div class="span6">
     <h3>Programming in Python</h3>
     <ul>
@@ -225,7 +240,7 @@ eventbrite: # FIXME (delete this if not used, otherwise uncomment and provide 12
       <li><a href="{{site.swc_lessons}}/ref/03-python.html">Reference...</a></li>
     </ul>
   </div>
-  <!-- 
+  -->
   <div class="span6">
     <h3>Programming in R</h3>
     <ul>
@@ -237,7 +252,6 @@ eventbrite: # FIXME (delete this if not used, otherwise uncomment and provide 12
       <li><a href="{{site.swc_lessons}}/ref/06-R.html">Reference...</a></li>
     </ul>
   </div>
-  -->
 </div>
 
 <div class="row-fluid">
@@ -255,6 +269,7 @@ eventbrite: # FIXME (delete this if not used, otherwise uncomment and provide 12
       <li><a href="{{site.swc_lessons}}/ref/02-git.html">Reference...</a></li>
     </ul>
   </div>
+  <!--
   <div class="span6">
     <h3>Managing Data with SQL</h3>
     <ul>
@@ -269,17 +284,17 @@ eventbrite: # FIXME (delete this if not used, otherwise uncomment and provide 12
       <li><a href="{{site.swc_lessons}}/ref/04-sql.html">Reference...</a></li>
     </ul>
   </div>
+  -->
 </div>
+
 
 <hr/>
 
 <!--
   SETUP
-
   Delete irrelevant sections from the setup instructions.  Each
   section is inside a 'div' without any classes to make the beginning
   and end easier to find.
-
   This is the other place where people frequently make mistakes, so
   please preview your site before committing, and make sure to run
   'tools/check' as well.
@@ -443,7 +458,8 @@ eventbrite: # FIXME (delete this if not used, otherwise uncomment and provide 12
   </div>
 </div> <!-- End of 'Git' section. -->
 
-<div> <!-- Start of 'Python' section. -->
+<!-- No Python
+<div>
   <h3>Python</h3>
 
   <p>
@@ -517,7 +533,8 @@ eventbrite: # FIXME (delete this if not used, otherwise uncomment and provide 12
       </ol>
     </div>
   </div>
-</div> <!-- End of 'Python' section. -->
+</div>
+-->
 
 <div> <!-- Start of 'R' section. -->
   <h3>R</h3>
@@ -564,7 +581,8 @@ eventbrite: # FIXME (delete this if not used, otherwise uncomment and provide 12
   </div>
 </div> <!-- End of 'R' section. -->
 
-<div> <!-- Start of 'SQLite' section. -->
+<!-- No SQL
+<div>
   <h3>SQLite</h3>
 
   <p>
@@ -595,14 +613,13 @@ eventbrite: # FIXME (delete this if not used, otherwise uncomment and provide 12
       </p>
     </div>
   </div>
-</div> <!-- End of 'SQLite' section. -->
+</div>
+-->
 
 <!--
   Uncomment this section if you are using our virtual machine.
-
 <div>
   <h3>Virtual Machine</h3>
-
   <p>
     Some instructors prefer to have learners use a virtual machine (VM)
     rather than install software on their own computers.  If your
