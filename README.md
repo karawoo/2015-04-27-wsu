@@ -7,45 +7,45 @@ template for creating websites for workshops.
     Instead, please follow the instructions below
     to create a website repository for your workshop.
 
-2.  Once you are done,
+2.  Please *do your work in your repository's `gh-pages` branch*,
+    since that is what is [automatically published as a website by GitHub](https://help.github.com/articles/creating-project-pages-manually/).
+
+3.  Once you are done,
     please **send your repository's URL to the Software Carpentry administrator**.
     We build the [list of workshops on the main website](http://software-carpentry.org/workshops/index.html)
     from the data included in your `index.html` page.
     We can only do that if you [customize](CUSTOMIZATION.md) that page correctly
     *and* send us a link to your workshop website.
 
-3.  Please also read
+4.  Please also read
     [the notes on customizing your website](CUSTOMIZATION.md) and the [FAQ](FAQ.md).
     If you're interested in knowing more about why we do things the way we do,
     please check out the [design notes](DESIGN.md).
 
-4.  If you are teaching Git,
+5.  If you are teaching Git,
     please [create a separate repository](#setting-up-a-separate-repository-for-learners)
     for your learners to practice in.
 
-5.  If you run into problems,
+6.  If you run into problems,
     or have ideas about how to make this process simpler,
     please [get in touch](#getting-and-giving-help).
 
 ## Creating a Repository
 
-1.  Go to [http://import.github.com](http://import.github.com).
+1.  Go to [GitHub's importer][import].
 
-2.  Enter the URL for this template repository, which is
-    `https://github.com/swcarpentry/workshop-template`.
+2.  Click on "Check the URL".  (GitHub won't import until you've done this.)
 
-3.  Check the URL.  (GitHub won't import until you've done this.)
-
-4.  Select the owner for your new repository.
+3.  Select the owner for your new repository.
     (This will probably be you, but may instead be an organization you belong to.)
 
-5.  Choose a name for your workshop website repository.
+4.  Choose a name for your workshop website repository.
     This name should have the form `YYYY-MM-DD-site`,
     e.g., `2015-07-01-miskatonic`.
 
-6.  Make sure the repository is public.
+5.  Make sure the repository is public.
 
-7.  At this point, you should have a page like this:
+6.  At this point, you should have a page like this:
 
     ![](http://software-carpentry.org/img/workshop-template/using-github-import.png)
 
@@ -59,6 +59,17 @@ possibly because of the network timing out.
 If you experience a problem, please re-try;
 if the problem persists,
 please [get in touch](#getting-and-giving-help).
+
+To clone your new repository, use:
+
+~~~
+git clone -b gh-pages https://github.com/your_username/YYYY-MM-DD-site
+~~~
+
+This is needed because the imported repository doesn't have a `master` branch.
+
+**Note:** please do all of your work in your repository's `gh-pages` branch,
+since [GitHub automatically publishes that as a website](https://help.github.com/articles/creating-project-pages-manually/).
 
 ## Customizing Your Website
 
@@ -81,7 +92,7 @@ please [get in touch](#getting-and-giving-help).
     and push your changes back to the repository.
 
 3.  Edit `_config.yml` in the same way
-    so that `lesson_repo` and `lesson_site`
+    so that `workshop_repo` and `workshop_site`
     are the URLs of your repository and your GitHub Pages website respectively.
 
     Note: the URL for your website is determined automatically
@@ -213,3 +224,5 @@ If you find bugs in our instructions,
 or would like to suggest improvements,
 please [file an issue](https://github.com/swcarpentry/workshop-template/issues)
 or [mail us](mailto:admin@software-carpentry.org).
+
+[import]: http://import.github.com/new?import_url=https://github.com/swcarpentry/workshop-template
