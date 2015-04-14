@@ -1,6 +1,5 @@
 ---
-layout: lesson
-root: ../..
+layout: page
 title: Syllabus
 ---
 
@@ -10,8 +9,9 @@ Syllabus and lesson materials.
 
 <div class="toc" markdown="1">
 
-1.  [Intro to R](R_intro.html)
-2.  [ggplot2](ggplot.html)
+1.  [Intro to R](R_intro_00.html)
+2.  [Data in R](R_intro_01_data.html)
+3.  [Subsetting and Summarizing data](R_intro_02_subsetting_summarizing.html)
 
 </div>
 
