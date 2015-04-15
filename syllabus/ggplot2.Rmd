@@ -1,0 +1,237 @@
+---
+layout: lesson
+root: ../..
+title: Intro to ggplot2
+---
+
+### Preparations
+
+There are several different systems for creating data visualizations
+in R. We will introduce [ggplot2](http://ggplot2.org), which is based
+on Leland Wilkinson's
+[Grammar of Graphics](http://www.amazon.com/exec/obidos/ASIN/0387245448/7210-20). The
+learning curve is a bit steep, but ultimately you'll be able to
+produce complex graphs more quickly and easily.
+
+You first need to install the ggplot2 package, including all dependencies:
+
+```{r install_ggplot2, eval=FALSE}
+install.packages("ggplot2", dependencies=TRUE)
+```
+
+You then need to load the package:
+
+```{r load_ggplot2}
+library(ggplot2)
+```
+
+We'll consider the gapminder data from the last lesson. If it's not
+within your R workspace, load it again with `read.csv`.
+
+```{r load_gapminder, eval=FALSE}
+gapminder <- read.csv("~/Desktop/gapminder.csv")
+```
+
+```{r load_gapminder_really, echo=FALSE}
+# really load the data, from the gapminder package
+library(gapminder)
+data(gapminder)
+```
+
+### A first plot
+
+An initial bit of code, to make a scatterplot:
+
+```{r initial_scatter}
+ggplot(gapminder, aes(x=gdpPercap, y=lifeExp)) + geom_point()
+```
+
+Two key concepts in the grammar of graphics: _aesthetics_ map
+features of the data (for example, the `lifeExp` variable) to features
+of the visualization (for example, the y-axis coordinate, and _geoms_
+concern what actually gets plotted (here, each data point becomes a
+point in the plot).
+
+Another key aspect of ggplot2: the `ggplot()` function creates a
+graphics object; additional controls are added with the `+`
+operator. The actual plot is made when the object is printed.
+
+The following is equivalent to the code above. The actual plot isn't
+created until the `p2` object is printed. (When you type an object's
+name at the R prompt, it gets printed, and that's the usual way that
+these plots get created.)
+
+```{r initial_scatter_alternative, eval=FALSE}
+p1 <- ggplot(gapminder, aes(x=gdpPercap, y=lifeExp))
+p2 <- p1 + geom_point()
+print(p2)
+```
+
+It's best to do the x-axis on a log scale.
+
+```{r scatter_with_log_xaxis}
+ggplot(gapminder, aes(x=gdpPercap, y=lifeExp)) + geom_point() + scale_x_log10()
+```
+
+We could also have used the following:
+
+```{r scatter_with_log_alternative, eval=FALSE}
+p2 + scale_x_log10()
+```
+
+### CHALLENGE
+
+Make a scatterplot of `lifeExp` vs `gdpPercap` just for the data for
+China.
+
+```{r china}
+library(dplyr)
+gm_china <- filter(gapminder, country=="China")
+ggplot(gm_china, aes(x=gdpPercap, y=lifeExp)) + geom_point() + scale_x_log10()
+```
+
+### Other aesthetics
+
+For a scatterplot, additional aesthetics include `shape`, `size`, and
+`color`.
+
+For example, we might make our scatterplot for all countries, with
+data from 1952, and then color the points according to the continent.
+
+```{r color_by_continent}
+gm_1952 <- filter(gapminder, year==1952)
+ggplot(gm_1952, aes(x=gdpPercap, y=lifeExp)) +
+    geom_point() + scale_x_log10() +
+    aes(color=continent)
+```
+
+### CHALLENGE
+
+Try out the `size`, `shape`, and `color` aesthetics, both with
+categorical variables (such as `continent`) and numeric variables
+(such as `pop`).
+
+
+### Other geoms
+
+You can use `geom_line` to make a line plot, for example, for China:
+
+```{r china_line}
+p <- ggplot(filter(gapminder, country=="China"),
+            aes(x=gdpPercap, y=lifeExp))
+p + geom_line()
+```
+
+You can use both `geom_line` and `geom_point` to make a line plot with
+points at the data values.
+
+```{r china_line_and_point}
+p + geom_line() + geom_point()
+```
+
+You can color the points by the year
+
+```{r china_line_and_point_color_by_year}
+p + geom_point() + aes(color=year) + geom_line()
+```
+
+
+### Univariate geoms
+
+We've focused so far on scatterplots, but one can also create
+one-dimensional summaries, such as histograms or boxplots.
+
+For a histogram, you want just the `x` aesthetic, and then use
+`geom_histogram()`, with `binwidth` to define the width of the bins.
+Here's a histogram of `lifeExp` for 2007.
+
+```{r example_histogram}
+gm_2007 <- filter(gapminder, year==2007)
+ggplot(gm_2007, aes(x=lifeExp)) + geom_histogram(binwidth=2)
+```
+
+If you want to compare the distributions for the different continents, it's
+probably best to look at density estimates rather than
+histograms. `alpha` indicates the _opacity_ (`alpha=1` is completely opaque).
+
+```{r example_density}
+ggplot(gm_2007, aes(x=lifeExp)) + geom_density(alpha=0.5) + aes(fill=continent)
+```
+
+Alternatively, we can look at boxplots, for which you need to define a
+continuous variable for `y` and a categorical variable for `x`.
+
+```{r boxplot_by_continent}
+ggplot(gm_2007, aes(y=lifeExp, x=continent)) + geom_boxplot()
+```
+
+But I actually prefer a scatterplot for this:
+
+```{r dotplot_by_continent}
+ggplot(gm_2007, aes(y=lifeExp, x=continent)) + geom_point()
+```
+
+I think it's better to include a bit of horizontal jittering.
+
+```{r dotplot_with_jitter}
+ggplot(gm_2007, aes(y=lifeExp, x=continent)) +
+    geom_point(position=position_jitter(width=0.1, height=0))
+```
+
+### CHALLENGE
+
+Explore the distribution of the population sizes of counties, by
+continent.
+
+
+
+### Faceting
+
+A particularly valuable feature of ggplot2 is _faceting_: the ability
+to make a series of plots, conditional on the values of some selected
+variables.
+
+For example, rather than coloring points by continent, one might
+separate the continents into separate panels. There are two functions
+for this, `facet_grid()` and `facet_wrap()`.
+
+Here's the data for 2007, separated by continent.
+
+```{r faceting_example}
+p <- ggplot(filter(gapminder, year==2007), aes(x=gdpPercap, y=lifeExp)) + geom_point() + scale_x_log10()
+p + facet_grid(~ continent)
+```
+
+Or we could split vertically.
+
+```{r facet_vertically}
+p + facet_grid(continent ~ .)
+```
+
+Or we could "wrap"
+
+```{r facet_wrap}
+p + facet_wrap(~ continent)
+```
+
+The `facet_wrap` function is particularly useful if you have a lot of
+facets, for example, plotting by year.
+
+```{r facet_by_year}
+p <- ggplot(gapminder, aes(x=gdpPercap, y=lifeExp)) + geom_point() + scale_x_log10()
+p + aes(color=continent) + facet_wrap(~ year)
+```
+
+
+### CHALLENGE
+
+Select five countries of interest (e.g., China, India, US, France,
+Nigeria) and plot `lifeExp` vs `gdpPercap` across time (with
+`geom_line`), faceting by country.
+
+
+### Themes
+
+
+
+### Saving plots to files
