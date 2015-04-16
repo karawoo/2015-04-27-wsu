@@ -1,0 +1,87 @@
+---
+title: "R-intro-02-subsetting-summarizing"
+author: "Kara Woo"
+date: "04/14/2015"
+output: html_document
+---
+
+```{r, include = FALSE}
+source("chunk_options.R")
+gapminder <- read.csv("data/gapminder.csv")
+```
+
+# Subsetting and Summarizing
+
+> ### Learning Objectives {.objectives}
+>
+> * Understand bracket subsetting in R
+> * Learn how to use key `dplyr` verbs to summarize data: `select()`, 
+>   `filter()`, `mutate()`, `group_by()`, and `summarize()`.
+
+## Bracket Subsetting
+
+To pull out one or multiple values from an object, we'll often use square
+brackets. For subsetting a vector, you place the brackets right next to the name
+of the object, and inside the brackets type the indices you want to extract.
+Indexing begins at 1 in R, so `weights[1]` will give you the first element of 
+`weights`. You can also specify a range of values, such as `weights[1:3]`.
+
+The same approach can be applied to data frames. Data frames have two dimensions
+(rows and columns), so the subsetting follows a slightly different pattern:
+`dataframe[rows, columns]`. For example:
+
+```{r}
+gapminder[1, 1] ## First row, first column. The "142 Levels" that appear mean that this is a categorical variable and those are the categories
+gapminder[1, 3] ## First row, third column
+gapminder[500, 5:6] ## 500th row, 5th and 6th columns
+```
+
+To pull out single columns you can also use the `$` sign. `gapminder$pop` will 
+give you a vector of all values in the `pop` column. This is equivalent to doing
+`gapminder[, 5]` or `gapminder[, "pop"]`.
+
+Finally, you can set conditions for which data to return. For example:
+
+```{r}
+### Countries and years when populations were less than or equal to 400000
+gapminder[gapminder$pop <= 100000, c("country", "year")]
+
+### All data for Finland
+gapminder[gapminder$country == "Finland", ]
+```
+
+> ### Challenge {.challenge}
+>
+> Which of the following are NOT equivalent?
+>
+> a) gapminder[50, 4] and gapminder[50, "lifeExp"]
+>
+> b) gapminder[50, 4] and gapminder[4, 50]
+>
+> c) gapminder[50, 4] and gapminder$lifeExp[50]
+
+> ### Challenge {.challenge}
+>
+> Which countries in the data have life expectancies greater than 80?
+
+## Data manipulation using dplyr
+
+Bracket subsetting is handy, but it can be cumbersome and difficult to read,
+especially for complicated operations. Enter `dplyr`. `dplyr` is a package for 
+making data manipulation easier.
+
+Packages in R are basically sets of additional functions that let you do more
+stuff in R. You need to install a package and then load it to be able to use it.
+
+```{r, eval = FALSE}
+install.packages("dplyr") ## install
+```
+
+```{r, message = FALSE}
+library("dplyr")          ## load
+```
+
+You only need to install a package once per computer, but you need to load it 
+every time you open a new R session and want to use that package.
+
+
