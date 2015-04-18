@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Syllabus
+root: ..
 ---
 
 Syllabus and lesson materials.
