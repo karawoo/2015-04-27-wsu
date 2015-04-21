@@ -291,6 +291,12 @@ bigger relative to the plotting area.
 ggsave("scatter_2.png", p, height=6, width=8, scale=0.8)
 ```
 
+> ### Challenge {.challenge}
+>
+> Revisit a few of the plots you've made and try saving PNG and PDF
+> files. Try different heights and widths. Try out the `scale` parameter.
+
+
 
 ### Customizing a plot
 
