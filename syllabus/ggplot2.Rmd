@@ -4,6 +4,22 @@ root: ../..
 title: Intro to ggplot2
 ---
 
+```{r chunk_options, include=FALSE}
+source("chunk_options.R")
+opts_chunk$set(fig.path="fig/ggplot2-")
+```
+
+> ### Learning Objectives {.objectives}
+>
+> * Basics of ggplot2: aes vs geom
+> * Making scatterplots
+> * Various one-dimensional summaries
+> * Faceting
+> * Saving plots to a file
+> * Customizing axis limits and color choices
+> * Applying themes
+
+
 ### Preparations
 
 There are several different systems for creating data visualizations
@@ -79,12 +95,12 @@ We could also have used the following:
 p2 + scale_x_log10()
 ```
 
-### CHALLENGE
+> ### Challenge {.challenge}
+>
+> Make a scatterplot of `lifeExp` vs `gdpPercap` just for the data for
+> China.
 
-Make a scatterplot of `lifeExp` vs `gdpPercap` just for the data for
-China.
-
-```{r china}
+```{r china, message=FALSE}
 library(dplyr)
 gm_china <- filter(gapminder, country=="China")
 ggplot(gm_china, aes(x=gdpPercap, y=lifeExp)) + geom_point() + scale_x_log10()
@@ -105,11 +121,11 @@ ggplot(gm_1952, aes(x=gdpPercap, y=lifeExp)) +
     aes(color=continent)
 ```
 
-### CHALLENGE
-
-Try out the `size`, `shape`, and `color` aesthetics, both with
-categorical variables (such as `continent`) and numeric variables
-(such as `pop`).
+> ### Challenge {.challenge}
+>
+> Try out the `size`, `shape`, and `color` aesthetics, both with
+> categorical variables (such as `continent`) and numeric variables
+> (such as `pop`).
 
 
 ### Other geoms
@@ -178,10 +194,10 @@ ggplot(gm_2007, aes(y=lifeExp, x=continent)) +
     geom_point(position=position_jitter(width=0.1, height=0))
 ```
 
-### CHALLENGE
-
-Explore the distribution of the population sizes of counties, by
-continent.
+> ### Challenge {.challenge}
+>
+> Explore the distribution of the population sizes of countries, by
+> continent.
 
 
 
@@ -202,7 +218,7 @@ p <- ggplot(filter(gapminder, year==2007), aes(x=gdpPercap, y=lifeExp)) + geom_p
 p + facet_grid(~ continent)
 ```
 
-Or we could split vertically.
+Or we could split vertically. Note the need for the dot.
 
 ```{r facet_vertically}
 p + facet_grid(continent ~ .)
@@ -222,16 +238,75 @@ p <- ggplot(gapminder, aes(x=gdpPercap, y=lifeExp)) + geom_point() + scale_x_log
 p + aes(color=continent) + facet_wrap(~ year)
 ```
 
+We could also facet by both year and continent.
 
-### CHALLENGE
-
-Select five countries of interest (e.g., China, India, US, France,
-Nigeria) and plot `lifeExp` vs `gdpPercap` across time (with
-`geom_line`), faceting by country.
+```{r facet_by_year_and_country}
+p + facet_grid(continent ~ year)
+```
 
 
-### Themes
+Perhaps we might drop Oceania in this.
+
+```{r drop_oceania}
+gm_no_oceania <- filter(gapminder, continent != "Oceania")
+p <- ggplot(gm_no_oceania, aes(x=gdpPercap, y=lifeExp)) + geom_point() + scale_x_log10()
+p + facet_grid(continent ~ year)
+```
+
+
+> ### Challenge {.challenge}
+>
+> Select five countries of interest (e.g., China, India, US, France,
+> Nigeria) and plot `lifeExp` vs `gdpPercap` across time (with
+> `geom_line`), faceting by country.
 
 
 
 ### Saving plots to files
+
+If you want to save a plot, to share with others, use the `ggsave`
+function.
+
+The default is to save the last plot that you created, but I think
+it's safer to first save the plot as an object and pass that to
+`ggsave`. Also give the height and width in inches.
+
+```{r ggsave_example, eval=FALSE}
+p <- ggplot(gapminder, aes(x=gdpPercap, y=lifeExp)) + geom_point() + scale_x_log10()
+ggsave("scatter.png", p, height=6, width=8)
+```
+
+The image file type is taken from the file name extension.
+To make a PDF instead:
+
+```{r ggsave_pdf, eval=FALSE}
+ggsave("scatter.pdf", p, height=6, width=8)
+```
+
+Use `scale` to adjust the sizes of things, for example for a talk/poster
+versus a paper/report. Use `scale < 1` to make the various elements
+bigger relative to the plotting area.
+
+```{r ggsave_scale, eval=FALSE}
+ggsave("scatter_2.png", p, height=6, width=8, scale=0.8)
+```
+
+> ### Challenge {.challenge}
+>
+> Revisit a few of the plots you've made and try saving PNG and PDF
+> files. Try different heights and widths. Try out the `scale` parameter.
+
+
+
+### Customizing a plot
+
+A few more bits about customization.
+
+* axis limits
+* color choices
+
+
+### Themes
+
+* Applying a theme to change the appearance of the plot.
+* Creating your own theme?
