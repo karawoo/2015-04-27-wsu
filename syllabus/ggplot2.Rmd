@@ -238,6 +238,21 @@ p <- ggplot(gapminder, aes(x=gdpPercap, y=lifeExp)) + geom_point() + scale_x_log
 p + aes(color=continent) + facet_wrap(~ year)
 ```
 
+We could also facet by both year and continent.
+
+```{r facet_by_year_and_country}
+p + facet_grid(continent ~ year)
+```
+
+
+Perhaps we might drop Oceania in this.
+
+```{r drop_oceania}
+gm_no_oceania <- filter(gapminder, continent != "Oceania")
+p <- ggplot(gm_no_oceania, aes(x=gdpPercap, y=lifeExp)) + geom_point() + scale_x_log10()
+p + facet_grid(continent ~ year)
+```
+
 
 > ### Challenge {.challenge}
 >
