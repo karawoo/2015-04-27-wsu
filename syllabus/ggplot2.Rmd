@@ -9,8 +9,6 @@ source("chunk_options.R")
 opts_chunk$set(fig.path="fig/ggplot2-")
 ```
 
-# Intro to ggplot2
-
 > ### Learning Objectives {.objectives}
 >
 > * Basics of ggplot2: aes vs geom
