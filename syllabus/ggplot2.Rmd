@@ -4,6 +4,23 @@ root: ../..
 title: Intro to ggplot2
 ---
 
+```{r chunk_options, include=FALSE}
+source("chunk_options.R")
+```
+
+# Intro to ggplot2
+
+> ### Learning Objectives {.objectives}
+>
+> * Basics of ggplot2: aes vs geom
+> * Making scatterplots
+> * Various one-dimensional summaries
+> * Faceting
+> * Saving plots to a file
+> * Customizing axis limits and color choices
+> * Applying themes
+
+
 ### Preparations
 
 There are several different systems for creating data visualizations
@@ -79,10 +96,10 @@ We could also have used the following:
 p2 + scale_x_log10()
 ```
 
-### CHALLENGE
-
-Make a scatterplot of `lifeExp` vs `gdpPercap` just for the data for
-China.
+> ### Challenge {.challenge}
+>
+> Make a scatterplot of `lifeExp` vs `gdpPercap` just for the data for
+> China.
 
 ```{r china}
 library(dplyr)
@@ -105,11 +122,11 @@ ggplot(gm_1952, aes(x=gdpPercap, y=lifeExp)) +
     aes(color=continent)
 ```
 
-### CHALLENGE
-
-Try out the `size`, `shape`, and `color` aesthetics, both with
-categorical variables (such as `continent`) and numeric variables
-(such as `pop`).
+> ### Challenge {.challenge}
+>
+> Try out the `size`, `shape`, and `color` aesthetics, both with
+> categorical variables (such as `continent`) and numeric variables
+> (such as `pop`).
 
 
 ### Other geoms
@@ -178,10 +195,10 @@ ggplot(gm_2007, aes(y=lifeExp, x=continent)) +
     geom_point(position=position_jitter(width=0.1, height=0))
 ```
 
-### CHALLENGE
-
-Explore the distribution of the population sizes of counties, by
-continent.
+> ### Challenge {.challenge}
+>
+> Explore the distribution of the population sizes of counties, by
+> continent.
 
 
 
@@ -223,15 +240,32 @@ p + aes(color=continent) + facet_wrap(~ year)
 ```
 
 
-### CHALLENGE
-
-Select five countries of interest (e.g., China, India, US, France,
-Nigeria) and plot `lifeExp` vs `gdpPercap` across time (with
-`geom_line`), faceting by country.
-
-
-### Themes
+> ### Challenge {.challenge}
+>
+> Select five countries of interest (e.g., China, India, US, France,
+> Nigeria) and plot `lifeExp` vs `gdpPercap` across time (with
+> `geom_line`), faceting by country.
 
 
 
 ### Saving plots to files
+
+Explain the use of `ggsave`.
+
+* last plot vs plot saved in some object
+* height and width in inches
+* file type taken from file extension
+
+
+### Customizing a plot
+
+A few more bits about customization.
+
+* axis limits
+* color choices
+
+
+### Themes
+
+* Applying a theme to change the appearance of the plot.
+* Creating your own theme?
