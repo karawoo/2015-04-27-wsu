@@ -4,6 +4,19 @@ root: ../..
 title: Writing R functions
 ---
 
+```{r chunk_options, include=FALSE}
+source("chunk_options.R")
+opts_chunk$set(fig.path="fig/functions-")
+```
+
+> ### Learning Objectives {.objectives}
+>
+> * Why write functions
+> * How to define a function
+> * Defining graphing functions
+> * Scope and global variables
+
+
 ### Why?
 
 There are two main reasons to write R functions.
@@ -61,10 +74,10 @@ f2c <-
 ```
 
 
-### CHALLENGE
-
-Write the opposite function, for converting from celsius to
-Fahrenheit. Test that it works.
+> ### Challenge {.challenge}
+>
+> Write the opposite function, for converting from celsius to
+> Fahrenheit. Test that it works.
 
 
 ### Functions for plotting
@@ -102,16 +115,43 @@ plot_year(1952) + aes(color=continent) + ggtitle(1952)
 Note that I passed the data as an argument and gave each argument a
 default value.
 
-### CHALLENGE
+> ### Challenge {.challenge}
+>
+> Write a function that makes a plot of `lifeExp` vs `gdpPercap` across
+> years, for a selected country.
 
-Write a function that makes a plot of `lifeExp` vs `gdpPercap` across
-years, for a selected country.
-
-
-(In the solution, show how to include a smooth curve, and have a
-function argument to indicate whether it should be included or not.)
 
 ```{r plot_country}
+plot_country <-
+    function(country="China", data=gapminder)
+{
+    library(dplyr)
+    library(ggplot2)
+
+    the_country <- country
+    gm_country <- filter(data, country==the_country)
+
+    p <- ggplot(gm_country, aes(y=lifeExp, x=gdpPercap)) +
+        geom_point()
+
+    p
+}
+```
+
+
+### Scope
+
+- variables defined within a function are destroyed on exit.
+- if function refers to a variable that hasn't been defined locally,
+  look outside to global environment.
+- things are more tricky for functions defined within functions, but
+  maybe we'll skip that.
+
+
+
+### Conditional statements
+
+```{r add_curve}
 plot_country <-
     function(country="China", data=gapminder, add_curve=FALSE)
 {
@@ -125,17 +165,19 @@ plot_country <-
         geom_point()
 
     if(add_curve)
-        p <- p + geom_smooth(method="loess", se=FALSE)
-
+        p <- p + geom_smooth(method="loess")
     p
 }
 ```
 
+Maybe also include `include_se`?
 
 
+### Multiple-choice arguments
 
-### Scope
-
+Allow `method` to be either `"loess"` or `"lm"`.
 
 
 ### The `...` argument
+
+Perhaps pass `...` to `geom_smooth`, to cover each of `method` and `se`.
