@@ -218,7 +218,7 @@ p <- ggplot(filter(gapminder, year==2007), aes(x=gdpPercap, y=lifeExp)) + geom_p
 p + facet_grid(~ continent)
 ```
 
-Or we could split vertically.
+Or we could split vertically. Note the need for the dot.
 
 ```{r facet_vertically}
 p + facet_grid(continent ~ .)
@@ -249,11 +249,32 @@ p + aes(color=continent) + facet_wrap(~ year)
 
 ### Saving plots to files
 
-Explain the use of `ggsave`.
+If you want to save a plot, to share with others, use the `ggsave`
+function.
 
-* last plot vs plot saved in some object
-* height and width in inches
-* file type taken from file extension
+The default is to save the last plot that you created, but I think
+it's safer to first save the plot as an object and pass that to
+`ggsave`. Also give the height and width in inches.
+
+```{r ggsave_example, eval=FALSE}
+p <- ggplot(gapminder, aes(x=gdpPercap, y=lifeExp)) + geom_point() + scale_x_log10()
+ggsave("scatter.png", p, height=6, width=8)
+```
+
+The image file type is taken from the file name extension.
+To make a PDF instead:
+
+```{r ggsave_pdf, eval=FALSE}
+ggsave("scatter.pdf", p, height=6, width=8)
+```
+
+Use `scale` to adjust the sizes of things, for example for a talk/poster
+versus a paper/report. Use `scale < 1` to make the various elements
+bigger relative to the plotting area.
+
+```{r ggsave_scale, eval=FALSE}
+ggsave("scatter_2.png", p, height=6, width=8, scale=0.8)
+```
 
 
 ### Customizing a plot
