@@ -100,7 +100,7 @@ p2 + scale_x_log10()
 > Make a scatterplot of `lifeExp` vs `gdpPercap` just for the data for
 > China.
 
-```{r china}
+```{r china, message=FALSE}
 library(dplyr)
 gm_china <- filter(gapminder, country=="China")
 ggplot(gm_china, aes(x=gdpPercap, y=lifeExp)) + geom_point() + scale_x_log10()
