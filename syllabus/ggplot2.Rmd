@@ -196,7 +196,7 @@ ggplot(gm_2007, aes(y=lifeExp, x=continent)) +
 
 > ### Challenge {.challenge}
 >
-> Explore the distribution of the population sizes of counties, by
+> Explore the distribution of the population sizes of countries, by
 > continent.
 
 
