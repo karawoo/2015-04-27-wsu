@@ -6,7 +6,7 @@ title: Intro to ggplot2
 
 ```{r chunk_options, include=FALSE}
 source("chunk_options.R")
-opts_chunk$set(fig.path="fig/ggplot2-")
+opts_chunk$set(fig.path="fig/ggplot2-", fig.width=12, fig.height=8)
 ```
 
 > ### Learning Objectives {.objectives}
@@ -298,15 +298,203 @@ ggsave("scatter_2.png", p, height=6, width=8, scale=0.8)
 
 
 
-### Customizing a plot
+### Customizing a plot: axis limits
 
-A few more bits about customization.
+When faceting, the different panels are given common x- and y-axis
+limits. If we were to create separate plots (say one for each
+country), we would need to do a bit extra to ensure that common axis
+limits are used.
 
-* axis limits
-* color choices
+Recall the `scale_x_log10()` function that we had used to create the log
+scale for the x axis. This can take an argument `limits` (a
+vector of length 2) defining the minimum and maximum values plotted.
+
+There is also a `scale_y_log10()` function, but if you want to change
+the y-axis limits without going to a log scale, you would use
+`scale_y_continuous()`. (Similarly, there's a `scale_x_continuous`.)
+
+For example, to plot the data for China, using axis limits defined by
+the full data, we'd do the following:
+
+```{r limits}
+gm_china <- filter(gapminder, country=="China")
+
+xrange <- range(gapminder$gdpPercap)
+yrange <- range(gapminder$lifeExp)
+
+p <- ggplot(gm_china, aes(y=lifeExp, x=gdpPercap)) + geom_line()
+p + scale_x_log10(limits=xrange) + scale_y_continuous(limits=yrange)
+```
+
+
+> ### Challenge {.challenge}
+>
+> Create a plot with lines for the United States and Sweden, but
+> using the axis limits defined with the full data.
+
+```{r limits_challenge}
+gm_us_sweden <- filter(gapminder, country %in% c("United States", "Sweden"))
+
+xrange <- range(gapminder$gdpPercap)
+yrange <- range(gapminder$lifeExp)
+
+p <- ggplot(gm_us_sweden, aes(y=lifeExp, x=gdpPercap, color=country)) + geom_line()
+p + scale_x_log10(limits=xrange) + scale_y_continuous(limits=yrange)
+```
+
+
+
+### Customizing a plot: color choices
+
+If you don't like the choices for point colors, you can customize
+them in a number of ways. First, you can use `scale_color_manual()`
+with a vector of your preferred choices. (If it's `fill` rather than
+`color` that you want to change, you'll need to use `scale_fill_manual()`.)
+
+```{r custom_colors}
+gm_2007 <- filter(gapminder, year==2007)
+p <- ggplot(gm_2007, aes(y=lifeExp, x=gdpPercap, color=continent)) + geom_point() + scale_x_log10()
+colors <- c("black", "blue", "green", "red", "orange")
+p + scale_color_manual(values=colors)
+```
+
+You can also use RGB hex values.
+
+```{r custom_colors_rgb}
+hexcolors <- c("#001F3F", "#0074D9", "#01FF70", "#FF851B", "#B10DC9")
+p + scale_color_manual(values=hexcolors)
+```
+
+Also consider the [Color Brewer](http://colorbrewer2.org/) palettes,
+available via `scale_color_brewer()`. If you install the
+[RColorBrewer](http://cran.r-project.org/web/packages/RColorBrewer)
+package, you can use `display.brewer.all()` to view the available
+palettes.
+
+Install the package as follows:
+
+```{r install_colorbrewer, eval=FALSE}
+install.packages("RColorBrewer")
+```
+
+Then display them this way:
+
+```{r display_brewer_palettes}
+library(RColorBrewer)
+display.brewer.all()
+```
+
+I like the `"Dark2"` palette, which you can use this way:
+
+```{r use_colorbrewer_palette}
+p + scale_color_brewer(palette="Dark2")
+```
+
+Actually, maybe `"Set1"` is better in this case:
+
+```{r use_colorbrewer_palette_set1}
+p + scale_color_brewer(palette="Set1")
+```
+
+Also consider the
+[wesanderson](https://github.com/karthik/wesanderson) package, with
+color palettes taken from
+[Wes Anderson movies](http://wesandersonpalettes.tumblr.com/).
+
+Install the package as follows:
+
+```{r install_wesanderson, eval=FALSE}
+install.packages("wesanderson")
+```
+
+Here's an example using one.
+
+```{r use_wesanderson_palette}
+library(wesanderson)
+p + scale_color_manual(values=wes_palette("Darjeeling"))
+```
+
+> ### Challenge {.challenge}
+>
+> Make a set of histograms of `lifeExp` for the year 2007, using
+> `facet_grid` to split by continent. Use different colors
+> for the five continents, chosen manually.
+
+
+The [gapminder](https://github.com/jennybc/gapminder) package includes
+a `country_colors` object that colors countries by population size and
+continent.
+
+```{r install_gapminder, eval=FALSE}
+install.packages(gapminder)
+```
+
+I'm going to use that and add a bit of fanciness.
+
+```{r fancy_gapminder_plot_2007}
+gm_2007 <- gapminder %>% filter(year==2007) %>% arrange(-pop)
+ggplot(gm_2007, aes(y=lifeExp, x=gdpPercap, fill=country, size=sqrt(pop))) +
+    geom_point(shape=21) +
+    scale_x_log10() +
+    scale_fill_manual(values=country_colors) +
+    facet_wrap(~continent) +
+    scale_size_continuous(range=c(1, 20)) +
+    guides(fill=FALSE, size=FALSE)
+```
+
+- I used `shape=21` in the call to `geom_point()`; this makes circles,
+  but allowing separate colors for the `fill` (interior) and `color`
+  (outer circle).
+- I sized the points by the square-root of the population.
+- I used `dplyr::arrange()` to reorder the points, so that the larger
+  points would be plotted first and the smaller ones on top.
+- I used `scale_size_continuous` with `range=c(1,20)` to adjust the
+  size of the points.
+- I used `guides()` to get rid of the legends.
 
 
 ### Themes
 
-* Applying a theme to change the appearance of the plot.
-* Creating your own theme?
+Themes allow you to change the overall appearance of a plot.
+
+The default theme is `theme_gray()`, you might consider `theme_bw()`
+or `theme_linedraw()` instead.
+
+```{r try_themes}
+p <- ggplot(gapminder, aes(y=lifeExp, x=gdpPercap, color=continent)) +
+    geom_point() + scale_x_log10() + facet_wrap(~year)
+p + theme_bw()
+p + theme_linedraw()
+```
+
+The package `ggthemes()` includes additional themes as well as
+additional color scales. Install it as follows.
+
+```{r install_ggthemes, eval=FALSE}
+install.packages("ggthemes")
+```
+
+Consider `theme_igray()`, and `theme_solarized_2()`.
+
+```{r try_ggthemes}
+library(ggthemes)
+p + theme_igray()
+p + theme_solarized_2()
+```
+
+Personally, I like the default ggplot theme, but I want to remove the
+tick marks and add a black border. You create this as follows.
+(Tomorrow afternoon, we'll talk more about creating functions.)
+
+```{r theme_karl}
+theme_karl <-
+    function(...)
+    theme(panel.border=element_rect(fill=NA, color="black"),
+          axis.ticks.length = grid::unit(0, "cm"), ...)
+```
+
+Now, put it to use:
+
+```{r use_karl_theme}
+p + theme_karl()
+```
