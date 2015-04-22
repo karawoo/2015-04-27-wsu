@@ -1,8 +1,11 @@
 ---
-layout: lesson
-root: ../..
+layout: page
+root: ..
 title: A Better Kind of Backup
 ---
+
+# A Better Kind of Backup
+
 <div class="objectives" markdown="1">
 
 #### Objectives

@@ -1,8 +1,11 @@
 ---
-layout: lesson
-root: ../..
+layout: page
+root: ..
 title: Open Science
 ---
+
+# Open Science
+
 <div class="objectives" markdown="1">
 
 #### Objectives
