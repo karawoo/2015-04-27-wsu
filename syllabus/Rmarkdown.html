@@ -43,47 +43,88 @@
 </ul>
 </div>
 </div>
-<p>I'm not quite sure the best way to get started with this. I'm trying to explain</p>
-<ul>
-<li>the value of reproducible documents (literate programming)</li>
-<li>what knitr document looks like (chunks of code in the midst of text)</li>
-<li>the value of having the product be a web page</li>
-<li>the value of R Markdown for this</li>
-</ul>
-<p>I then need to explain</p>
-<ul>
-<li>the basics of markdown syntax</li>
-<li>the yaml header for R Markdown</li>
-<li>R code chunks</li>
-<li>inline R</li>
-<li>chunk options</li>
-<li>global chunk options</li>
-</ul>
 <h3 id="data-analysis-reports">Data analysis reports</h3>
 <p>Data analysts tend to write a lot of reports, describing their analyses and results, for their collaborators or to document their work for future reference.</p>
 <p>When I was first starting out, I'd write an R script with all of my work, and would just send an email to my collaborator, describing the results and attaching various graphs. In discussing the results, there would often be confusion about which graph was which.</p>
 <p>I moved to writing formal reports, with Word or LaTeX, but I'd have to spend a lot of time getting the figures to look right. Mostly, the concern is about page breaks.</p>
-<p>Everything is easier now that I create a web page (as an html file). It can be one long stream, so you can have as tall figures that wouldn't ordinary fit on one page. Scrolling is your friend.</p>
+<p>Everything is easier now that I create a web page (as an html file). It can be one long stream, so I can use tall figures that wouldn't ordinary fit on one page. Scrolling is your friend.</p>
 <h3 id="literate-programming">Literate programming</h3>
 <p>Ideally, such analysis reports are <em>reproducible</em> documents: If an error is discovered, or if some additional subjects are added to the data, you can just re-compile the report and get the new or corrected results (versus having to reconstruct figures, paste them into a Word document, and further hand-edit various detailed results).</p>
 <p>The key tool for R is <a href="http://yihui.name/knitr/">knitr</a>, which allows you to create a document that is a mixture of text and some chunks of code. When the document is processed by knitr, chunks of R code will be executed, and graphs or other results inserted.</p>
 <p>This sort of idea has been called &quot;literate programming&quot;.</p>
 <p>knitr allows you to mix basically any sort of text with any sort of code, but we recommend that you use R Markdown, which mixes Markdown with R. Markdown is a light-weight mark-up language for creating web pages.</p>
 <h3 id="creating-an-r-markdown-file">Creating an R Markdown file</h3>
-<ul>
-<li>Within R Studio, how to use menu-bar to create a new R Markdown file</li>
-</ul>
+<p>Within R Studio, click File → New File → R Markdown and you'll get a dialog box like this:</p>
+<p><img src="img/New_R_Markdown.png" /><br/></p>
+<p>You can stick with the default (HTML output), but give it a title.</p>
 <h3 id="basic-components-of-r-markdown">Basic components of R Markdown</h3>
+<p>The initial chunk of text contains instructions for R: you give the thing a title, author, and date, and tell it that you're going to want to produce html output (in other words, a web page).</p>
+<pre><code>---
+title: &quot;Initial R Markdown document&quot;
+author: &quot;Karl Broman&quot;
+date: &quot;April 23, 2015&quot;
+output: html_document
+---</code></pre>
+<p>You can delete any of those fields if you don't want them included. The double-quotes aren't strictly <em>necessary</em> in this case. They're mostly needed if you want to include a colon in the title.</p>
+<p>RStudio creates the document with some example text to get you started. Note below that there are chunks like</p>
+<pre>
+&#96;&#96;&#96;{r}
+summary(cars)
+&#96;&#96;&#96;
+</pre>
+<p>These are chunks of R code that will be executed by knitr and replaced by their results. More on this later.</p>
+<p>Also note the web address that's put between angle brackets (<code>&lt; &gt;</code>) as well as the double-asterisks in <code>**Knit**</code>. This is <a href="http://daringfireball.net/projects/markdown/syntax">Markdown</a>.</p>
+<h3 id="markdown">Markdown</h3>
+<p>Markdown is a system for writing web pages by marking up the text much as you would in an email rather than writing html code. The marked-up text gets <em>converted</em> to html, replacing the marks with the proper html code.</p>
+<p>For now, let's delete all of the stuff that's there and write a bit of markdown.</p>
+<p>You make things <strong>bold</strong> using two asterisks, like this: <code>**bold**</code>, and you make things <em>italics</em> by using underscores, like this: <code>_italics_</code>.</p>
+<p>You can make a bulleted list by writing a list with hyphens or asterisks, like this:</p>
+<pre><code>* bold with double-asterisks
+* italics with underscores
+* code-type font with backticks</code></pre>
+<p>or like this:</p>
+<pre><code>- bold with double-asterisks
+- italics with underscores
+- code-type font with backticks</code></pre>
+<p>Each will appear as:</p>
 <ul>
-<li>Discuss the initial yaml header</li>
-<li>Point to code chunks</li>
-<li>Delete all of the code chunks and start out with basic discussion of R Markdown:</li>
-<li>bold and italics</li>
-<li>section headers of different sizes</li>
-<li>bulleted lists</li>
-<li>numbered lists</li>
-<li>hyperlinks</li>
-<li>inserting images (maybe insert an R icon)</li>
+<li>bold with double-asterisks</li>
+<li>italics with underscores</li>
+<li>code-type font with backticks</li>
+</ul>
+<p>(I prefer hyphens over asterisks, myself.)</p>
+<p>You can make a numbered list by just using numbers. You can use the same number over and over if you want:</p>
+<pre><code>1. bold with double-asterisks
+1. italics with underscores
+1. code-type font with backticks</code></pre>
+<p>This will appear as:</p>
+<ol style="list-style-type: decimal">
+<li>bold with double-asterisks</li>
+<li>italics with underscores</li>
+<li>code-type font with backticks</li>
+</ol>
+<p>You can make section headers of different sizes by initiating a line with some number of <code>#</code> symbols:</p>
+<pre><code># Title
+## Main section
+### Sub-section
+#### Sub-sub section</code></pre>
+<p>You <em>compile</em> the R Markdown document to an html webpage by clicking the &quot;Knit HTML&quot; in the upper-left. And note the little question mark next to it; click the question mark and you'll get a &quot;Markdown Quick Reference&quot; (with the Markdown syntax) as well to the RStudio documentation on R Markdown.</p>
+<div id="challenge" class="challenge panel panel-success">
+<div class="panel-heading">
+<h3><span class="glyphicon glyphicon-pencil"></span>Challenge</h3>
+</div>
+<div class="panel-body">
+<p>Create a new R Markdown document. Delete all of the R code chunks and write a bit of Markdown (some sections, some italicized text, and an itemized list).</p>
+<p>Convert the document to a webpage.</p>
+</div>
+</div>
+<h3 id="a-bit-more-markdown">A bit more Markdown</h3>
+<p>You can make a hyperlink like this: <code>[text to show](http://the-web-page.com)</code>.</p>
+<p>You can include an image file like this: <code>![caption](http://url/for/file)</code></p>
+<p>You can do subscripts (e.g., F<sub>2</sub>) with <code>F~2</code> and superscripts (e.g., F<sup>2</sup>) with <code>F^2^</code>.</p>
+<p>If you know how to write equations in <a href="http://www.latex-project.org/">LaTeX</a>, you'll be glad to know that you can use <code>$ $</code> and <code>$$ $$</code> to insert math equations, like <code>$E = mc^2$</code> and</p>
+<pre><code>$$y = \mu + \sum_{i=1}^p \beta_i x_i + \epsilon$$</code></pre>
+<ul>
 <li>super-scripts and subscripts</li>
 <li>How to compile to html file</li>
 </ul>
