@@ -12,6 +12,8 @@ title: Writing R functions
 > * How to define a function
 > * Defining graphing functions
 > * Scope and global variables
+> * Conditional statements
+> * `match.arg`
 
 
 ### Why?
@@ -47,11 +49,45 @@ The definition of a function has three parts:
 - `function()`, containing any _arguments_ (in other words, parameters or inputs) that the
   function takes
 - The body of the function (the bit that is executed when the function
-  is called
+  is called)
 - The assignment of the function to an object; in this case we've
-  called it `f2c`.
+  called it `f2c`
 
-This function definition could actually be simplified. In R functions,
+Having executed the above code, you'll note that there's now an object in
+your R workspace called `f2c`. (Try `ls()`.)
+
+You can use the function like any other R function:
+
+
+~~~{.r}
+f2c(65)
+~~~
+
+
+
+~~~{.output}
+[1] 18.33333
+
+~~~
+
+Note that you can even give it a vector of Fahrenheit temperatures.
+
+
+~~~{.r}
+f2c(c(100, 212, 32, -40))
+~~~
+
+
+
+~~~{.output}
+[1]  37.77778 100.00000   0.00000 -40.00000
+
+~~~
+
+### Implicit return value
+
+
+The function definition could actually be simplified. In R functions,
 an explicit `return` statement is not needed; the function will
 _return_ the value of the last statement, so we could write:
 
@@ -77,7 +113,7 @@ f2c <-
 
 > ### Challenge {.challenge}
 >
-> Write the opposite function, for converting from celsius to
+> Write the opposite function, for converting from Celsius to
 > Fahrenheit. Test that it works.
 
 
@@ -185,9 +221,39 @@ plot_country <-
 ### Conditional statements
 
 
+
+~~~{.r}
+plot_year <-
+    function(year=2007, data=gapminder, add_curve=TRUE)
+{
+    library(dplyr)
+    library(ggplot2)
+
+    the_year <- year
+    gm_year <- filter(data, year==the_year)
+
+    p <- ggplot(gm_year, aes(y=lifeExp, x=gdpPercap)) +
+        geom_point() + scale_x_log10()
+
+    if(add_curve)
+        p <- p + geom_smooth(method="loess")
+
+    p
+}
+~~~
+
+
+Maybe also include `include_se`?
+
+> ### Challenge: {.challenge}
+>
+> Add an option to your `plot_country` function, to use `geom_line()`
+> as well as `geom_point()`.
+
+
 ~~~{.r}
 plot_country <-
-    function(country="China", data=gapminder, add_curve=FALSE)
+    function(country="China", data=gapminder, add_line=FALSE)
 {
     library(dplyr)
     library(ggplot2)
@@ -198,20 +264,103 @@ plot_country <-
     p <- ggplot(gm_country, aes(y=lifeExp, x=gdpPercap)) +
         geom_point()
 
-    if(add_curve)
-        p <- p + geom_smooth(method="loess")
+    if(add_line)
+        p <- p + geom_line()
+
     p
 }
 ~~~
 
-Maybe also include `include_se`?
-
 
 ### Multiple-choice arguments
 
-Allow `method` to be either `"loess"` or `"lm"`.
+Add `method` argument, to allow that you might use either `"loess"` or
+`"lm"` for the curve.
+
+
+~~~{.r}
+plot_year <-
+    function(year=2007, data=gapminder, add_curve=TRUE, method="loess")
+{
+    library(dplyr)
+    library(ggplot2)
+
+    the_year <- year
+    gm_year <- filter(data, year==the_year)
+
+    p <- ggplot(gm_year, aes(y=lifeExp, x=gdpPercap)) +
+        geom_point() + scale_x_log10()
+
+    if(add_curve)
+        p <- p + geom_smooth(method=method)
+
+    p
+}
+~~~
+
+Can be helpful to give multiple choices. You could then use
+`match.arg()` to ensure that the selected choice is allowable.
+
+
+~~~{.r}
+plot_year <-
+    function(year=2007, data=gapminder, curve=c("none", "loess", "lm"))
+{
+    curve <- match.arg(curve)
+
+    library(dplyr)
+    library(ggplot2)
+
+    the_year <- year
+    gm_year <- filter(data, year==the_year)
+
+    p <- ggplot(gm_year, aes(y=lifeExp, x=gdpPercap)) +
+        geom_point() + scale_x_log10()
+
+    if(curve != "none")
+        p <- p + geom_smooth(method=curve)
+
+    p
+}
+~~~
+
+> ### Challenge {.challenge}
+>
+> Modify your function to take an argument `type` with possible values
+> `"points"`, `"lines"`, or `"both"`, indicating whether to use
+> `geom_point()`, `geom_line()`, or both.
 
 
 ### The `...` argument
 
-Perhaps pass `...` to `geom_smooth`, to cover each of `method` and `se`.
+You might also want to be able to pass `se` (taking values `TRUE` or
+`FALSE`).
+
+We could just go back to `add_curve` but then also include an argument
+`...` which is passed to `geom_smooth`, to cover each of `method` and `se`.
+
+
+~~~{.r}
+plot_year <-
+    function(year=2007, data=gapminder, add_curve=FALSE, ...)
+{
+    curve <- match.arg(curve)
+
+    library(dplyr)
+    library(ggplot2)
+
+    the_year <- year
+    gm_year <- filter(data, year==the_year)
+
+    p <- ggplot(gm_year, aes(y=lifeExp, x=gdpPercap)) +
+        geom_point() + scale_x_log10()
+
+    if(add_curve)
+        p <- p + geom_smooth(...)
+
+    p
+}
+~~~
+
+Problem here: if they use `add_curve=TRUE`, they need to also indicate
+a method; otherwise they'll get an error. **(Or will they?)**
