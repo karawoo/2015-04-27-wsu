@@ -1,8 +1,11 @@
 ---
-layout: lesson
-root: ../..
+layout: page
+root: ..
 title: Collaborating
 ---
+
+# Collaborating
+
 <div class="objectives" markdown="1">
 
 #### Objectives

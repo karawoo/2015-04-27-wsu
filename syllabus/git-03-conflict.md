@@ -1,8 +1,11 @@
 ---
-layout: lesson
-root: ../..
+layout: page
+root: ..
 title: Conflicts
 ---
+
+# Conflicts
+
 <div class="objectives" markdown="1">
 
 #### Objectives
