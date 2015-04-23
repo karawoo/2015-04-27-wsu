@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="pandoc">
+    <title>Software Carpentry: </title>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-theme.css" />
+    <link rel="stylesheet" type="text/css" href="css/swc.css" />
+    <link rel="alternate" type="application/rss+xml" title="Software Carpentry Blog" href="http://software-carpentry.org/feed.xml"/>
+    <meta charset="UTF-8" />
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body class="lesson">
+    <div class="container card">
+      <div class="banner">
+        <a href="http://software-carpentry.org" title="Software Carpentry">
+          <img alt="Software Carpentry banner" src="img/software-carpentry-banner.png" />
+        </a>
+      </div>
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+          <h1 class="title"></h1>
+          
+<h2 id="lets-get-started">Let's get started</h2>
+<p>Open your Terminal (i.e. shell prompt)</p>
+<p>My Terminal looks like this:</p>
+<p><img src="img/prompt.png" width="600"></p>
+<p>Yours might look different (these can be easily customized). Usually includes something like <code>username@machinename</code>, followed by the current working directory and a <code>$</code> sign. Note: a &quot;directory&quot; is what you may know as a &quot;folder&quot;, and I'll be using these basically interchangeably throughout the lesson.</p>
+<h2 id="entering-commands-into-the-shell">Entering commands into the shell</h2>
+<p>You can just enter commands directly into the shell.</p>
+<pre><code>$ echo Morning People</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>We just used a command called <code>echo</code> and gave it an argument called <code>Morning People</code>.</p>
+<p>If you enter a command that shell doesn't recognize, it will just report an error</p>
+<pre><code>$ gobbeltdfsf</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<pre><code>-bash: gobbeltdfsf: command not found</code></pre>
+<p>{:class=&quot;out&quot;}</p>
+<hr />
+<h2 id="how-commands-work-in-the-shell">How commands work in the shell</h2>
+<p>Commands are often followed by one or more options that modify their behavior, and further, by one or more arguments, the items upon which the command acts. So most commands look kind of like this:</p>
+<pre><code>$ ls -l ~/</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<pre><code>$ command -letter</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p><strong>OR</strong></p>
+<pre><code>$ command --word</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<h2 id="knowing-where-you-are-and-seeing-whats-around">Knowing where you are and seeing what's around</h2>
+<p>The first thing you want to do when you're somewhere new is get a map or figure out how to obtain directions. Since you're new to the shell, we're going to do just that. This is really easy to do using a GUI (just click on things). Once you learn the basic commands, you'll see that it is really easy to do in the shell too.</p>
+<p>Three really imporant commands:</p>
+<ul>
+<li><code>pwd</code> <em>Acronym for print working directory</em>. Tell you where you are.</li>
+<li><code>cd</code> <em>Change directory</em>. Give it options for where to take you.</li>
+<li><code>ls</code> <em>Short for list</em>. List all the files and folders in your current location.</li>
+</ul>
+<p>Most operating systems have a hierarchical directory structure. The very top is called the <em>home</em> directory. Directories are often called &quot;folders&quot; because of how they are represented in GUIs. Directories are just listings of files. They can contain other files or (sub) directories.</p>
+<pre><code>$ pwd</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<pre><code>/Users/Kara</code></pre>
+<p>{:class=&quot;out&quot;}</p>
+<p>Note that I'm in my <em>home</em> directory. Whenever you start up a terminal, you will start in the home directory. Every user has their own home directory where they have full access to do whatever they want. For example, my user ID is <code>Kara</code>, the <code>pwd</code> command tells me that I am in the <code>/Users/Kara</code> directory. This is the home directory for the <code>Kara</code> user. Yours should (hopefully) look different.</p>
+<h3 id="changing-directories">Changing Directories</h3>
+<p>You can change the working directory at any time using the <code>cd</code> command.</p>
+<pre><code>$ cd
+$ cd /usr/bin
+$ pwd
+$ ls</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>Now change back to your home again</p>
+<pre><code>$ cd ~</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>Tip: <code>~</code> is a shortcut for the HOME directory for any user. My home is <code>/Users/Kara</code> and I can get there three ways:</p>
+<p><code>cd /Users/Kara</code> OR <code>cd ~</code> OR <code>cd</code>.</p>
+<p>You might be wondering why there is a <strong>standard</strong> shortcut for the home directory. It provides a convenient way of giving a point of access which is independent of machine and username. For instance, <code>~/Downloads</code> should work for all Mac users.</p>
+<h3 id="full-versus-relative-paths">Full versus relative paths</h3>
+<p>In the command line you can use both full paths (much like someone's street address with post code) OR offer relative directions from one's current location. You can do the same here.</p>
+<pre><code>$ cd /usr
+$ pwd</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>We're now in the <code>usr/</code> directory. Now change to <code>bin/</code></p>
+<pre><code>$ cd bin</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>This is the same as doing:</p>
+<pre><code>$ cd /usr/bin</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>from <strong>anywhere</strong>.</p>
+<p><strong>An important note:</strong> having spaces in folder names or file names will confuse the computer. Once it sees a space, it will think the path is complete. For this reason it's recommended not to use spaces in your file/folder names. If you do have paths that contain spaces, you can encase the path that you type into the shell with quotation marks, e.g.:</p>
+<pre><code>$ cd &quot;Users/Kara/Desktop/folder with a space&quot;</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>But note that the tilde shortcut for the home directory doesn't work within the quotations.</p>
+<p><em>Stop and ask for questions</em></p>
+<h3 id="list-all-the-files-in-this-directory">List all the files in this directory</h3>
+<p>Now we're going to talk about how to view the contents of a folder (directory).</p>
+<pre><code>$ ls</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>When you enter the <code>ls</code> command lists the contents of the current directory. <code>ls</code> is extremely useful both for beginners and experts. <code>ls</code> can not only list the current directory contents but also contents from anywhere without changing working directories.</p>
+<p>e.g.</p>
+<pre><code>$ ls /usr</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>or even multiple directories at once</p>
+<pre><code>$ ls ~ /usr</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<div id="challenge" class="challenge panel panel-success">
+<div class="panel-heading">
+<h3><span class="glyphicon glyphicon-pencil"></span>Challenge</h3>
+</div>
+<div class="panel-body">
+<ol style="list-style-type: decimal">
+<li>Using the shell, navigate to your desktop.</li>
+<li>List the contents of this directory.</li>
+<li>Change back into your home directory.</li>
+<li>Now, without changing your directory (i.e. without using <code>cd</code>), list the contents of the data directory again.</li>
+</ol>
+</div>
+</div>
+<pre><code>$ cd ~/Desktop/swc-data/
+$ ls
+$ cd ~
+$ ls ~/Desktop/swc-data</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<h3 id="arguments">Arguments</h3>
+<p>Now we can start adding more options. Recall that commands can take both options (with a <code>-</code> or <code>--</code>) followed by arguments. Let's add some to <code>ls</code>.</p>
+<pre><code>$ cd
+$ cd ~/Desktop/swc-data
+$ ls -l</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>(This workshop won't have these files, but this is some example output): <sub>~</sub> total 2288 -rwxr-xr-x@ 1 Kara staff 1715 Dec 31 09:15 car-speeds.csv -rwxr-xr-x@ 1 Kara staff 5374 Dec 31 09:15 inflammation-02.csv -rwxr-xr-x@ 1 Kara staff 5403 Dec 31 09:15 inflammation-03.csv -rwxr-xr-x@ 1 Kara staff 5427 Dec 31 09:15 inflammation-04.csv -rwxr-xr-x@ 1 Kara staff 5405 Dec 31 09:15 inflammation-05.csv -rwxr-xr-x@ 1 Kara staff 5390 Dec 31 09:15 inflammation-06.csv -rwxr-xr-x@ 1 Kara staff 5402 Dec 31 09:15 inflammation-07.csv -rwxr-xr-x@ 1 Kara staff 5412 Dec 31 09:15 inflammation-08.csv -rwxr-xr-x@ 1 Kara staff 5387 Dec 31 09:15 inflammation-09.csv -rwxr-xr-x@ 1 Kara staff 5402 Dec 31 09:15 inflammation-10.csv -rwxr-xr-x@ 1 Kara staff 5423 Dec 31 09:15 inflammation-11.csv -rwxr-xr-x@ 1 Kara staff 5400 Dec 31 09:15 inflammation-12.csv -rwxr-xr-x@ 1 Kara staff 14 Dec 31 09:15 small-01.csv -rwxr-xr-x@ 1 Kara staff 17 Dec 31 09:15 small-02.csv -rwxr-xr-x@ 1 Kara staff 14 Dec 31 09:15 small-03.csv -rwxr-xr-x@ 1 Kara staff 2115 Jan 2 11:34 species.csv -rwxr-xr-x@ 1 Kara staff 1058902 Jan 2 11:01 surveys.csv <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p>By adding <code>-l</code> to the command, we changed the output to the long format.</p>
+<p>Now let's add more options</p>
+<pre><code>$ ls -lt</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>The <code>t</code> options now sorts by time.</p>
+<p>Similarly you can try the following:</p>
+<p>Some options: <em>(list these on the board -- show output of ls -a and explain . and ..)</em></p>
+<ul>
+<li><code>-a</code> List all files even those that are hidden. Files starting with a <code>.</code> are considered hidden;</li>
+<li><code>-F</code> All a trailing slash to help identify folders;</li>
+<li><code>-l</code> Long format;</li>
+<li><code>-lh</code> Make file sizes human readable;</li>
+<li><code>-S</code> Sort by file size;</li>
+<li><code>-t</code> Sort by modification time.</li>
+</ul>
+<p>Try some of these. Do you see any new files that we have not discussed before? You can even combine several of these options in a single command like we did above with <code>ls -lt</code>.</p>
+<p>What are all the extra fields in the long format?</p>
+<pre><code>$ ls -l</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<pre><code>total 2288
+-rwxr-xr-x@ 1 Kara  staff     1715 Dec 31 09:15 car-speeds.csv
+-rwxr-xr-x@ 1 Kara  staff     5374 Dec 31 09:15 inflammation-02.csv
+-rwxr-xr-x@ 1 Kara  staff     5403 Dec 31 09:15 inflammation-03.csv
+-rwxr-xr-x@ 1 Kara  staff     5427 Dec 31 09:15 inflammation-04.csv
+-rwxr-xr-x@ 1 Kara  staff     5405 Dec 31 09:15 inflammation-05.csv
+-rwxr-xr-x@ 1 Kara  staff     5390 Dec 31 09:15 inflammation-06.csv
+-rwxr-xr-x@ 1 Kara  staff     5402 Dec 31 09:15 inflammation-07.csv
+-rwxr-xr-x@ 1 Kara  staff     5412 Dec 31 09:15 inflammation-08.csv
+-rwxr-xr-x@ 1 Kara  staff     5387 Dec 31 09:15 inflammation-09.csv
+-rwxr-xr-x@ 1 Kara  staff     5402 Dec 31 09:15 inflammation-10.csv
+-rwxr-xr-x@ 1 Kara  staff     5423 Dec 31 09:15 inflammation-11.csv
+-rwxr-xr-x@ 1 Kara  staff     5400 Dec 31 09:15 inflammation-12.csv
+-rwxr-xr-x@ 1 Kara  staff       14 Dec 31 09:15 small-01.csv
+-rwxr-xr-x@ 1 Kara  staff       17 Dec 31 09:15 small-02.csv
+-rwxr-xr-x@ 1 Kara  staff       14 Dec 31 09:15 small-03.csv
+-rwxr-xr-x@ 1 Kara  staff     2115 Jan  2 11:34 species.csv
+-rwxr-xr-x@ 1 Kara  staff  1058902 Jan  2 11:01 surveys.csv</code></pre>
+<p>{:class=&quot;out&quot;}</p>
+<ul>
+<li>Files begin with a <code>-</code> and directories with a <code>d</code>.</li>
+<li>Followed by permissions for the user, group, and everyone.</li>
+<li>Permissions are in the order of read, write, and execute. If any * group is missing a permission, you'll see a <code>-</code>.</li>
+<li>Ignore second column for now (it's the number of links to the file)</li>
+<li>The owner of the file</li>
+<li>What group this person belongs to</li>
+<li>Size of file in bytes (Quick question: How do you change this?)</li>
+<li>Date and time the file was last modified</li>
+<li>Name of file.</li>
+</ul>
+<p><strong>Quick exercise:</strong> List the files in your data directory in long format, by file size, with human readable file sizes.</p>
+<p><strong>Arguments</strong></p>
+<p>Most programs take additional arguments that control their exact behavior. For example, <code>-F</code> and <code>-l</code> are arguments to <code>ls</code>. The <code>ls</code> program, like many programs, take a lot of arguments. But how do we know what the options are to particular commands?</p>
+<p>Most commonly used shell programs have a manual. You can access the manual using the <code>man</code> program. Try entering:</p>
+<pre><code>$ man ls</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>This will open the manual page for <code>ls</code>. Use the space key to go forward and b to go backwards. When you are done reading, just hit <code>q</code> to exit.</p>
+<p>Unfortunately GitBash for Windows does not have the <code>man</code> command. Instead, try using the <code>--help</code> flag after the command you want to learn about. For internal bahs commands such as <code>cd</code> and <code>pwd</code> you will be able to access the help file by typing <code>help function</code>.</p>
+<pre><code>$ ls --help
+$ help cd</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>And you also find the manual pages at many different sites online, e.g. <a href="">http://linuxmanpages.com/</a>.</p>
+<p>Programs that are run from the shell can get extremely complicated. To see an example, open up the manual page for the <code>find</code> program, which we will use later this session. No one can possibly learn all of these arguments, of course. So you will probably find yourself referring back to the manual page frequently.</p>
+<h3 id="exploring-your-file-system">Exploring your file system</h3>
+<p>Other really important commands</p>
+<ul>
+<li><code>file</code></li>
+<li><code>less</code></li>
+<li><code>head</code></li>
+<li><code>wc</code></li>
+</ul>
+<p><strong>Determining file type</strong></p>
+<pre><code>$ file &lt;filename&gt;</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>e.g.</p>
+<pre><code>$ file surveys.csv</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<pre><code>surveys.csv: ASCII text</code></pre>
+<p>{:class=&quot;out&quot;} Notice that the function <code>file</code> is unfortunately not defined in GitBash.</p>
+<p>You can have a quick look at the file to see the contents of its first lines using the function <code>head</code> (similar to the <code>head()</code> function in R).</p>
+<pre><code>$ head &lt;filename&gt;</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p><code>wc</code> will give you the word count of a file. The output shows the number of lines, words, and bytes in a file. <code>wc -l</code> will tell you just the number of lines.</p>
+<p>You can also fully examine files with the <code>less</code> command. Keeps the content from scrolling of the screen. You can also use the arrow keys to navigate up or down. Press enter or return to keep scrolling down and the <code>q</code> key to quit.</p>
+<p><em>Let's list on the whiteboard the commands we've learned so far (probably in Etherpad too).</em></p>
+<hr />
+<p>Acknowledgments: these lessons were adapted by Kara Woo from materials by <a href="http://nicercode.github.io/2014-02-13-UNSW/lessons/60-shell/">Diego Barneche</a>.</p>
+        </div>
+      </div>
+      <div class="footer">
+        <a class="label swc-blue-bg" href="http://software-carpentry.org">Software Carpentry</a>
+        <a class="label swc-blue-bg" href="https://github.com/karawoo/2015-04-27-wsu">Source</a>
+        <a class="label swc-blue-bg" href="mailto:admin@software-carpentry.org">Contact</a>
+        <a class="label swc-blue-bg" href="../LICENSE.html">License</a>
+      </div>
+    </div>
+    <!-- Javascript placed at the end of the document so the pages load faster -->
+    <script src="http://software-carpentry.org/v5/js/jquery-1.9.1.min.js"></script>
+    <script src="css/bootstrap/bootstrap-js/bootstrap.js"></script>
+  </body>
+</html>

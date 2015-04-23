@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="pandoc">
+    <title>Software Carpentry: A Better Kind of Backup</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-theme.css" />
+    <link rel="stylesheet" type="text/css" href="css/swc.css" />
+    <link rel="alternate" type="application/rss+xml" title="Software Carpentry Blog" href="http://software-carpentry.org/feed.xml"/>
+    <meta charset="UTF-8" />
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body class="lesson">
+    <div class="container card">
+      <div class="banner">
+        <a href="http://software-carpentry.org" title="Software Carpentry">
+          <img alt="Software Carpentry banner" src="img/software-carpentry-banner.png" />
+        </a>
+      </div>
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+          <h1 class="title">A Better Kind of Backup</h1>
+          
+<h1 id="a-better-kind-of-backup">A Better Kind of Backup</h1>
+<div class="objectives" markdown="1">
+<h4>Objectives</h4>
+<ul>
+<li>Explain which initialization and configuration steps are required once per machine, and which are required once per repository.</li>
+<li>Go through the modify-add-commit cycle for single and multiple files and explain where information is stored at each stage.</li>
+<li>Identify and use Git revision numbers.</li>
+<li>Compare files with old versions of themselves.</li>
+<li>Restore old versions of files.</li>
+<li>Configure Git to ignore specific files, and explain why it is sometimes useful to do so.</li>
+</ul>
+</div>
+<p>We'll start by exploring how version control can be used to keep track of what one person did and when. Even if you aren't collaborating with other people, version control is much better for this than this:</p>
+<div>
+<a href="http://www.phdcomics.com"><img src="img/phd101212s.gif" alt="Piled Higher and Deeper by Jorge Cham, http://www.phdcomics.com" /></a>
+<p>
+&quot;Piled Higher and Deeper&quot; by Jorge Cham, http://www.phdcomics.com
+</p>
+</div>
+<h3 id="local-repo">Local Repo</h3>
+<p>Git will keep track of the <em>changes</em> to your files, rather than keep multiple copies of the files. It saves the first version, then keeps track of subsequent changes to that version. This makes it efficient and speedy. It can recreate any version (go back in time) by adding up all the changes to get to where you want to be.</p>
+<h3 id="setting-up">Setting Up</h3>
+<p>The first time we use Git on a new machine, we need to configure a few things. Here's how Dracula sets up his new laptop:</p>
+<pre><code>$ git config --global user.name &quot;Vlad Dracula&quot;
+$ git config --global user.email &quot;vlad@tran.sylvan.ia&quot;
+$ git config --global color.ui &quot;auto&quot;
+$ git config --global core.editor &quot;nano&quot;</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>(Please use your own name and email address instead of Dracula's, and please make sure you choose an editor that's actually on your system, such as <code>notepad</code> on Windows.)</p>
+<p>Git commands are written <code>git verb</code>, where <code>verb</code> is what we actually want it to do. In this case, we're telling Git:</p>
+<ul>
+<li>our name and email address,</li>
+<li>to colorize output,</li>
+<li>what our favorite text editor is, and</li>
+<li>that we want to use these settings globally (i.e., for every project),</li>
+</ul>
+<p>The four commands above only need to be run once: the flag <code>--global</code> tells Git to use the settings for every project on this machine.</p>
+<blockquote>
+<h4>Proxy</h4>
+<p>In some networks you need to use a proxy. If this is the case you may also need to tell Git about the proxy:</p>
+<pre><code>$ git config --global http.proxy proxy-url
+$ git config --global https.proxy proxy-url</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>To disable the proxy, use</p>
+<pre><code>$ git config --global --unset http.proxy
+$ git config --global --unset https.proxy</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+</blockquote>
+<h3 id="creating-a-repository">Creating a Repository</h3>
+<p>Once Git is configured, we can start using it. Let's create a directory for our work:</p>
+<pre><code>$ mkdir planets
+$ cd planets</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>and tell Git to make it a <a href="../../gloss.html#repository">repository</a>—a place where Git can store old versions of our files:</p>
+<pre><code>$ git init</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>If we use <code>ls</code> to show the directory's contents, it appears that nothing has changed:</p>
+<pre><code>$ ls</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>But if we add the <code>-a</code> flag to show everything, we can see that Git has created a hidden directory called <code>.git</code>:</p>
+<pre><code>$ ls -a</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> . .. .git <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p>Git stores information about the project in this special sub-directory. If we ever delete it, we will lose the project's history.</p>
+<p>We can check that everything is set up correctly by asking Git to tell us the status of our project:</p>
+<pre><code>$ git status</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> # On branch master # # Initial commit # nothing to commit (create/copy files and use &quot;git add&quot; to track) <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p><em>On the white board draw a box representing the working area and explain that this is where you work and make changes.</em></p>
+<h3 id="tracking-changes-to-files">Tracking Changes to Files</h3>
+<p>Let's create a file called <code>mars.txt</code> that contains some notes about the Red Planet's suitability as a base. (We'll use <code>nano</code> to edit the file; you can use whatever editor you like. In particular, this does not have to be the core.editor you set globally earlier.) <em>also create a second file named venus.txt</em></p>
+<pre><code>$ nano mars.txt</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>Type the text below into the <code>mars.txt</code> file:</p>
+<pre><code>Cold and dry, but everything is my favorite color</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p><code>mars.txt</code> now contains a single line:</p>
+<pre><code>$ ls</code></pre>
+<p>{:class=&quot;in&quot;} <sub><sub><sub> mars.txt </sub></sub></sub> {:class=&quot;out&quot;} <sub>~</sub> $ cat mars.txt <sub><sub><sub> {:class=&quot;in&quot;} </sub></sub></sub> Cold and dry, but everything is my favorite color <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p>If we check the status of our project again, Git tells us that it's noticed the new file:</p>
+<pre><code>$ git status</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> # On branch master # # Initial commit # # Untracked files: # (use &quot;git add <file>...&quot; to include in what will be committed) # # mars.txt nothing added to commit but untracked files present (use &quot;git add&quot; to track) <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p>The &quot;untracked files&quot; message means that there's a file in the directory that Git isn't keeping track of.</p>
+<p><em>Now, lets add files that are inside: On the white board draw a box representing the staging area (index) and explain that this is where we set up the next snapshot of our project. Like a photographer in a studio, we're putting together a shot before we actually snap the picture. Connect the working area box and the staging box with 'git add'.</em></p>
+<p><em><code>git add .</code> This adds <strong>all</strong> the files in our repository. But sometimes we only want to add a single file at a time.</em></p>
+<p>We can tell Git that it should do so using <code>git add</code>:</p>
+<pre><code>$ git add mars.txt</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>and then check that the right thing happened:</p>
+<pre><code>$ git status</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> # On branch master # # Initial commit # # Changes to be committed: # (use &quot;git rm --cached <file>...&quot; to unstage) # # new file: mars.txt # <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p><em>-- highlight the &quot;Untracked files&quot; section and that git tells you how to add a file to the next commit.</em></p>
+<p>Git now knows that it's supposed to keep track of <code>mars.txt</code>, but it hasn't yet recorded any changes for posterity as a commit.</p>
+<p><em>Tell git </em>&quot;Hey, we want you to remember the way that the files look right now&quot;<em>.</em></p>
+<p><em>On the white board draw a box representing the project history. Once we take a snapshot of the project that snapshot becomes a permanent reference point in the project's history that we can always go back to. The history is like a photo album of changes, and each snapshot has a time stamp, the name of the photographer, and a description. Connect the staging area to the history with <code>git commit -m &quot;message&quot;</code>. In order to save a snapshot of the current state (revision) of the repository, we use the commit command. This command is always associated with a message describing the changes since the last commit and indicating their purpose. Git will ask you to add a commit message. This is just to remind you what changes you made. Informative commit messages will serve you well someday, so make a habit of never committing changes without at least a full sentence description.</em></p>
+<p><strong>ADVICE: Commit often</strong> <em>In the same way that it is wise to often save a document that you are working on, so too is it wise to save numerous revisions of your code. More frequent commits increase the granularity of your undo button.</em></p>
+<p><strong>ADVICE: Good commit messages</strong> <a href="http://www.commitlogsfromlastnight.com/">because it's important!</a> <em>There are no hard and fast rules, but good commits are atomic: they are the smallest change that remain meaningful. A good commit message usually contains a one-line description followed by a longer explanation if necessary. For code, it's useful to commit changes that can be reviewed by someone in under an hour. Or it can be useful to commit changes that &quot;go together&quot; - for example, one paragraph of a manuscript, or each new function added to your script. For example, if you work on your code all day long (add 200 lines of code, including 5 new functions and write 7 pages of your new manuscript including deleting an old paragraph), and at 3:00 you make a fatal error or deletion, but you didn't commit once, then you will have a hard time recreating the version you are looking for - because it doesn't exist!</em></p>
+<p>To get it to do that, we need to run one more command:</p>
+<pre><code>$ git commit -m &quot;Starting to think about Mars&quot;</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> [master (root-commit) f22b25e] Starting to think about Mars 1 file changed, 1 insertion(+) create mode 100644 mars.txt <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p>When we run <code>git commit</code>, Git takes everything we have told it to save by using <code>git add</code> and stores a copy permanently inside the special <code>.git</code> directory. This permanent copy is called a <a href="../../gloss.html#revision">revision</a> and its short identifier is <code>f22b25e</code>. (Your revision may have another identifier.)</p>
+<p>We use the <code>-m</code> flag (for &quot;message&quot;) to record a comment that will help us remember later on what we did and why. If we just run <code>git commit</code> without the <code>-m</code> option, Git will launch <code>nano</code> (or whatever other editor we configured at the start) so that we can write a longer message.</p>
+<p><strong>ADVICE:</strong> <em>You must have a commit message. It's good practice and git won't let you commit without one.</em></p>
+<p><em>If you only want to add one file, use <code>git commit filename.txt -m &quot;message&quot;</code>git commit -am &quot;message` will add ALL tracked files.</em></p>
+<p>If we run <code>git status</code> now:</p>
+<pre><code>$ git status</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> # On branch master nothing to commit, working directory clean <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p>it tells us everything is up to date. If we want to know what we've done recently, we can ask Git to show us the project's history using <code>git log</code>. You can see all the changes you have ever made using this command:</p>
+<pre><code>$ git log</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> commit f22b25e3233b4645dabd0d81e651fe074bd8e73b Author: Vlad Dracula <script type="text/javascript">
+<!--
+h='&#116;&#114;&#x61;&#110;&#46;&#x73;&#x79;&#108;&#118;&#x61;&#110;&#46;&#x69;&#x61;';a='&#64;';n='&#118;&#108;&#x61;&#100;';e=n+a+h;
+document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'" clas'+'s="em' + 'ail">'+e+'<\/'+'a'+'>');
+// -->
+</script><noscript>&#118;&#108;&#x61;&#100;&#32;&#x61;&#116;&#32;&#116;&#114;&#x61;&#110;&#32;&#100;&#x6f;&#116;&#32;&#x73;&#x79;&#108;&#118;&#x61;&#110;&#32;&#100;&#x6f;&#116;&#32;&#x69;&#x61;</noscript> Date: Thu Aug 22 09:51:46 2013 -0400</p>
+<pre><code>Starting to think about Mars</code></pre>
+<pre><code>{:class=&quot;out&quot;}
+
+`git log` lists all revisions  made to a repository in reverse chronological order.
+The listing for each revision includes
+the revision&#39;s full identifier
+(which starts with the same characters as
+the short identifier printed by the `git commit` command earlier),
+the revision&#39;s author,
+when it was created,
+and the log message Git was given when the revision was created.
+
+&gt; #### Where Are My Changes?
+&gt;
+&gt; If we run `ls` at this point, we will still see just one file called `mars.txt`.
+&gt; That&#39;s because Git saves information about files&#39; history
+&gt; in the special `.git` directory mentioned earlier
+&gt; so that our filesystem doesn&#39;t become cluttered
+&gt; (and so that we can&#39;t accidentally edit or delete an old version).
+
+### Changing a File
+
+Now suppose Dracula adds more information to the file.
+(Again, we&#39;ll edit with `nano` and then `cat` the file to show its contents;
+you may use a different editor, and don&#39;t need to `cat`.)
+</code></pre>
+<p>$ nano mars.txt $ cat mars.txt <sub><sub><sub> {:class=&quot;in&quot;} </sub></sub></sub> Cold and dry, but everything is my favorite color The two moons may be a problem for Wolfman <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p>When we run <code>git status</code> now, it tells us that a file it already knows about has been modified:</p>
+<pre><code>$ git status</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> # On branch master # Changes not staged for commit: # (use &quot;git add <file>...&quot; to update what will be committed) # (use &quot;git checkout -- <file>...&quot; to discard changes in working directory) # # modified: mars.txt # no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;) <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p>The last line is the key phrase: &quot;no changes added to commit&quot;. We have changed this file, but we haven't told Git we will want to save those changes (which we do with <code>git add</code>) much less actually saved them. Let's double-check our work using <code>git diff</code>, which shows us the differences between the current state of the file and the most recently saved version:</p>
+<pre><code>$ git diff</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> diff --git a/mars.txt b/mars.txt index df0654a..315bf3a 100644 --- a/mars.txt +++ b/mars.txt @@ -1 +1,2 @@ Cold and dry, but everything is my favorite color +The two moons may be a problem for Wolfman <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p>The output is cryptic because it is actually a series of commands for tools like editors and <code>patch</code> telling them how to reconstruct one file given the other. If we can break it down into pieces:</p>
+<ol style="list-style-type: decimal">
+<li>The first line tells us that Git is producing output similar to the Unix <code>diff</code> command comparing the old and new versions of the file.</li>
+<li>The second line tells exactly which <a href="../../gloss.html#revision">revisions</a> of the file Git is comparing; <code>df0654a</code> and <code>315bf3a</code> are unique computer-generated labels for those revisions.</li>
+<li>The remaining lines show us the actual differences and the lines on which they occur. In particular, the <code>+</code> markers in the first column show where we are adding lines.</li>
+</ol>
+<p>Let's commit our change:</p>
+<pre><code>$ git commit -m &quot;Concerns about Mars&#39;s moons on my furry friend&quot;</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> # On branch master # Changes not staged for commit: # (use &quot;git add <file>...&quot; to update what will be committed) # (use &quot;git checkout -- <file>...&quot; to discard changes in working directory) # # modified: mars.txt # no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;) <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p>Whoops: Git won't commit because we didn't use <code>git add</code> first. Let's fix that:</p>
+<pre><code>$ git add mars.txt
+$ git commit -m &quot;Concerns about Mars&#39;s moons on my furry friend&quot;</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> [master 34961b1] Concerns about Mars's moons on my furry friend 1 file changed, 1 insertion(+) <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p>Git insists that we add files to the set we want to commit before actually committing anything because we may not want to commit everything at once. For example, suppose we're adding a few citations to our supervisor's work to our thesis. We might want to commit those additions, and the corresponding addition to the bibliography, but <em>not</em> commit the work we're doing on the conclusion (which we haven't finished yet).</p>
+<p>To allow for this, Git has a special staging area where it keeps track of things that have been added to the current <a href="../../gloss.html#change-set">change set</a> but not yet committed. <code>git add</code> puts things in this area, and <code>git commit</code> then copies them to long-term storage (as a commit):</p>
+<p><img src="img/git-staging-area.svg" alt="The Git Staging Area" /></p>
+<p>Let's watch as our changes to a file move from our editor to the staging area and into long-term storage. First, we'll add another line to the file:</p>
+<pre><code>$ nano mars.txt
+$ cat mars.txt</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> Cold and dry, but everything is my favorite color The two moons may be a problem for Wolfman But the Mummy will appreciate the lack of humidity <sub><sub><sub> {:class=&quot;out&quot;} </sub></sub></sub> $ git diff <sub><sub><sub> {:class=&quot;in&quot;} </sub></sub></sub> diff --git a/mars.txt b/mars.txt index 315bf3a..b36abfd 100644 --- a/mars.txt +++ b/mars.txt @@ -1,2 +1,3 @@ Cold and dry, but everything is my favorite color The two moons may be a problem for Wolfman +But the Mummy will appreciate the lack of humidity <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p>So far, so good: we've added one line to the end of the file (shown with a <code>+</code> in the first column). Now let's put that change in the staging area and see what <code>git diff</code> reports:</p>
+<pre><code>$ git add mars.txt
+$ git diff</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>There is no output: as far as Git can tell, there's no difference between what it's been asked to save permanently and what's currently in the directory. However, if we do this:</p>
+<pre><code>$ git diff --staged</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> diff --git a/mars.txt b/mars.txt index 315bf3a..b36abfd 100644 --- a/mars.txt +++ b/mars.txt @@ -1,2 +1,3 @@ Cold and dry, but everything is my favorite color The two moons may be a problem for Wolfman +But the Mummy will appreciate the lack of humidity <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p>it shows us the difference between the last committed change and what's in the staging area. Let's save our changes:</p>
+<pre><code>$ git commit -m &quot;Thoughts about the climate&quot;</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> [master 005937f] Thoughts about the climate 1 file changed, 1 insertion(+) <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p>check our status:</p>
+<pre><code>$ git status</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> # On branch master nothing to commit, working directory clean <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p>and look at the history of what we've done so far:</p>
+<pre><code>$ git log</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> commit 005937fbe2a98fb83f0ade869025dc2636b4dad5 Author: Vlad Dracula <script type="text/javascript">
+<!--
+h='&#116;&#114;&#x61;&#110;&#46;&#x73;&#x79;&#108;&#118;&#x61;&#110;&#46;&#x69;&#x61;';a='&#64;';n='&#118;&#108;&#x61;&#100;';e=n+a+h;
+document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'" clas'+'s="em' + 'ail">'+e+'<\/'+'a'+'>');
+// -->
+</script><noscript>&#118;&#108;&#x61;&#100;&#32;&#x61;&#116;&#32;&#116;&#114;&#x61;&#110;&#32;&#100;&#x6f;&#116;&#32;&#x73;&#x79;&#108;&#118;&#x61;&#110;&#32;&#100;&#x6f;&#116;&#32;&#x69;&#x61;</noscript> Date: Thu Aug 22 10:14:07 2013 -0400</p>
+<pre><code>Thoughts about the climate</code></pre>
+<p>commit 34961b159c27df3b475cfe4415d94a6d1fcd064d Author: Vlad Dracula <script type="text/javascript">
+<!--
+h='&#116;&#114;&#x61;&#110;&#46;&#x73;&#x79;&#108;&#118;&#x61;&#110;&#46;&#x69;&#x61;';a='&#64;';n='&#118;&#108;&#x61;&#100;';e=n+a+h;
+document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'" clas'+'s="em' + 'ail">'+e+'<\/'+'a'+'>');
+// -->
+</script><noscript>&#118;&#108;&#x61;&#100;&#32;&#x61;&#116;&#32;&#116;&#114;&#x61;&#110;&#32;&#100;&#x6f;&#116;&#32;&#x73;&#x79;&#108;&#118;&#x61;&#110;&#32;&#100;&#x6f;&#116;&#32;&#x69;&#x61;</noscript> Date: Thu Aug 22 10:07:21 2013 -0400</p>
+<pre><code>Concerns about Mars&#39;s moons on my furry friend</code></pre>
+<p>commit f22b25e3233b4645dabd0d81e651fe074bd8e73b Author: Vlad Dracula <script type="text/javascript">
+<!--
+h='&#116;&#114;&#x61;&#110;&#46;&#x73;&#x79;&#108;&#118;&#x61;&#110;&#46;&#x69;&#x61;';a='&#64;';n='&#118;&#108;&#x61;&#100;';e=n+a+h;
+document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'" clas'+'s="em' + 'ail">'+e+'<\/'+'a'+'>');
+// -->
+</script><noscript>&#118;&#108;&#x61;&#100;&#32;&#x61;&#116;&#32;&#116;&#114;&#x61;&#110;&#32;&#100;&#x6f;&#116;&#32;&#x73;&#x79;&#108;&#118;&#x61;&#110;&#32;&#100;&#x6f;&#116;&#32;&#x69;&#x61;</noscript> Date: Thu Aug 22 09:51:46 2013 -0400</p>
+<pre><code>Starting to think about Mars</code></pre>
+<pre><code>{:class=&quot;out&quot;}
+
+_Useful `git log` flags:_
+
+* -3 (shows only the 3 most recent commits)
+* --oneline (condenses each log into a single line, for quicker scanning)
+* --stat (gives more details for each commit, ++--)
+* --since=X.minutes/hours/days/weeks/months/years or YY-MM-DD-HH:MM (for specific time frames)
+* --author=&lt;pattern&gt; (look for specific people)
+
+To recap, when we want to add changes to our repository,
+we first need to add the changed files to the staging area
+(`git add`) and then commit the staged changes to the
+repository (`git commit`):
+
+&lt;img src=&quot;img/git-committing.svg&quot; alt=&quot;The Git Commit Workflow&quot; /&gt;
+
+### Exploring History
+
+If we want to see what we changed when,
+we use `git diff` again,
+but refer to old versions
+using the notation `HEAD~1`, `HEAD~2`, and so on:
+</code></pre>
+<p>$ git diff HEAD~1 mars.txt <sub><sub><sub> {:class=&quot;in&quot;} </sub></sub></sub> diff --git a/mars.txt b/mars.txt index 315bf3a..b36abfd 100644 --- a/mars.txt +++ b/mars.txt @@ -1,2 +1,3 @@ Cold and dry, but everything is my favorite color The two moons may be a problem for Wolfman +But the Mummy will appreciate the lack of humidity <sub><sub><sub> {:class=&quot;out&quot;} </sub></sub></sub> $ git diff HEAD~2 mars.txt <sub><sub><sub> {:class=&quot;in&quot;} </sub></sub></sub> diff --git a/mars.txt b/mars.txt index df0654a..b36abfd 100644 --- a/mars.txt +++ b/mars.txt @@ -1 +1,3 @@ Cold and dry, but everything is my favorite color +The two moons may be a problem for Wolfman +But the Mummy will appreciate the lack of humidity <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p><em>Useful git diff flags</em></p>
+<ul>
+<li><code>git diff --stat</code> gives us a summary of the filename and number of insertions/deletions</li>
+<li><code>git diff -- filename</code> looks at the differences for a specific file</li>
+</ul>
+<p>In this way, we build up a chain of revisions. The most recent end of the chain is referred to as <code>HEAD</code>; we can refer to previous revisions using the <code>~</code> notation, so <code>HEAD~1</code> (pronounced &quot;head minus one&quot;) means &quot;the previous revision&quot;, while <code>HEAD~123</code> goes back 123 revisions from where we are now.</p>
+<p>We can also refer to revisions using those long strings of digits and letters that <code>git log</code> displays. These are unique IDs for the changes, and &quot;unique&quot; really does mean unique: every change to any set of files on any machine has a unique 40-character identifier. Our first commit was given the ID f22b25e3233b4645dabd0d81e651fe074bd8e73b, so let's try this:</p>
+<pre><code>$ git diff f22b25e3233b4645dabd0d81e651fe074bd8e73b mars.txt</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> diff --git a/mars.txt b/mars.txt index df0654a..b36abfd 100644 --- a/mars.txt +++ b/mars.txt @@ -1 +1,3 @@ Cold and dry, but everything is my favorite color +The two moons may be a problem for Wolfman +But the Mummy will appreciate the lack of humidity <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p>That's the right answer, but typing random 40-character strings is annoying, so Git lets us use just the first few:</p>
+<pre><code>$ git diff f22b25e mars.txt</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> diff --git a/mars.txt b/mars.txt index df0654a..b36abfd 100644 --- a/mars.txt +++ b/mars.txt @@ -1 +1,3 @@ Cold and dry, but everything is my favorite color +The two moons may be a problem for Wolfman +But the Mummy will appreciate the lack of humidity <sub>~</sub> {:class=&quot;out&quot;}</p>
+<h3 id="recovering-old-versions">Recovering Old Versions</h3>
+<p><em>So far, this seems like a lot of work. Why are we keeping track of all these little things?? Let's say you fatally ruin a file during an editing mistake (like when I deleted an awesome paragraph from my dissertation instead of cutting and pasting it like I meant to.) Maybe you even accidentally delete an important file (This code is old, why should I keep it?). If you have version control, you don't need to track down your System Administrator. You can fix your problem easily!</em></p>
+<p>All right: we can save changes to files and see what we've changed---how can we restore older versions of things? Let's suppose we accidentally overwrite our file:</p>
+<pre><code>$ nano mars.txt
+$ cat mars.txt</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> We will need to manufacture our own oxygen <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p><code>git status</code> now tells us that the file has been changed, but those changes haven't been staged:</p>
+<pre><code>$ git status</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> # On branch master # Changes not staged for commit: # (use &quot;git add <file>...&quot; to update what will be committed) # (use &quot;git checkout -- <file>...&quot; to discard changes in working directory) # # modified: mars.txt # no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;) <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p>We can put things back the way they were by using <code>git checkout</code>:</p>
+<pre><code>$ git checkout HEAD mars.txt
+$ cat mars.txt</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> Cold and dry, but everything is my favorite color The two moons may be a problem for Wolfman But the Mummy will appreciate the lack of humidity <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p>As you might guess from its name, <code>git checkout</code> checks out (i.e., restores) an old version of a file. In this case, we're telling Git that we want to recover the version of the file recorded in <code>HEAD</code>, which is the last saved revision.</p>
+<p><em>This would work even if we deleted our file, and wanted to get it back!</em> <em>delete mars.txt, and then show that it can be checked back out</em></p>
+<p>If we want to go back even further, we can use a revision identifier instead:</p>
+<pre><code>$ git checkout f22b25e mars.txt</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>It's important to remember that we must use the revision number that identifies the state of the repository <em>before</em> the change we're trying to undo. A common mistake is to use the revision number of the commit in which we made the change we're trying to get rid of. In the example below, we want retrieve the state from before the most recent commit (<code>HEAD~1</code>), which is revision <code>f22b25e</code>:</p>
+<p><img src="img/git-checkout.svg" alt="Git Checkout" /></p>
+<p>The following diagram illustrates what the history of a file might look like (moving back from <code>HEAD</code>, the most recently committed version):</p>
+<p><img src="img/git-when-revisions-updated.svg" alt="When Git Updates Revision Numbers" /></p>
+<blockquote>
+<h4>Simplifying the Common Case</h4>
+<p>If you read the output of <code>git status</code> carefully, you'll see that it includes this hint:</p>
+<pre><code>(use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>As it says, <code>git checkout</code> without a version identifier restores files to the state saved in <code>HEAD</code>. The double dash <code>--</code> is needed to separate the names of the files being recovered from the command itself: without it, Git would try to use the name of the file as the revision identifier.</p>
+</blockquote>
+<p>The fact that files can be reverted one by one tends to change the way people organize their work. If everything is in one large document, it's hard (but not impossible) to undo changes to the introduction without also undoing changes made later to the conclusion. If the introduction and conclusion are stored in separate files, on the other hand, moving backward and forward in time becomes much easier. Or for your code, if you store functions in files separate from code that executes them, or makes figures, you can go back in time to find or retrieve specific chunks.</p>
+<h3 id="ignoring-things">Ignoring Things</h3>
+<p>What if we have files that we do not want Git to track for us, like backup files created by our editor or intermediate files created during data analysis.</p>
+<p><em>while git can keep track of data files, this is often not a great idea. Share story of .rdata files in collaborative project. Why they needed to be in the .git ignore file</em></p>
+<p>Let's create a few dummy files:</p>
+<pre><code>$ mkdir results
+$ touch a.dat b.dat c.dat results/a.out results/b.out</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>and see what Git says:</p>
+<pre><code>$ git status</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> # On branch master # Untracked files: # (use &quot;git add <file>...&quot; to include in what will be committed) # # a.dat # b.dat # c.dat # results/ nothing added to commit but untracked files present (use &quot;git add&quot; to track) <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p><em>Note: if you already added these files (git add .) you can unstage them by typing git reset HEAD</em></p>
+<p>Putting these files under version control would be a waste of disk space. What's worse, having them all listed could distract us from changes that actually matter, so let's tell Git to ignore them.</p>
+<p>We do this by creating a file in the root directory of our project called <code>.gitignore</code>.</p>
+<pre><code>$ nano .gitignore
+$ cat .gitignore</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> *.dat results/ <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p>These patterns tell Git to ignore any file whose name ends in <code>.dat</code> and everything in the <code>results</code> directory. (If any of these files were already being tracked, Git would continue to track them.)</p>
+<p>Once we have created this file, the output of <code>git status</code> is much cleaner:</p>
+<pre><code>$ git status</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> # On branch master # Untracked files: # (use &quot;git add <file>...&quot; to include in what will be committed) # # .gitignore nothing added to commit but untracked files present (use &quot;git add&quot; to track) <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p>The only thing Git notices now is the newly-created <code>.gitignore</code> file. You might think we wouldn't want to track it, but everyone we're sharing our repository with will probably want to ignore the same things that we're ignoring. Let's add and commit <code>.gitignore</code>:</p>
+<pre><code>$ git add .gitignore
+$ git commit -m &quot;Add the ignore file&quot;
+$ git status</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> # On branch master nothing to commit, working directory clean <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p>As a bonus, using <code>.gitignore</code> helps us avoid accidentally adding files to the repository that we don't want.</p>
+<pre><code>$ git add a.dat</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> The following paths are ignored by one of your .gitignore files: a.dat Use -f if you really want to add them. fatal: no files added <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p>If we really want to override our ignore settings, we can use <code>git add -f</code> to force Git to add something. We can also always see the status of ignored files if we want:</p>
+<pre><code>$ git status --ignored</code></pre>
+<p>{:class=&quot;in&quot;} <sub>~</sub> # On branch master # Ignored files: # (use &quot;git add -f <file>...&quot; to include in what will be committed) # # a.dat # b.dat # c.dat # results/</p>
+<p>nothing to commit, working directory clean <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p><em>To discard all your most recent changes and GO BACK IN TIME, first look at your <code>git log</code> to decide what version you want to go back to. Remember the first 5-7 digits in the commit code of the version that wasn't screwed up.</em></p>
+<p><em>use <code>git reset --hard versioncode</code></em></p>
+<p><em>To roll back to a specific file, use <code>git checkout version name --filename</code></em></p>
+<p><em>To roll back one version (usually I know that I messed up pretty quickly) <code>git checkout master~1 PathToFile</code></em></p>
+<p><em>A short exercise to show moving back and forth. If I mess up and I notice right away, might want to go back in time quickly. Commit some changes to <code>mars.txt</code>. I can return to the previous version by typing <code>git checkout master~1 mars.txt</code>, and then committing those changes with a message like &quot;I deleted the thing I just added&quot;. This will preserve your entire history, including the short-lived mistake, which will allow you to return to it if you should decide it wasn't a mistake at all. If you check out the entire repository using <code>git checkout master~1</code> you will be in &quot;detached head state&quot;. This can be quickly remedied by typing <code>git checkout master</code>, to return you to the correct place. Detached head is when the head is not the same version as the master.</em></p>
+<div class="keypoints" markdown="1">
+<h4>Key Points</h4>
+<ul>
+<li>Use <code>git config</code> to configure a user name, email address, editor, and other preferences once per machine.</li>
+<li><code>git init</code> initializes a repository.</li>
+<li><code>git status</code> shows the status of a repository.</li>
+<li>Files can be stored in a project's working directory (which users see), the staging area (where the next commit is being built up) and the local repository (where snapshots are permanently recorded).</li>
+<li><code>git add</code> puts files in the staging area.</li>
+<li><code>git commit</code> creates a snapshot of the staging area in the local repository.</li>
+<li>Always write a log message when committing changes.</li>
+<li><code>git diff</code> displays differences between revisions.</li>
+<li><code>git checkout</code> recovers old versions of files.</li>
+<li>The <code>.gitignore</code> file tells Git what files to ignore.</li>
+</ul>
+</div>
+<div class="challenge" markdown="1">
+Create a new Git repository on your computer called <code>bio</code>. Write a three-line biography for yourself in a file called <code>me.txt</code>, commit your changes, then modify one line and add a fourth and display the differences between its updated state and its original state.
+</div>
+<div class="challenge" markdown="1">
+<p>The following sequence of commands creates one Git repository inside another:</p>
+<pre><code>cd           # return to home directory
+mkdir alpha  # make a new directory alpha
+cd alpha     # go into alpha
+git init     # make the alpha directory a Git repository
+mkdir beta   # make a sub-directory alpha/beta
+cd beta      # go into alpha/beta
+git init     # make the beta sub-directory a Git repository</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+Why is it a bad idea to do this?
+</div>
+        </div>
+      </div>
+      <div class="footer">
+        <a class="label swc-blue-bg" href="http://software-carpentry.org">Software Carpentry</a>
+        <a class="label swc-blue-bg" href="https://github.com/karawoo/2015-04-27-wsu">Source</a>
+        <a class="label swc-blue-bg" href="mailto:admin@software-carpentry.org">Contact</a>
+        <a class="label swc-blue-bg" href="../LICENSE.html">License</a>
+      </div>
+    </div>
+    <!-- Javascript placed at the end of the document so the pages load faster -->
+    <script src="http://software-carpentry.org/v5/js/jquery-1.9.1.min.js"></script>
+    <script src="css/bootstrap/bootstrap-js/bootstrap.js"></script>
+  </body>
+</html>
