@@ -89,6 +89,15 @@ scatterplot of `lifeExp` vs `gdpPercap` for each of several different
 years. Rather than repeat the code multiple times, write a function
 that does the work and then call it several times.
 
+Let's reload the `gapminder` data, as before.
+
+
+~~~{.r}
+gapminder <- read.csv("~/Desktop/gapminder.csv")
+~~~
+
+
+
 Here's a function to make a plot for a particular year.
 
 
@@ -133,12 +142,7 @@ Loading required package: methods
 
 ~~~
 
-
-
-~~~{.output}
-Error in filter_(.data, .dots = lazyeval::lazy_dots(...)): object 'gapminder' not found
-
-~~~
+<img src="fig/functions-use_plot_year-1.png" title="plot of chunk use_plot_year" alt="plot of chunk use_plot_year" style="display: block; margin: auto;" />
 
 Note that I passed the data as an argument and gave each argument a
 default value.
