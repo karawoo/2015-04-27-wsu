@@ -6,7 +6,7 @@ title: Writing R functions
 
 ```{r chunk_options, include=FALSE}
 source("chunk_options.R")
-opts_chunk$set(fig.path="fig/functions-")
+opts_chunk$set(fig.path="fig/functions-", fig.width=11, fig.height=8)
 ```
 
 > ### Learning Objectives {.objectives}
@@ -87,6 +87,17 @@ want to make the same sort of graph multiple times, for example, a
 scatterplot of `lifeExp` vs `gdpPercap` for each of several different
 years. Rather than repeat the code multiple times, write a function
 that does the work and then call it several times.
+
+Let's reload the `gapminder` data, as before.
+
+```{r load_gapminder, eval=FALSE}
+gapminder <- read.csv("~/Desktop/gapminder.csv")
+```
+
+```{r load_gapminder_really, echo=FALSE}
+library(gapminder)
+data(gapminder)
+```
 
 Here's a function to make a plot for a particular year.
 

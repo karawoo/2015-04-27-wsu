@@ -81,6 +81,8 @@
 </div>
 <h3 id="functions-for-plotting">Functions for plotting</h3>
 <p>Functions are particularly useful when making graphs. You'll often want to make the same sort of graph multiple times, for example, a scatterplot of <code>lifeExp</code> vs <code>gdpPercap</code> for each of several different years. Rather than repeat the code multiple times, write a function that does the work and then call it several times.</p>
+<p>Let's reload the <code>gapminder</code> data, as before.</p>
+<pre class="sourceCode r"><code class="sourceCode r">gapminder &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;~/Desktop/gapminder.csv&quot;</span>)</code></pre>
 <p>Here's a function to make a plot for a particular year.</p>
 <pre class="sourceCode r"><code class="sourceCode r">plot_year &lt;-
 <span class="st">    </span>function(<span class="dt">year=</span><span class="dv">2007</span>, <span class="dt">data=</span>gapminder)
@@ -109,8 +111,7 @@ The following objects are masked from &#39;package:base&#39;:
 
 Loading required package: methods
 </code></pre>
-<pre class="output"><code>Error in filter_(.data, .dots = lazyeval::lazy_dots(...)): object &#39;gapminder&#39; not found
-</code></pre>
+<p><img src="fig/functions-use_plot_year-1.png" title="plot of chunk use_plot_year" alt="plot of chunk use_plot_year" style="display: block; margin: auto;" /></p>
 <p>Note that I passed the data as an argument and gave each argument a default value.</p>
 <div id="challenge-1" class="challenge panel panel-success">
 <div class="panel-heading">
