@@ -1,8 +1,10 @@
 ---
-layout: lesson
-root: ../..
+layout: page
+root: ..
 title: Introducing Version Control
 ---
+
+# Introducing Version Control
 
 #Teaching Git - 1
 
