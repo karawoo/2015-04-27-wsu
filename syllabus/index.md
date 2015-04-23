@@ -14,7 +14,7 @@ root: ..
 1. [Intro to R](R_intro_00.html)
 2. [Data in R](R_intro_01_data.html)
 3. [Subsetting and Summarizing data](R_intro_02_subsetting_summarizing.html)
-4. [ggplot2](ggplot2.html)
+4. [Graphics with ggplot2](ggplot2.html)
 
 #### Shell
 1. [Introduction](shell-00-intro.html)
@@ -37,7 +37,7 @@ root: ..
 
 #### R
 1. [Functions in R](functions.html)
-2. [knitr and Rmarkdown](Rmarkdown.html)
+2. [Reproducible reports with knitr and Rmarkdown](Rmarkdown.html)
 
 #### [Capstone exercise](capstone.html)
 
