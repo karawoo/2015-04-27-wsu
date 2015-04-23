@@ -27,7 +27,6 @@
         <div class="col-md-10 col-md-offset-1">
           <h1 class="title">Conflicts</h1>
           
-<h1 id="conflicts">Conflicts</h1>
 <div class="objectives" markdown="1">
 <h4>Objectives</h4>
 <ul>
@@ -62,7 +61,7 @@ $ git commit -m &quot;Adding a line in my copy&quot;</code></pre>
 <p><img src="img/conflict.svg" alt="The conflicting changes" /></p>
 <p>Git detects that the changes made in one copy overlap with those made in the other and stops us from trampling on our previous work. What we have to do is pull the changes from GitHub, <a href="../../gloss.html#merge">merge</a> them into the copy we're currently working in, and then push that. Let's start by pulling:</p>
 <pre><code>$ git pull origin master</code></pre>
-<p>{:class=&quot;in&quot;} <sub>~</sub> remote: Counting objects: 5, done.<br />remote: Compressing objects: 100% (2/2), done.<br />remote: Total 3 (delta 1), reused 3 (delta 1)<br />Unpacking objects: 100% (3/3), done. From https://github.com/vlad/planets * branch master -&gt; FETCH_HEAD Auto-merging mars.txt CONFLICT (content): Merge conflict in mars.txt Automatic merge failed; fix conflicts and then commit the result. <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p>{:class=&quot;in&quot;} <sub>~</sub> remote: Counting objects: 5, done. remote: Compressing objects: 100% (2/2), done. remote: Total 3 (delta 1), reused 3 (delta 1) Unpacking objects: 100% (3/3), done. From https://github.com/vlad/planets * branch master -&gt; FETCH_HEAD Auto-merging mars.txt CONFLICT (content): Merge conflict in mars.txt Automatic merge failed; fix conflicts and then commit the result. <sub>~</sub> {:class=&quot;out&quot;}</p>
 <p><code>git pull</code> tells us there's a conflict, and marks that conflict in the affected file:</p>
 <pre><code>$ cat mars.txt</code></pre>
 <p>{:class=&quot;in&quot;} <sub>~</sub> Cold and dry, but everything is my favorite color The two moons may be a problem for Wolfman But the Mummy will appreciate the lack of humidity &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD We added a different line in the other copy ======= This line added to Sarah's copy &gt;&gt;&gt;&gt;&gt;&gt;&gt; dabb4c8c450e8475aee9b14b4383acc99f42af1d <sub>~</sub> {:class=&quot;out&quot;}</p>
@@ -79,9 +78,9 @@ $ git status</code></pre>
 <p>{:class=&quot;in&quot;} <sub>~</sub> Counting objects: 10, done. Delta compression using up to 4 threads. Compressing objects: 100% (6/6), done. Writing objects: 100% (6/6), 697 bytes, done. Total 6 (delta 2), reused 0 (delta 0) To https://github.com/vlad/planets.git dabb4c8..2abf2b1 master -&gt; master <sub>~</sub> {:class=&quot;out&quot;}</p>
 <p>Git keeps track of what we've merged with what, so we don't have to fix things by hand again when the collaborator who made the first change pulls again:</p>
 <pre><code>$ git pull origin master</code></pre>
-<p>{:class=&quot;in&quot;} <sub>~</sub> remote: Counting objects: 10, done.<br />remote: Compressing objects: 100% (4/4), done.<br />remote: Total 6 (delta 2), reused 6 (delta 2)<br />Unpacking objects: 100% (6/6), done. From https://github.com/vlad/planets * branch master -&gt; FETCH_HEAD Updating dabb4c8..2abf2b1 Fast-forward mars.txt | 2 +- 1 file changed, 1 insertion(+), 1 deletion(-) <sub>~</sub> {:class=&quot;out&quot;}</p>
+<p>{:class=&quot;in&quot;} <sub>~</sub> remote: Counting objects: 10, done. remote: Compressing objects: 100% (4/4), done. remote: Total 6 (delta 2), reused 6 (delta 2) Unpacking objects: 100% (6/6), done. From https://github.com/vlad/planets * branch master -&gt; FETCH_HEAD Updating dabb4c8..2abf2b1 Fast-forward mars.txt | 2 +- 1 file changed, 1 insertion(+), 1 deletion(-) <sub>~</sub> {:class=&quot;out&quot;}</p>
 <p>we get the merged file:</p>
-<pre><code>$ cat mars.txt </code></pre>
+<pre><code>$ cat mars.txt</code></pre>
 <p>{:class=&quot;in&quot;} <sub>~</sub> Cold and dry, but everything is my favorite color The two moons may be a problem for Wolfman But the Mummy will appreciate the lack of humidity We removed the conflict on this line <sub>~</sub> {:class=&quot;out&quot;}</p>
 <p>We don't need to merge again because Git knows someone has already done that.</p>
 <p>Version control's ability to merge conflicting changes is another reason users tend to divide their programs and papers into multiple files instead of storing everything in one large file. There's another benefit too: whenever there are repeated conflicts in a particular file, the version control system is essentially trying to tell its users that they ought to clarify who's responsible for what, or find a way to divide the work up differently.</p>

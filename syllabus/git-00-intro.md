@@ -4,8 +4,6 @@ root: ..
 title: Introducing Version Control
 ---
 
-# Introducing Version Control
-
 #Teaching Git - 1
 
 1. Take 30 seconds and explain to your neighbor what your project workflow is. What tools do you use? How do you keep notes on what you did?
@@ -42,7 +40,7 @@ __Do you currently use some kind of version control?__
 * Email files to yourself
 * Time Machine (or other automated backup system)
 
-__Suggest that students who are familiar with git and GitHub move to sit near students who are not. 
+__Suggest that students who are familiar with git and GitHub move to sit near students who are not.
 Maybe move to the center of their tables, or towards the aisles to act as helpers??__
 
 ##Why should I use a version control system?
