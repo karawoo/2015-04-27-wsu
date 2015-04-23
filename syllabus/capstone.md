@@ -1,10 +1,8 @@
 ---
 layout: page
-title: Capstone
+title: Capstone exercise
 root: ..
 ---
-
-# Capstone exercise
 
 #### Using an Rmd file, create a short analysis report using R of the gapminder dataset.
 

@@ -1,472 +1,840 @@
-#!/usr/bin/env python
+#! /usr/bin/env python
 
-'''Check that index.html is valid and print out warnings and errors
-when the header is malformed.  See the docstrings on the checking
-functions for a summary of the checks.
-'''
+"""
+Validate Software Carpentry lessons
+according to the Markdown template specification described here:
+http://software-carpentry.org/blog/2014/10/new-lesson-template-v2.html
 
-from __future__ import print_function
-import sys
+Validates the presence of headings, as well as specific sub-nodes.
+Contains validators for several kinds of template.
+
+Call at command line with flag -h to see options and usage instructions.
+"""
+
+import argparse
+import collections
+import glob
+import hashlib
+import logging
 import os
 import re
-import logging
+import sys
+
+import CommonMark
 import yaml
-from collections import Counter
 
-try:  # Hack to make codebase compatible with python 2 and 3
-    basestring
-except NameError:
-    basestring = str
-
-__version__ = '0.6'
+import validation_helpers as vh
 
 
-# basic logging configuration
-logger = logging.getLogger(__name__)
-verbosity = logging.INFO  # severity of at least INFO will emerge
-logger.setLevel(verbosity)
+class MarkdownValidator(object):
+    """Base class for Markdown validation
 
-# create console handler and set level to debug
-console_handler = logging.StreamHandler()
-console_handler.setLevel(verbosity)
+    Contains basic validation skeleton to be extended for specific page types
+    """
+    HEADINGS = []  # List of strings containing expected heading text
 
-formatter = logging.Formatter('%(levelname)s: %(message)s')
-console_handler.setFormatter(formatter)
-logger.addHandler(console_handler)
+    # Callout boxes (blockquote items) have special rules.
+    # Dict of tuples for each callout type: {style: (title, min, max)}
+    CALLOUTS = {}
 
+    WARN_ON_EXTRA_HEADINGS = True  # Warn when other headings are present?
 
-# TODO: these regexp patterns need comments inside
-EMAIL_PATTERN = r'[^@]+@[^@]+\.[^@]+'
-HUMANTIME_PATTERN = r'((0?\d|1[0-1]):[0-5]\d(am|pm)(-|to)(0?\d|1[0-1]):[0-5]\d(am|pm))|((0?\d|1\d|2[0-3]):[0-5]\d(-|to)(0?\d|1\d|2[0-3]):[0-5]\d)'
-EVENTBRITE_PATTERN = r'\d{9,10}'
-URL_PATTERN = r'https?://.+'
+    # Validate YAML doc headers: dict of {header text: validation_func}
+    DOC_HEADERS = {}
 
-DEFAULT_CONTACT_EMAIL = 'admin@software-carpentry.org'
+    def __init__(self, filename=None, markdown=None):
+        """Perform validation on a Markdown document.
 
-USAGE = 'Usage: "python check.py" or "python check.py path/to/index.html"\n'
+        Validator accepts either the path to a file containing Markdown,
+        OR a valid Markdown string. The latter is useful for unit testing."""
+        self.filename = filename
 
-COUNTRIES = [
-    'Abkhazia', 'Afghanistan', 'Aland', 'Albania', 'Algeria',
-    'American-Samoa', 'Andorra', 'Angola', 'Anguilla',
-    'Antarctica', 'Antigua-and-Barbuda', 'Argentina', 'Armenia',
-    'Aruba', 'Australia', 'Austria', 'Azerbaijan', 'Bahamas',
-    'Bahrain', 'Bangladesh', 'Barbados', 'Basque-Country',
-    'Belarus', 'Belgium', 'Belize', 'Benin', 'Bermuda', 'Bhutan',
-    'Bolivia', 'Bosnia-and-Herzegovina', 'Botswana', 'Brazil',
-    'British-Antarctic-Territory', 'British-Virgin-Islands',
-    'Brunei', 'Bulgaria', 'Burkina-Faso', 'Burundi', 'Cambodia',
-    'Cameroon', 'Canada', 'Canary-Islands', 'Cape-Verde',
-    'Cayman-Islands', 'Central-African-Republic', 'Chad',
-    'Chile', 'China', 'Christmas-Island',
-    'Cocos-Keeling-Islands', 'Colombia', 'Commonwealth',
-    'Comoros', 'Cook-Islands', 'Costa-Rica', 'Cote-dIvoire',
-    'Croatia', 'Cuba', 'Curacao', 'Cyprus', 'Czech-Republic',
-    'Democratic-Republic-of-the-Congo', 'Denmark', 'Djibouti',
-    'Dominica', 'Dominican-Republic', 'East-Timor', 'Ecuador',
-    'Egypt', 'El-Salvador', 'England', 'Equatorial-Guinea',
-    'Eritrea', 'Estonia', 'Ethiopia', 'European-Union',
-    'Falkland-Islands', 'Faroes', 'Fiji', 'Finland', 'France',
-    'French-Polynesia', 'French-Southern-Territories', 'Gabon',
-    'Gambia', 'Georgia', 'Germany', 'Ghana', 'Gibraltar',
-    'GoSquared', 'Greece', 'Greenland', 'Grenada', 'Guam',
-    'Guatemala', 'Guernsey', 'Guinea-Bissau', 'Guinea', 'Guyana',
-    'Haiti', 'Honduras', 'Hong-Kong', 'Hungary', 'Iceland',
-    'India', 'Indonesia', 'Iran', 'Iraq', 'Ireland',
-    'Isle-of-Man', 'Israel', 'Italy', 'Jamaica', 'Japan',
-    'Jersey', 'Jordan', 'Kazakhstan', 'Kenya', 'Kiribati',
-    'Kosovo', 'Kuwait', 'Kyrgyzstan', 'Laos', 'Latvia',
-    'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Liechtenstein',
-    'Lithuania', 'Luxembourg', 'Macau', 'Macedonia',
-    'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali',
-    'Malta', 'Mars', 'Marshall-Islands', 'Martinique',
-    'Mauritania', 'Mauritius', 'Mayotte', 'Mexico', 'Micronesia',
-    'Moldova', 'Monaco', 'Mongolia', 'Montenegro', 'Montserrat',
-    'Morocco', 'Mozambique', 'Myanmar', 'NATO',
-    'Nagorno-Karabakh', 'Namibia', 'Nauru', 'Nepal',
-    'Netherlands-Antilles', 'Netherlands', 'New-Caledonia',
-    'New-Zealand', 'Nicaragua', 'Niger', 'Nigeria', 'Niue',
-    'Norfolk-Island', 'North-Korea', 'Northern-Cyprus',
-    'Northern-Mariana-Islands', 'Norway', 'Olympics', 'Oman',
-    'Pakistan', 'Palau', 'Palestine', 'Panama',
-    'Papua-New-Guinea', 'Paraguay', 'Peru', 'Philippines',
-    'Pitcairn-Islands', 'Poland', 'Portugal', 'Puerto-Rico',
-    'Qatar', 'Red-Cross', 'Republic-of-the-Congo', 'Romania',
-    'Russia', 'Rwanda', 'Saint-Barthelemy', 'Saint-Helena',
-    'Saint-Kitts-and-Nevis', 'Saint-Lucia', 'Saint-Martin',
-    'Saint-Vincent-and-the-Grenadines', 'Samoa', 'San-Marino',
-    'Sao-Tome-and-Principe', 'Saudi-Arabia', 'Scotland',
-    'Senegal', 'Serbia', 'Seychelles', 'Sierra-Leone',
-    'Singapore', 'Slovakia', 'Slovenia', 'Solomon-Islands',
-    'Somalia', 'Somaliland', 'South-Africa',
-    'South-Georgia-and-the-South-Sandwich-Islands',
-    'South-Korea', 'South-Ossetia', 'South-Sudan', 'Spain',
-    'Sri-Lanka', 'Sudan', 'Suriname', 'Swaziland', 'Sweden',
-    'Switzerland', 'Syria', 'Taiwan', 'Tajikistan', 'Tanzania',
-    'Thailand', 'Togo', 'Tokelau', 'Tonga',
-    'Trinidad-and-Tobago', 'Tunisia', 'Turkey', 'Turkmenistan',
-    'Turks-and-Caicos-Islands', 'Tuvalu', 'US-Virgin-Islands',
-    'Uganda', 'Ukraine', 'United-Arab-Emirates',
-    'United-Kingdom', 'United-Nations', 'United-States',
-    'Unknown', 'Uruguay', 'Uzbekistan', 'Vanuatu',
-    'Vatican-City', 'Venezuela', 'Vietnam', 'Wales',
-    'Wallis-And-Futuna', 'Western-Sahara', 'Yemen', 'Zambia',
-    'Zimbabwe'
-]
+        if filename:
+            # Expect Markdown files to be in same directory as the input file
+            self.markdown_dir = os.path.dirname(filename)
+            self.lesson_dir = self.markdown_dir
+            with open(filename, 'rU') as f:
+                self.markdown = f.read()
+        else:
+            # Look for linked content in ../pages (relative to this file)
+            self.lesson_dir = os.path.abspath(
+                os.path.join(os.path.dirname(__file__), os.pardir))
 
-LANGUAGES = [
-    'aa', 'ab', 'ae', 'af', 'ak', 'am', 'an', 'ar', 'as', 'av', 'ay', 'az',
-    'ba', 'be', 'bg', 'bh', 'bi', 'bm', 'bn', 'bo', 'br', 'bs', 'ca', 'ce',
-    'ch', 'co', 'cr', 'cs', 'cu', 'cv', 'cy', 'da', 'de', 'dv', 'dz', 'ee',
-    'el', 'en', 'eo', 'es', 'et', 'eu', 'fa', 'ff', 'fi', 'fj', 'fo', 'fr',
-    'fy', 'ga', 'gd', 'gl', 'gn', 'gu', 'gv', 'ha', 'he', 'hi', 'ho', 'hr',
-    'ht', 'hu', 'hy', 'hz', 'ia', 'id', 'ie', 'ig', 'ii', 'ik', 'io', 'is',
-    'it', 'iu', 'ja', 'jv', 'ka', 'kg', 'ki', 'kj', 'kk', 'kl', 'km', 'kn',
-    'ko', 'kr', 'ks', 'ku', 'kv', 'kw', 'ky', 'la', 'lb', 'lg', 'li', 'ln',
-    'lo', 'lt', 'lu', 'lv', 'mg', 'mh', 'mi', 'mk', 'ml', 'mn', 'mr', 'ms',
-    'mt', 'my', 'na', 'nb', 'nd', 'ne', 'ng', 'nl', 'nn', 'no', 'nr', 'nv',
-    'ny', 'oc', 'oj', 'om', 'or', 'os', 'pa', 'pi', 'pl', 'ps', 'pt', 'qu',
-    'rm', 'rn', 'ro', 'ru', 'rw', 'sa', 'sc', 'sd', 'se', 'sg', 'si', 'sk',
-    'sl', 'sm', 'sn', 'so', 'sq', 'sr', 'ss', 'st', 'su', 'sv', 'sw', 'ta',
-    'te', 'tg', 'th', 'ti', 'tk', 'tl', 'tn', 'to', 'tr', 'ts', 'tt', 'tw',
-    'ty', 'ug', 'uk', 'ur', 'uz', 've', 'vi', 'vo', 'wa', 'wo', 'xh', 'yi',
-    'yo', 'za', 'zh', 'zu'
-]
+            self.markdown_dir = self.lesson_dir
+            self.markdown = markdown
 
+        ast = self._parse_markdown(self.markdown)
+        self.ast = vh.CommonMarkHelper(ast)
 
-def add_error(msg, errors):
-    """Add error to the list of errors."""
-    errors.append(msg)
+        # Keep track of how many times callout box styles are used
+        self._callout_counts = collections.Counter()
 
+    def _parse_markdown(self, markdown):
+        parser = CommonMark.DocParser()
+        ast = parser.parse(markdown)
+        return ast
 
-def add_suberror(msg, errors):
-    """Add sub error, ie. error indented by 1 level ("\t"), to the list of errors."""
-    errors.append("\t{0}".format(msg))
+    def _validate_no_fixme(self):
+        """Validate that the file contains no lines marked 'FIXME'
+        This will be based on the raw markdown, not the ast"""
+        valid = True
+        for i, line in enumerate(self.markdown.splitlines()):
+            if re.search("FIXME", line, re.IGNORECASE):
+                logging.error(
+                    "In {0}: "
+                    "Line {1} contains FIXME, indicating "
+                    "work in progress".format(self.filename, i+1))
+                valid = False
+        return valid
 
+    def _validate_hrs(self):
+        """Validate header
 
-def look_for_fixme(func):
-    '''Decorator to fail test if text argument starts with "FIXME".'''
-    def inner(arg):
-        if (arg is not None) and \
-           isinstance(arg, basestring) and \
-           arg.lstrip().startswith('FIXME'):
+        Verify that the header section at top of document
+        is bracketed by two horizontal rules"""
+        valid = True
+        try:
+            hr_nodes = [self.ast.children[0], self.ast.children[2]]
+        except IndexError:
+            logging.error(
+                "In {0}: "
+                "Document must include header sections".format(self.filename))
             return False
-        return func(arg)
-    return inner
 
+        for hr in hr_nodes:
+            if not self.ast.is_hr(hr):
+                logging.error(
+                    "In {0}: "
+                    "Expected --- at line: {1}".format(
+                        self.filename, hr.start_line))
+                valid = False
+        return valid
 
-@look_for_fixme
-def check_layout(layout):
-    '''"layout" in YAML header must be "workshop".'''
+    def _validate_one_doc_header_row(self, label, content):
+        """Validate a single row of the document header section"""
+        if label not in self.DOC_HEADERS:
+            logging.warning(
+                "In {0}: "
+                "Unrecognized label in header section: {1}".format(
+                    self.filename, label))
+            return False
 
-    return layout == 'workshop'
+        validation_function = self.DOC_HEADERS[label]
+        validate_header = validation_function(content)
+        if not validate_header:
+            logging.error(
+                "In {0}: "
+                "Contents of document header field for label {1} "
+                "do not follow expected format".format(self.filename, label))
+        return validate_header
 
+    # Methods related to specific validation. Can override specific tests.
+    def _validate_doc_headers(self):
+        """Validate the document header section.
 
-@look_for_fixme
-def check_root(root):
-    '''"root" (the path from this page to the root directory) must be "."'''
+        Pass only if the header of the document contains the specified
+            sections with the expected contents"""
 
-    return root == '.'
+        # Test: Header section should be wrapped in hrs
+        has_hrs = self._validate_hrs()
 
+        header_node = self.ast.children[1]
+        header_text = '\n'.join(header_node.strings)
 
-@look_for_fixme
-def check_country(country):
-    '''"country" must be a hyphenated full country name from the list
-    embedded in this script.'''
+        # Parse headers as YAML. Don't check if parser returns None or str.
+        header_yaml = yaml.load(header_text)
+        if not isinstance(header_yaml, dict):
+            logging.error("In {0}: "
+                          "Expected YAML markup with labels "
+                          "{1}".format(self.filename, self.DOC_HEADERS.keys()))
+            return False
 
-    return country in COUNTRIES
+        # Test: Labeled YAML should match expected format
+        test_headers = [self._validate_one_doc_header_row(k, v)
+                        for k, v in header_yaml.items()]
 
+        # Test: Must have all expected header lines, and no others.
+        only_headers = (len(header_yaml) == len(self.DOC_HEADERS))
 
-@look_for_fixme
-def check_language(language):
-    '''"language" must be one of the two-letter ISO 639-1 language codes
-    embedded in this script.'''
+        # If expected headings are missing, print an informative message
+        missing_headings = [h for h in self.DOC_HEADERS
+                            if h not in header_yaml]
 
-    return language in LANGUAGES
+        for h in missing_headings:
+            logging.error("In {0}: "
+                          "Header section is missing expected "
+                          "row '{1}'".format(self.filename, h))
 
+        return has_hrs and all(test_headers) and only_headers
 
-@look_for_fixme
-def check_humandate(date):
-    '''"humandate" must be a human-readable date with a 3-letter month and
-    4-digit year.  Examples include "Feb 18-20, 2025" and "Feb 18 and
-    20, 2025".  It may be in languages other than English, but the
-    month name should be kept short to aid formatting of the main
-    Software Carpentry web site.'''
+    def _validate_section_heading_order(self, ast_node=None, headings=None):
+        """Verify that section headings appear, and in the order expected"""
+        if ast_node is None:
+            ast_node = self.ast.data
+            headings = self.HEADINGS
 
-    if "," not in date:
-        return False
+        heading_nodes = self.ast.get_section_headings(ast_node)
+        # All headings should be exactly level 2
+        correct_level = True
+        for n in heading_nodes:
+            if n.level != 2:
+                logging.error(
+                    "In {0}: "
+                    "Heading at line {1} should be level 2".format(
+                        self.filename, n.start_line))
+                correct_level = False
 
-    month_dates, year = date.split(",")
+        heading_labels = [vh.strip_attrs(n.strings[0]) for n in heading_nodes]
 
-    # The first three characters of month_dates are not empty
-    month = month_dates[:3]
-    if any(char == " " for char in month):
-        return False
+        # Check for missing and extra headings
+        missing_headings = [expected_heading for expected_heading in headings
+                            if expected_heading not in heading_labels]
 
-    # But the fourth character is empty ("February" is illegal)
-    if month_dates[3] != " ":
-        return False
+        extra_headings = [found_heading for found_heading in heading_labels
+                          if found_heading not in headings]
 
-    # year contains *only* numbers
-    try:
-        int(year)
-    except:
-        return False
+        for h in missing_headings:
+            logging.error(
+                "In {0}: "
+                "Document is missing expected heading: {1}".format(
+                    self.filename, h))
 
-    return True
+        if self.WARN_ON_EXTRA_HEADINGS is True:
+            for h in extra_headings:
+                logging.error(
+                    "In {0}: "
+                    "Document contains heading "
+                    "not specified in the template: {1}".format(
+                        self.filename, h))
+            no_extra = (len(extra_headings) == 0)
+        else:
+            no_extra = True
 
+        # Check that the subset of headings
+        # in the template spec matches order in the document
+        valid_order = True
+        headings_overlap = [h for h in heading_labels if h in headings]
+        if len(missing_headings) == 0 and headings_overlap != headings:
+            valid_order = False
+            logging.error(
+                "In {0}: "
+                "Document headings do not match "
+                "the order specified by the template".format(self.filename))
 
-@look_for_fixme
-def check_humantime(time):
-    '''"humantime" is a human-readable start and end time for the workshop,
-    such as "09:00 - 16:00".'''
+        return (len(missing_headings) == 0) and \
+            valid_order and no_extra and correct_level
 
-    return bool(re.match(HUMANTIME_PATTERN, time.replace(" ", "")))
+    def _validate_one_callout(self, callout_node):
+        """
+        Logic to validate a single callout box (defined as a blockquoted
+        section that starts with a heading). Checks that:
 
+        * First child of callout box should be a lvl 2 header with
+          known title & CSS style
+        * Callout box must have at least one child after the heading
 
-def check_date(this_date):
-    '''"startdate" and "enddate" are machine-readable start and end dates for
-    the workshop, and must be in YYYY-MM-DD format, e.g., "2015-07-01".'''
+        An additional test is done in another function:
+        * Checks # times callout style appears in document, minc <= n <= maxc
+        """
+        heading_node = callout_node.children[0]
+        valid_head_lvl = self.ast.is_heading(heading_node, heading_level=2)
+        title, styles = self.ast.get_heading_info(heading_node)
 
-    from datetime import date
-    # yaml automatically loads valid dates as datetime.date
-    return isinstance(this_date, date)
+        if not valid_head_lvl:
+            logging.error("In {0}: "
+                          "Callout box titled '{1}' must start with a "
+                          "level 2 heading".format(self.filename, title))
 
+        try:
+            style = styles[0]
+        except IndexError:
+            logging.error(
+                "In {0}: "
+                "Callout section titled '{1}' must specify "
+                "a CSS style".format(self.filename, title))
+            return False
 
-@look_for_fixme
-def check_latitude_longitude(latlng):
-    '''"latlng" must be a valid latitude and longitude represented as two
-    floating-point numbers separated by a comma.'''
+        # Track # times this style is used in any callout
+        self._callout_counts[style] += 1
 
-    try:
-        lat, lng = latlng.split(',')
-        lat = float(lat)
-        long = float(lng)
-    except ValueError:
-        return False
-    return (-90.0 <= lat <= 90.0) and (-180.0 <= long <= 180.0)
+        # Verify style actually in callout spec
+        if style not in self.CALLOUTS:
+            spec_title = None
+            valid_style = False
+        else:
+            spec_title, _, _ = self.CALLOUTS[style]
+            valid_style = True
 
+        has_children = self.ast.has_number_children(callout_node, minc=2)
+        if spec_title is not None and title != spec_title:
+            # Callout box must have specified heading title
+            logging.error(
+                "In {0}: "
+                "Callout section with style '{1}' should have "
+                "title '{2}'".format(self.filename, style, spec_title))
+            valid_title = False
+        else:
+            valid_title = True
 
-def check_instructors(instructors):
-    '''"instructor" must be a non-empty comma-separated list of quoted names,
-    e.g. ['First name', 'Second name', ...'].  Do not use "TBD" or other
-    placeholders.'''
+        res = (valid_style and valid_title and has_children and valid_head_lvl)
+        return res
 
-    # yaml automatically loads list-like strings as lists
-    return isinstance(instructors, list) and len(instructors) > 0
+    def _validate_callouts(self):
+        """
+        Validate all sections that appear as callouts
 
+        The style is a better determinant of callout than the title
+        """
+        callout_nodes = self.ast.get_callouts()
+        callouts_valid = True
 
-def check_helpers(helpers):
-    '''"helper" must be a comma-separated list of quoted names,
-    e.g. ['First name', 'Second name', ...'].  The list may be empty.  Do
-    not use "TBD" or other placeholders.'''
+        # Validate all the callout nodes present
+        for n in callout_nodes:
+            res = self._validate_one_callout(n)
+            callouts_valid = callouts_valid and res
 
-    # yaml automatically loads list-like strings as lists
-    return isinstance(helpers, list) and len(helpers) >= 0
+        found_styles = self._callout_counts
 
+        # Issue error if style is not present correct # times
+        missing_styles = [style
+                          for style, (title, minc, maxc) in self.CALLOUTS.items()
+                          if not ((minc or 0) <= found_styles[style]
+                                  <= (maxc or sys.maxsize))]
+        unknown_styles = [k for k in found_styles if k not in self.CALLOUTS]
 
-@look_for_fixme
-def check_email(email):
-    '''"contact" must be a valid email address consisting of characters, a
-    @, and more characters.  It should not be the default contact
-    email address "admin@software-carpentry.org".'''
+        for style in unknown_styles:
+            logging.error("In {0}: "
+                          "Found callout box with unrecognized "
+                          "style '{1}'".format(self.filename, style))
 
-    return bool(re.match(EMAIL_PATTERN, email)) and \
-           (email != DEFAULT_CONTACT_EMAIL)
+        for style in missing_styles:
+            minc = self.CALLOUTS[style][1]
+            maxc = self.CALLOUTS[style][2]
+            logging.error("In {0}: "
+                          "Expected between min {1} and max {2} callout boxes "
+                          "with style '{3}'".format(
+                self.filename, minc, maxc, style))
 
+        return (callouts_valid and
+                len(missing_styles) == 0 and len(unknown_styles) == 0)
 
-def check_eventbrite(eventbrite):
-    '''"eventbrite" (the Eventbrite registration key) must be 9 or more digits.'''
+    # Link validation methods
+    def _validate_one_html_link(self, link_node, check_text=False):
+        """
+        Any local html file being linked was generated as part of the lesson.
+        Therefore, file links (.html) must have a Markdown file
+            in the expected folder.
 
-    if isinstance(eventbrite, int):
+        The title of the linked Markdown document should match the link text.
+        """
+        dest, link_text = self.ast.get_link_info(link_node)
+
+        # HTML files in same folder are made from Markdown; special tests
+        fn = dest.split("#")[0]  # Split anchor name from filename
+        expected_md_fn = os.path.splitext(fn)[0] + os.extsep + "md"
+        expected_md_path = os.path.join(self.markdown_dir,
+                                        expected_md_fn)
+        if not os.path.isfile(expected_md_path):
+            logging.error(
+                "In {0}: "
+                "The document links to {1}, but could not find "
+                "the expected markdown file {2}".format(
+                    self.filename, fn, expected_md_path))
+            return False
+
+        if check_text is True:
+            # If file exists, parse and validate link text = node title
+            with open(expected_md_path, 'rU') as link_dest_file:
+                dest_contents = link_dest_file.read()
+
+            dest_ast = self._parse_markdown(dest_contents)
+            dest_ast = vh.CommonMarkHelper(dest_ast)
+            dest_page_title = dest_ast.get_doc_header_subtitle()
+
+            if dest_page_title != link_text:
+                logging.error(
+                    "In {0}: "
+                    "The linked page {1} exists, but "
+                    "the link text '{2}' does not match the "
+                    "(sub)title of that page, '{3}'.".format(
+                        self.filename, dest,
+                        link_text, dest_page_title))
+                return False
         return True
+
+    def _validate_one_link(self, link_node, check_text=False):
+        """Logic to validate a single link to a file asset
+
+        Performs special checks for links to a local markdown file.
+
+        For links or images, just verify that a file exists.
+        """
+        dest, link_text = self.ast.get_link_info(link_node)
+
+        if re.match(r"^[\w,\s-]+\.(html?)", dest, re.IGNORECASE):
+            # Validate local html links have matching md file
+            return self._validate_one_html_link(link_node,
+                                                check_text=check_text)
+        elif not re.match(r"^((https?|ftp)://.+)|mailto:",
+                          dest, re.IGNORECASE)\
+                and not re.match(r"^#.*", dest):
+            # If not web or email URL, and not anchor on same page, then
+            #  verify that local file exists
+            dest_path = os.path.join(self.lesson_dir, dest)
+            dest_path = dest_path.split("#")[0]  # Split anchor from filename
+            if not os.path.isfile(dest_path):
+                fn = dest.split("#")[0]  # Split anchor name from filename
+                logging.error(
+                    "In {0}: "
+                    "Could not find the linked asset file "
+                    "{1} in {2}. If this is a URL, it must be "
+                    "prefixed with http(s):// or ftp://.".format(
+                        self.filename, fn, dest_path))
+                return False
+        else:
+            logging.debug(
+                "In {0}: "
+                "Skipped validation of link {1}".format(self.filename, dest))
+        return True
+
+    def _partition_links(self):
+        """Fetch links in document. If this template has special requirements
+        for link text (eg only some links' text should match dest page title),
+        filter the list accordingly.
+
+        Default behavior: don't check the text of any links"""
+        check_text = []
+        no_check_text = self.ast.find_external_links()
+
+        return check_text, no_check_text
+
+    def _validate_links(self):
+        """Validate all references to external content
+
+        This includes links AND images: these are the two types of node that
+        CommonMark assigns a .destination property"""
+        check_text, no_check_text = self._partition_links()
+
+        valid = True
+        for link_node in check_text:
+            res = self._validate_one_link(link_node, check_text=True)
+            valid = valid and res
+
+        for link_node in no_check_text:
+            res = self._validate_one_link(link_node, check_text=False)
+            valid = valid and res
+        return valid
+
+    def _run_tests(self):
+        """
+        Let user override the list of tests to be performed.
+
+        Error trapping is handled by the validate() wrapper method.
+        """
+        tests = [self._validate_no_fixme(),
+                 self._validate_doc_headers(),
+                 self._validate_section_heading_order(),
+                 self._validate_callouts(),
+                 self._validate_links()]
+
+        return all(tests)
+
+    def validate(self):
+        """Perform all required validations. Wrap in exception handler"""
+        try:
+            return self._run_tests()
+        except IndexError:
+            logging.error("Document is missing critical sections")
+            return False
+
+
+class IndexPageValidator(MarkdownValidator):
+    """Validate the contents of the homepage (index.md)"""
+    HEADINGS = ['Topics',
+                'Other Resources']
+
+    DOC_HEADERS = {'layout': vh.is_str,
+                   'title': vh.is_str}
+
+    CALLOUTS = {'prereq': ("Prerequisites", 1, 1)}
+
+    def _partition_links(self):
+        """Check the text of every link in index.md"""
+        check_text = self.ast.find_external_links()
+        return check_text, []
+
+    def _validate_intro_section(self):
+        """Validate the intro section
+
+        It must be a paragraph, followed by blockquoted list of prereqs"""
+        intro_block = self.ast.children[3]
+        intro_section = self.ast.is_paragraph(intro_block)
+        if not intro_section:
+            logging.error(
+                "In {0}: "
+                "Expected paragraph of introductory text at {1}".format(
+                    self.filename, intro_block.start_line))
+
+        return intro_section
+
+    def _run_tests(self):
+        parent_tests = super(IndexPageValidator, self)._run_tests()
+        tests = [self._validate_intro_section()]
+        return all(tests) and parent_tests
+
+
+class TopicPageValidator(MarkdownValidator):
+    """Validate the Markdown contents of a topic page, eg 01-topicname.md"""
+    DOC_HEADERS = {"layout": vh.is_str,
+                   "title": vh.is_str,
+                   "subtitle": vh.is_str,
+                   "minutes": vh.is_numeric}
+
+    CALLOUTS = {"objectives": ("Learning Objectives", 1, 1),
+                "callout": (None, 0, None),
+                "challenge": (None, 0, None)}
+
+    def _validate_has_no_headings(self):
+        """Check headings
+
+        The top-level document has no headings indicating subtopics.
+        The only valid subheadings are nested in blockquote elements"""
+        heading_nodes = self.ast.get_section_headings()
+        if len(heading_nodes) == 0:
+            return True
+
+        # Individual heading msgs are logged by validate_section_heading_order
+        logging.error(
+            "In {0}: "
+            "The topic page should not have sub-headings "
+            "outside of special blocks. "
+            "If a topic needs sub-headings, "
+            "it should be broken into multiple topics.".format(self.filename))
+        return False
+
+    def _run_tests(self):
+        parent_tests = super(TopicPageValidator, self)._run_tests()
+        tests = [self._validate_has_no_headings()]
+        return all(tests) and parent_tests
+
+
+class MotivationPageValidator(MarkdownValidator):
+    """Validate motivation.md"""
+    WARN_ON_EXTRA_HEADINGS = False
+
+    DOC_HEADERS = {"layout": vh.is_str,
+                   "title": vh.is_str,
+                   "subtitle": vh.is_str}
+    # TODO: How to validate? May be a mix of reveal.js (HTML) + markdown.
+
+
+class ReferencePageValidator(MarkdownValidator):
+    """Validate reference.md"""
+    HEADINGS = ["Glossary"]
+    WARN_ON_EXTRA_HEADINGS = False
+
+    DOC_HEADERS = {"layout": vh.is_str,
+                   "title": vh.is_str,
+                   "subtitle": vh.is_str}
+
+    def _partition_links(self):
+        """For reference.md, only check that text of link matches
+        dest page subtitle if the link is in a heading"""
+        all_links = self.ast.find_external_links()
+        check_text = self.ast.find_external_links(
+            parent_crit=self.ast.is_heading)
+        dont_check_text = [n for n in all_links if n not in check_text]
+        return check_text, dont_check_text
+
+    def _validate_glossary_entry(self, glossary_entry):
+        """Validate glossary entry
+
+        Glossary entry must be formatted in conformance with Pandoc's
+        ```definition_lists``` extension.
+
+        That syntax isn't supported by the CommonMark parser, so we identify
+        terms manually."""
+        glossary_keyword = glossary_entry[0]
+        if len(glossary_entry) < 2:
+            logging.error(
+                "In {0}: "
+                "Glossary entry '{1}' must have at least two lines- "
+                "a term and a definition.".format(
+                    self.filename, glossary_keyword))
+            return False
+
+        entry_is_valid = True
+        for line_index, line in enumerate(glossary_entry):
+            if line_index == 1:
+                if not re.match("^:   ", line):
+                    logging.error(
+                        "In {0}: "
+                        "At glossary entry '{1}' "
+                        "First line of definition must "
+                        "start with ':    '.".format(
+                            self.filename, glossary_keyword))
+                    entry_is_valid = False
+            elif line_index > 1:
+                if not re.match("^    ", line):
+                    logging.error(
+                        "In {0}: "
+                        "At glossary entry '{1}' "
+                        "Subsequent lines of definition must "
+                        "start with '     '.".format(
+                            self.filename,  glossary_keyword, ))
+                    entry_is_valid = False
+        return entry_is_valid
+
+    def _validate_glossary(self):
+        """Validate the glossary section.
+
+        Assumes that the glossary is at the end of the file:
+            everything after the header. (and there must be a glossary section)
+
+        Verifies that the only things in the glossary are definition items.
+        """
+        is_glossary_valid = True
+        in_glossary = False
+        for node in self.ast.children:
+            if in_glossary:
+                is_glossary_valid = is_glossary_valid and \
+                    self._validate_glossary_entry(node.strings)
+            elif self.ast.is_heading(node) and "Glossary" in node.strings:
+                in_glossary = True
+
+        return is_glossary_valid
+
+    def _run_tests(self):
+        tests = [self._validate_glossary()]
+        parent_tests = super(ReferencePageValidator, self)._run_tests()
+        return all(tests) and parent_tests
+
+
+class InstructorPageValidator(MarkdownValidator):
+    """Simple validator for Instructor's Guide- instructors.md"""
+    HEADINGS = ["Legend", "Overall"]
+    WARN_ON_EXTRA_HEADINGS = False
+
+    DOC_HEADERS = {"layout": vh.is_str,
+                   "title": vh.is_str,
+                   "subtitle": vh.is_str}
+
+    def _partition_links(self):
+        """For instructors.md, only check that text of link matches
+        dest page subtitle if the link is in a heading"""
+        all_links = self.ast.find_external_links()
+        check_text = self.ast.find_external_links(
+            parent_crit=self.ast.is_heading)
+        dont_check_text = [n for n in all_links if n not in check_text]
+        return check_text, dont_check_text
+
+
+class LicensePageValidator(MarkdownValidator):
+    """Validate LICENSE.md: user should not edit this file"""
+    def _run_tests(self):
+        """Skip the base tests; just check md5 hash"""
+        # TODO: This hash is specific to the license for english-language repo
+        expected_hash = '051a04b8ffe580ba6b7018fb4fd72a50'
+        m = hashlib.md5()
+        try:
+            m.update(self.markdown)
+        except TypeError:
+            # Workaround for hashing in python3
+            m.update(self.markdown.encode('utf-8'))
+
+        if m.hexdigest() == expected_hash:
+            return True
+        else:
+            logging.error("The provided license file should not be modified.")
+            return False
+
+
+class DiscussionPageValidator(MarkdownValidator):
+    """
+    Validate the discussion page (discussion.md).
+    Most of the content is free-form.
+    """
+    WARN_ON_EXTRA_HEADINGS = False
+    DOC_HEADERS = {"layout": vh.is_str,
+                   "title": vh.is_str,
+                   "subtitle": vh.is_str}
+
+
+# Associate lesson template names with validators. This list used by CLI.
+#   Dict of {name: (Validator, filename_pattern)}
+LESSON_TEMPLATES = {"index": (IndexPageValidator, "^index"),
+                    "topic": (TopicPageValidator, "^[0-9]{2}-.*"),
+                    "motivation": (MotivationPageValidator, "^motivation"),
+                    "reference": (ReferencePageValidator, "^reference"),
+                    "instructor": (InstructorPageValidator, "^instructors"),
+                    "license": (LicensePageValidator, "^LICENSE"),
+                    "discussion": (DiscussionPageValidator, "^discussion")}
+
+# List of files in the lesson directory that should not be validated at all
+SKIP_FILES = ("DESIGN.md", "FAQ.md", "LAYOUT.md", "README.md")
+
+
+def identify_template(filepath):
+    """Identify template
+
+    Given the path to a single file,
+    identify the appropriate template to use"""
+    for template_name, (validator, pattern) in LESSON_TEMPLATES.items():
+        if re.search(pattern, os.path.basename(filepath)):
+            return template_name
+
+    return None
+
+
+def validate_single(filepath, template=None):
+    """Validate a single Markdown file based on a specified template"""
+    if os.path.basename(filepath) in SKIP_FILES:
+        # Silently pass certain non-lesson files without validating them
+        return True
+
+    template = template or identify_template(filepath)
+    if template is None:
+        logging.error(
+            "Validation failed for {0}: "
+            "Could not automatically identify correct template.".format(
+                filepath))
+        return False
+
+    logging.debug(
+        "Beginning validation of {0} using template {1}".format(
+            filepath, template))
+    validator = LESSON_TEMPLATES[template][0]
+    validate_file = validator(filepath)
+
+    res = validate_file.validate()
+    if res is True:
+        logging.debug("File {0} successfully passed validation".format(
+            filepath))
     else:
-        return bool(re.match(EVENTBRITE_PATTERN, eventbrite))
+        logging.debug("File {0} failed validation: "
+                      "see error log for details".format(filepath))
+
+    return res
 
 
-@look_for_fixme
-def check_etherpad(etherpad):
-    '''"etherpad" must be a valid URL.'''
+def validate_folder(path, template=None):
+    """Validate an entire folder of files"""
+    search_str = os.path.join(path, "*.md")  # Find files based on extension
+    filename_list = glob.glob(search_str)
 
-    return bool(re.match(URL_PATTERN, etherpad))
+    if not filename_list:
+        logging.error(
+            "No Markdown files were found "
+            "in specified directory {0}".format(path))
+        return False
 
-
-@look_for_fixme
-def check_pass(value):
-    '''This test always passes (it is used for "checking" things like
-    addresses, for which no sensible validation is feasible).'''
-
-    return True
-
-
-HANDLERS = {
-    'layout':     (True, check_layout, 'layout isn\'t "workshop"'),
-    'root':       (True, check_root, 'root can only be "."'),
-    'country':    (True, check_country,
-                   'country invalid: must use full hyphenated name from: ' +
-                   ' '.join(COUNTRIES)),
-
-    'language' :  (False,  check_language,
-                   'language invalid: must be a ISO 639-1 code'),
-
-    'humandate':  (True, check_humandate,
-                   'humandate invalid. Please use three-letter months like ' +
-                   '"Jan" and four-letter years like "2025".'),
-    'humantime':  (True, check_humantime,
-                   'humantime doesn\'t include numbers'),
-    'startdate':  (True, check_date,
-                   'startdate invalid. Must be of format year-month-day, ' +
-                   'i.e., 2014-01-31.'),
-    'enddate':    (False, check_date,
-                   'enddate invalid. Must be of format year-month-day, i.e.,' +
-                   ' 2014-01-31.'),
-
-    'latlng':     (True, check_latitude_longitude,
-                   'latlng invalid. Check that it is two floating point ' +
-                   'numbers, separated by a comma.'),
-
-    'instructor': (True, check_instructors,
-                   'instructor list isn\'t a valid list of format ' +
-                   '["First instructor", "Second instructor",..].'),
-    'helper':     (True, check_helpers,
-                   'helper list isn\'t a valid list of format ' +
-                   '["First helper", "Second helper",..].'),
-
-    'contact':    (True, check_email,
-                   'contact email invalid or still set to ' +
-                   '"{0}".'.format(DEFAULT_CONTACT_EMAIL)),
-
-    'eventbrite': (False, check_eventbrite, 'Eventbrite key appears invalid.'),
-    'etherpad':   (False, check_etherpad, 'Etherpad URL appears invalid.'),
-    'venue':      (False, check_pass, 'venue name not specified'),
-    'address':    (False, check_pass, 'address not specified')
-}
-
-# REQUIRED is all required categories.
-REQUIRED = set([k for k in HANDLERS if HANDLERS[k][0]])
-
-# OPTIONAL is all optional categories.
-OPTIONAL = set([k for k in HANDLERS if not HANDLERS[k][0]])
+    all_valid = True
+    for fn in filename_list:
+        res = validate_single(fn, template=template)
+        all_valid = all_valid and res
+    return all_valid
 
 
-def check_validity(data, function, errors, error_msg):
-    '''Wrapper-function around the various check-functions.'''
-    valid = function(data)
-    if not valid:
-        add_error(error_msg, errors)
-        add_suberror('Offending entry is: "{0}"'.format(data), errors)
+def start_logging(level=logging.INFO):
+    """Initialize logging and print messages to console."""
+    logging.basicConfig(stream=sys.stdout, level=level)
+
+
+def command_line():
+    """Handle arguments passed in via the command line"""
+    parser = argparse.ArgumentParser()
+    parser.add_argument("file_or_path",
+                        nargs="*",
+                        default=[os.getcwd()],
+                        help="The individual pathname")
+
+    parser.add_argument('-t', '--template',
+                        choices=LESSON_TEMPLATES.keys(),
+                        help="The type of template to apply to all file(s). "
+                             "If not specified, will auto-identify template.")
+
+    parser.add_argument('-d', '--debug',
+                        action='store_true',
+                        help="Enable debug information.")
+
+    return parser.parse_args()
+
+
+def check_required_files(dir_to_validate):
+    """Check if required files exists."""
+    REQUIRED_FILES = ["01-*.md",
+                      "discussion.md",
+                      "index.md",
+                      "instructors.md",
+                      "LICENSE.md",
+                      "motivation.md",
+                      "README.md",
+                      "reference.md"]
+    valid = True
+
+    for required in REQUIRED_FILES:
+        req_fn = os.path.join(dir_to_validate, required)
+        if not glob.glob(req_fn):
+            logging.error(
+                "Missing file {0}.".format(required))
+            valid = False
+
     return valid
 
 
-def check_blank_lines(raw_data, errors, error_msg):
-    '''Check for blank line in category headers.'''
-    lines = [x.strip() for x in raw_data.split('\n')]
-    if '' in lines:
-        add_error(error_msg, errors)
-        add_suberror('{0} blank lines found in header'.format(lines.count('')), errors)
-        return False
-    return True
+def get_files_to_validate(file_or_path):
+    """Generate list of files to validate."""
+    files_to_validate = []
+    dirs_to_validate = []
+
+    for fn in file_or_path:
+        if os.path.isdir(fn):
+            search_str = os.path.join(fn, "*.md")
+            files_to_validate.extend(glob.glob(search_str))
+            dirs_to_validate.append(fn)
+        elif os.path.isfile(fn):
+            files_to_validate.append(fn)
+        else:
+            logging.error(
+                "The specified file or folder {0} does not exist; "
+                "could not perform validation".format(fn))
+
+    return files_to_validate, dirs_to_validate
 
 
-def check_categories(left, right, errors, error_msg):
-    '''Report set difference of categories.'''
-    result = left - right
-    if result:
-        add_error(error_msg, errors)
-        add_suberror('Offending entries: {0}'.format(result), errors)
-        return False
-    return True
-
-
-def get_header(text):
-    '''Extract YAML header from raw data, returning (None, None) if no
-    valid header found and (raw, parsed) if header found.'''
-
-    # YAML header must be right at the start of the file.
-    if not text.startswith('---'):
-        return None, None
-
-    # YAML header must start and end with '---'
-    pieces = text.split('---')
-    if len(pieces) < 2:
-        return None, None
-
-    # Return raw text and YAML-ized form.
-    raw = pieces[1].strip()
-    return raw, yaml.load(raw)
-
-
-def check_file(filename, data):
-    '''Get header from index.html, call all other functions and check file
-    for validity. Return list of errors (empty when no errors).'''
-
-    errors = []
-    raw, header = get_header(data)
-    if header is None:
-        msg = ('Cannot find YAML header in given file "{0}".'.format(filename))
-        add_error(msg, errors)
-        return errors
-
-    # Do we have any blank lines in the header?
-    is_valid = check_blank_lines(raw, errors,
-                                 'There are blank lines in the header')
-
-    # Look through all header entries.  If the category is in the input
-    # file and is either required or we have actual data (as opposed to
-    # a commented-out entry), we check it.  If it *isn't* in the header
-    # but is required, report an error.
-    for category in HANDLERS:
-        required, handler_function, error_message = HANDLERS[category]
-        if category in header:
-            if required or header[category]:
-                is_valid &= check_validity(header[category],
-                                           handler_function, errors,
-                                           error_message)
-        elif required:
-            msg = 'index file is missing mandatory key "{0}"'.format(category)
-            add_error(msg, errors)
-            is_valid = False
-
-    # Check whether we have missing or too many categories
-    seen_categories = set(header.keys())
-
-    is_valid &= check_categories(REQUIRED, seen_categories, errors,
-                                 'There are missing categories')
-
-    is_valid &= check_categories(seen_categories, REQUIRED.union(OPTIONAL),
-                                 errors, 'There are superfluous categories')
-
-    return errors
-
-
-def main():
-    '''Run as the main program.'''
-    filename = None
-    if len(sys.argv) == 1:
-        if os.path.exists('./index.html'):
-            filename = './index.html'
-        elif os.path.exists('../index.html'):
-            filename = '../index.html'
-    elif len(sys.argv) == 2:
-        filename = sys.argv[1]
-
-    if filename is None:
-        print(USAGE, file=sys.stderr)
-        sys.exit(1)
-
-    logger.info('Testing "{0}"'.format(filename))
-
-    with open(filename) as reader:
-        data = reader.read()
-        errors = check_file(filename, data)
-
-    if errors:
-        for m in errors:
-            logger.error(m)
-        sys.exit(1)
+def main(parsed_args_obj):
+    if parsed_args_obj.debug:
+        log_level = "DEBUG"
     else:
-        logger.info('Everything seems to be in order')
+        log_level = "WARNING"
+    start_logging(log_level)
+
+    template = parsed_args_obj.template
+
+    all_valid = True
+
+    files_to_validate, dirs_to_validate = get_files_to_validate(
+        parsed_args_obj.file_or_path)
+
+    # If user ask to validate only one file don't check for required files.
+    for d in dirs_to_validate:
+        all_valid = all_valid and check_required_files(d)
+
+    for fn in files_to_validate:
+        res = validate_single(fn, template=template)
+
+        all_valid = all_valid and res
+
+    if all_valid is True:
+        logging.debug("All Markdown files successfully passed validation.")
         sys.exit(0)
+    else:
+        logging.warning(
+            "Some errors were encountered during validation. "
+            "See log for details.")
+        sys.exit(1)
 
 
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    parsed_args = command_line()
+    main(parsed_args)

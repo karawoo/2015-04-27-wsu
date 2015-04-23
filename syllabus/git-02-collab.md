@@ -4,8 +4,6 @@ root: ..
 title: Collaborating
 ---
 
-# Collaborating
-
 <div class="objectives" markdown="1">
 
 #### Objectives
@@ -62,10 +60,10 @@ __C.V./resume line!__
 
 #####github.com?
 
-GitHub is a site where many people store their open (and closed) source code repositories. 
-It provides tools for browsing, collaborating on and documenting code. 
-Your home institution may have a repository hosting system of it's own. 
-To find out, ask your system administrator. 
+GitHub is a site where many people store their open (and closed) source code repositories.
+It provides tools for browsing, collaborating on and documenting code.
+Your home institution may have a repository hosting system of it's own.
+To find out, ask your system administrator.
 GitHub, much like other forge hosting services (launchpad, bitbucket, googlecode, sourceforge etc.) provides :
 
 * landing page support
@@ -81,7 +79,7 @@ GitHub, much like other forge hosting services (launchpad, bitbucket, googlecode
 
 __Give a quick tour of GitHub__
 
-__EXERCISE:__ _Show everyone how to make a new account. 
+__EXERCISE:__ _Show everyone how to make a new account.
 If they have an account already, ask them to help their neighbors get started._
 
 Let's start by sharing the changes we've made to our current project with the world.

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="pandoc">
+    <title>Software Carpentry: </title>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-theme.css" />
+    <link rel="stylesheet" type="text/css" href="css/swc.css" />
+    <link rel="alternate" type="application/rss+xml" title="Software Carpentry Blog" href="http://software-carpentry.org/feed.xml"/>
+    <meta charset="UTF-8" />
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body class="lesson">
+    <div class="container card">
+      <div class="banner">
+        <a href="http://software-carpentry.org" title="Software Carpentry">
+          <img alt="Software Carpentry banner" src="img/software-carpentry-banner.png" />
+        </a>
+      </div>
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+          <h1 class="title"></h1>
+          
+<h1 id="creating-moving-and-deleting-files-and-directories">Creating, moving, and deleting files and directories</h1>
+<p>I'm going to be working mainly in the <code>Desktop</code> directory -- recommend that people follow along.</p>
+<h2 id="creating-an-empty-file">Creating an empty file</h2>
+<p>Lets create an empty file using the <code>touch</code> command. Enter the command:</p>
+<pre><code>$ touch testfile</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>Then list the contents of the directory again using <code>ls</code>. You should see that a new entry, called <code>testfile</code>, exists. It does not have a slash at the end, showing that it is not a directory. The <code>touch</code> command just creates an empty file.</p>
+<p>Some terminals can color the directory entries in this very convenient way. In those terminals, use <code>ls -G</code> instead of <code>ls</code> if you are on a Mac or <code>ls --color</code> if you run on Windows. Now your directories, files, and executables will have different colors.</p>
+<p>Now if you use the command <code>ls -l</code> you will notice that <code>testfile</code> has a size of zero. OK then, let's get rid of <code>testfile</code>. To remove a file, just enter the command:</p>
+<pre><code>$ rm -i testfile</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>When prompted, type:</p>
+<pre><code>$ y</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>The <code>rm</code> command can be used to remove files. The <code>-i</code> adds the &quot;are you sure?&quot; message. If you enter <code>ls</code> again, you will see that <code>testfile</code> is gone.</p>
+<p><strong><em>Warning: The shell does not have a recycling bin. So any file removed with <code>rm</code> is gone forever. Use with caution. Remember the -i argument</em></strong></p>
+<p>If you want to create a file with some text, say notes about what you are doing, you'll need to use a text editor. The one we'll be using here is nano.</p>
+<blockquote>
+<h4>Which Editor?</h4>
+<p>When we say, &quot;<code>nano</code> is a text editor,&quot; we really do mean &quot;text&quot;: it can only work with plain character data, not tables, images, or any other human-friendly media. We use it in examples because almost anyone can drive it anywhere without training, but please use something more powerful for real work. On Unix systems (such as Linux and Mac OS X), many programmers use <a href="http://www.gnu.org/software/emacs/">Emacs</a> or <a href="http://www.vim.org/">Vim</a> (both of which are completely unintuitive, even by Unix standards), or a graphical editor such as <a href="http://projects.gnome.org/gedit/">Gedit</a>. On Windows, you may wish to use <a href="http://notepad-plus-plus.org/">Notepad++</a>.</p>
+<p>No matter what editor you use, you will need to know where it searches for and saves files. If you start it from the shell, it will (probably) use your current working directory as its default location. If you use your computer's start menu, it may want to save files in your desktop or documents directory instead. You can change this by navigating to another directory the first time you &quot;Save As...&quot;</p>
+</blockquote>
+<p>To create a new file and open nano, type</p>
+<pre><code>$ nano notes.txt</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p><em>Pause to make sure this worked for everyone, especially Windows users who may not have installed nano.</em></p>
+<p>Now, type a line of text, something like &quot;This is where I am keeping my notes.&quot; To exit, hit Ctrl-X, then Y (to save), then Enter.</p>
+<p>Now use <code>ls</code> to view the contents of your desktop. Do you see the file you created? <em>(Does anyone not see it?)</em></p>
+<p><strong>Exercise:</strong> View the contents of the file you just created within your terminal (hint: we learned a command for viewing the contents of a file in the last section). Then, open the file, add some more text to it, save it, and exit.</p>
+<h2 id="manipulating-the-file-system">Manipulating the file system</h2>
+<p>Make directories with <code>mkdir</code>. This will create a new directory within the current directory.</p>
+<pre><code>$ mkdir software-carpentry</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>You can create as many folders as you like in a single call.</p>
+<pre><code>$ mkdir directory_name_1 directory_name_2 directory_name_3</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>To copy and move files, we use the commands <code>cp</code> and <code>mv</code>, followed by the file you want to copy/move, and then the location that you want to copy/move it to.</p>
+<pre><code>$ cp file1 file2
+$ mv file1 file2</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>So if I am in my data directory and I want to copy or move one of the data files to my desktop, I would do. <em>(Do these, then show them on the Desktop. Do rm ~/Desktop/car-speeds.csv in between.)</em></p>
+<pre><code>$ cp gapminder.csv software-carpentry/
+$ mv gapminder.csv software-carpentry/</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p><code>cp</code> and <code>mv</code> can also rename files. If you want to rename a file in place, just do:</p>
+<pre><code>$ mv file_oldname file_newname</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>When we moved <code>gapminder.csv</code> to the <code>software-carpentry</code> folder, if we'd wanted to rename it at the same time we could have done:</p>
+<pre><code>$ cp gapminder.csv software-carpentry/gapminder-2.csv</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>Both <code>cp</code> and <code>mv</code> can be used with directories in addition to files.</p>
+<p>See the <code>man</code> command to get help on options you can use with these commands.</p>
+<p>Remove files with <code>rm</code>.</p>
+<h2 id="lets-try-out-some-of-the-commands-above">Let's try out some of the commands above</h2>
+<p>First create a temporary directory on your desktop. <em>Ask for people to call out commands to make directory and navigate into it.</em></p>
+<pre><code>$ cd ~/Desktop
+$ mkdir scratchpad
+$ cd scratchpad</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>Make a few directories inside <code>scratchpad</code></p>
+<pre><code>$ mkdir dir1 dir2 dir3
+$ cp ~/Desktop/swc-data/*.png .</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>Use <code>ls</code> to view the contents of the current directory. What just happened? <em>(Ask for a volunteer)</em></p>
+<p>This is our first introduction to wildcards, which I'm going to talk a bit more about later. The <code>*.png</code> is telling the computer to match anything that ends in <code>.png</code>, which in this case is all of the figures from Karl's ggplot2 lesson.</p>
+<p>Now try and remove scratchpad.</p>
+<pre><code>rm scratchpad</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>What just happened? If you want to remove everything within scratchpad no matter what, you will need to add the <code>-r</code> argument to function <code>rm</code></p>
+<pre><code>rm -r scratchpad</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p><em>Maybe skip the below since it won't work for Windows users</em></p>
+<p>You can also create an entire directory structure with a single call (unfortunately this shortcut does not work in GitBash). e.g.</p>
+<pre><code>cd
+mkdir -p test_project/{R,data,output/{data,figures},doc}
+ls test_project/</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<p>This will create a project called <code>test_project</code> with the following structure:</p>
+<pre><code>|-- R/
+|-- data/
+|-- output/
+|-- |-- data/
+|-- |-- figures/
+|-- doc/</code></pre>
+<p>{:class=&quot;out&quot;}</p>
+<p>One could also create lots of subdirectories at once using curly brackets expansions.</p>
+<pre><code>mkdir temp
+cd temp
+ls
+mkdir dir-{0..10}
+ls
+rm -r temp</code></pre>
+<p>{:class=&quot;in&quot;}</p>
+<div id="challenge" class="challenge panel panel-success">
+<div class="panel-heading">
+<h3><span class="glyphicon glyphicon-pencil"></span>Challenge</h3>
+</div>
+<div class="panel-body">
+<p>Using the shell, create a folder on your desktop for materials from this workshop that looks like this <em>(Draw on the board)</em>.</p>
+</div>
+</div>
+<pre><code>|-- software-carpentry/
+|-- |-- data/
+|-- |-- |-- (data here)
+|-- |-- R/
+|-- |-- |-- (R scripts here)
+|-- |-- notes/
+|-- |-- figures/
+|-- |-- |-- (figures here)</code></pre>
+<p>{:class=&quot;out&quot;}</p>
+<p>Note that this will break read.csv in your R script <em>go to RStudio and demonstrate, then use relative paths to fix loading of data</em></p>
+<hr />
+<p>Acknowledgments: these lessons were adapted by Kara Woo from materials by <a href="http://nicercode.github.io/2014-02-13-UNSW/lessons/60-shell/">Diego Barneche</a>.</p>
+        </div>
+      </div>
+      <div class="footer">
+        <a class="label swc-blue-bg" href="http://software-carpentry.org">Software Carpentry</a>
+        <a class="label swc-blue-bg" href="https://github.com/karawoo/2015-04-27-wsu">Source</a>
+        <a class="label swc-blue-bg" href="mailto:admin@software-carpentry.org">Contact</a>
+        <a class="label swc-blue-bg" href="../LICENSE.html">License</a>
+      </div>
+    </div>
+    <!-- Javascript placed at the end of the document so the pages load faster -->
+    <script src="http://software-carpentry.org/v5/js/jquery-1.9.1.min.js"></script>
+    <script src="css/bootstrap/bootstrap-js/bootstrap.js"></script>
+  </body>
+</html>

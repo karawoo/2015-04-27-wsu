@@ -4,8 +4,6 @@ root: ..
 title: A Better Kind of Backup
 ---
 
-# A Better Kind of Backup
-
 <div class="objectives" markdown="1">
 
 #### Objectives
@@ -32,10 +30,10 @@ version control is much better for this than this:
 </div>
 
 ###Local Repo
-Git will keep track of the _changes_ to your files, rather than keep multiple copies of the files. 
-It saves the first version, then keeps track of subsequent changes to that version. 
-This makes it efficient and speedy. 
-It can recreate any version (go back in time) by adding up all the changes 
+Git will keep track of the _changes_ to your files, rather than keep multiple copies of the files.
+It saves the first version, then keeps track of subsequent changes to that version.
+This makes it efficient and speedy.
+It can recreate any version (go back in time) by adding up all the changes
 to get to where you want to be.
 
 ### Setting Up
@@ -216,9 +214,9 @@ The "untracked files" message means that there's a file in the directory
 that Git isn't keeping track of.
 
 _Now, lets add files that are inside:
-On the white board draw a box representing the staging area (index) and 
+On the white board draw a box representing the staging area (index) and
 explain that this is where we set up the next snapshot of our project.
-Like a photographer in a studio, we're putting together a shot 
+Like a photographer in a studio, we're putting together a shot
 before we actually snap the picture.
 Connect the working area box and the staging box with 'git add'._
 
@@ -259,25 +257,25 @@ but it hasn't yet recorded any changes for posterity as a commit.
 
 _Tell git _"Hey, we want you to remember the way that the files look right now"_._
 
-_On the white board draw a box representing the project history. 
+_On the white board draw a box representing the project history.
 Once we take a snapshot of the project that snapshot becomes a permanent reference point in the project's history that we can always go back to.
 The history is like a photo album of changes, and each snapshot has a time stamp, the name of the photographer, and a description.
 Connect the staging area to the history with `git commit -m "message"`.
-In order to save a snapshot of the current state (revision) of the repository, we use the commit command. 
-This command is always associated with a message describing the changes since the last commit and indicating their purpose. 
-Git will ask you to add a commit message. 
-This is just to remind you what changes you made. 
+In order to save a snapshot of the current state (revision) of the repository, we use the commit command.
+This command is always associated with a message describing the changes since the last commit and indicating their purpose.
+Git will ask you to add a commit message.
+This is just to remind you what changes you made.
 Informative commit messages will serve you well someday, so make a habit of never committing changes without at least a full sentence description._
 
 __ADVICE: Commit often__
-_In the same way that it is wise to often save a document that you are working on, so too is it wise to save numerous revisions of your code. 
+_In the same way that it is wise to often save a document that you are working on, so too is it wise to save numerous revisions of your code.
 More frequent commits increase the granularity of your undo button._
 
 __ADVICE: Good commit messages__
 [because it's important!](http://www.commitlogsfromlastnight.com/)
-_There are no hard and fast rules, but good commits are atomic: they are the smallest change that remain meaningful. 
+_There are no hard and fast rules, but good commits are atomic: they are the smallest change that remain meaningful.
 A good commit message usually contains a one-line description followed by a longer explanation if necessary.
-For code, it's useful to commit changes that can be reviewed by someone in under an hour. 
+For code, it's useful to commit changes that can be reviewed by someone in under an hour.
 Or it can be useful to commit changes that "go together" - for example, one paragraph of a manuscript, or each new function added to your script.
 For example, if you work on your code all day long (add 200 lines of code, including 5 new functions and write 7 pages of your new manuscript including deleting an old paragraph), and at 3:00 you make a fatal error or deletion, but you didn't commit once, then you will have a hard time recreating the version you are looking for - because it doesn't exist!_
 
@@ -328,7 +326,7 @@ nothing to commit, working directory clean
 
 it tells us everything is up to date.
 If we want to know what we've done recently,
-we can ask Git to show us the project's history using `git log`. 
+we can ask Git to show us the project's history using `git log`.
 You can see all the changes you have ever made using this command:
 
 ~~~
@@ -730,9 +728,9 @@ index df0654a..b36abfd 100644
 ### Recovering Old Versions
 
 _So far, this seems like a lot of work. Why are we keeping track of all these little things??
-Let's say you fatally ruin a file during an editing mistake 
-(like when I deleted an awesome paragraph from my dissertation instead of cutting and pasting it like I meant to.) 
-Maybe you even accidentally delete an important file (This code is old, why should I keep it?). 
+Let's say you fatally ruin a file during an editing mistake
+(like when I deleted an awesome paragraph from my dissertation instead of cutting and pasting it like I meant to.)
+Maybe you even accidentally delete an important file (This code is old, why should I keep it?).
 If you have version control, you don't need to track down your System Administrator. You can fix your problem easily!_
 
 All right:
@@ -977,27 +975,27 @@ nothing to commit, working directory clean
 ~~~
 {:class="out"}
 
-_To discard all your most recent changes and GO BACK IN TIME, 
-first look at your `git log` to decide what version you want to go back to. 
+_To discard all your most recent changes and GO BACK IN TIME,
+first look at your `git log` to decide what version you want to go back to.
 Remember the first 5-7 digits in the commit code of the version that wasn't screwed up._
 
 _use `git reset --hard versioncode`_
 
-_To roll back to a specific file, use 
+_To roll back to a specific file, use
 `git checkout version name --filename`_
 
 _To roll back one version (usually I know that I messed up pretty quickly)
 `git checkout master~1 PathToFile`_
 
 
-_A short exercise to show moving back and forth. If I mess up and I notice right away, 
- might want to go back in time quickly. Commit some changes to `mars.txt`. 
+_A short exercise to show moving back and forth. If I mess up and I notice right away,
+ might want to go back in time quickly. Commit some changes to `mars.txt`.
  I can return to the previous version by typing `git checkout master~1 mars.txt`, and then
- committing those changes with a message like "I deleted the thing I just added". 
+ committing those changes with a message like "I deleted the thing I just added".
  This will preserve your entire history, including the short-lived mistake, which will allow
- you to return to it if you should decide it wasn't a mistake at all. 
- If you check out the entire repository using `git checkout master~1` you will be in 
- "detached head state". This can be quickly remedied by typing `git checkout master`, to return 
+ you to return to it if you should decide it wasn't a mistake at all.
+ If you check out the entire repository using `git checkout master~1` you will be in
+ "detached head state". This can be quickly remedied by typing `git checkout master`, to return
  you to the correct place. Detached head is when the head is not the same version as the master._
 
 

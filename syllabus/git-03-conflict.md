@@ -4,8 +4,6 @@ root: ..
 title: Conflicts
 ---
 
-# Conflicts
-
 <div class="objectives" markdown="1">
 
 #### Objectives
@@ -142,9 +140,9 @@ $ git pull origin master
 ~~~
 {:class="in"}
 ~~~
-remote: Counting objects: 5, done.        
-remote: Compressing objects: 100% (2/2), done.        
-remote: Total 3 (delta 1), reused 3 (delta 1)        
+remote: Counting objects: 5, done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 3 (delta 1), reused 3 (delta 1)
 Unpacking objects: 100% (3/3), done.
 From https://github.com/vlad/planets
  * branch            master     -> FETCH_HEAD
@@ -253,9 +251,9 @@ $ git pull origin master
 ~~~
 {:class="in"}
 ~~~
-remote: Counting objects: 10, done.        
-remote: Compressing objects: 100% (4/4), done.        
-remote: Total 6 (delta 2), reused 6 (delta 2)        
+remote: Counting objects: 10, done.
+remote: Compressing objects: 100% (4/4), done.
+remote: Total 6 (delta 2), reused 6 (delta 2)
 Unpacking objects: 100% (6/6), done.
 From https://github.com/vlad/planets
  * branch            master     -> FETCH_HEAD
@@ -269,7 +267,7 @@ Fast-forward
 we get the merged file:
 
 ~~~
-$ cat mars.txt 
+$ cat mars.txt
 ~~~
 {:class="in"}
 ~~~

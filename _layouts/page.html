@@ -1,29 +1,23 @@
----
----
 <!DOCTYPE html>
-<!--
-  Use this layout for generic pages in the workshop website.
-  Use 'workshop.html' for the workshop home page.
-  REMEMBER to set the variable 'root' in the header of the actual page.
--->
 <html>
   <head>
-    <title>Software Carpentry: {{ page.venue }}</title>
-    {% include header.html %}
+    <meta charset="utf-8">
+    <meta name="generator" content="pandoc">
+    <title>Software Carpentry: $pagetitle$</title>
+    $header$
   </head>
-  <body class="workshop">
-
-    {% include github-ribbon.html %}
-
+  <body class="lesson">
     <div class="container card">
-      {% include banner.html %}
+      $banner$
       <div class="row">
         <div class="col-md-10 col-md-offset-1">
-          {{content}}
+          <h1 class="title">$title$</h1>
+          $if(subtitle)$<h2 class="subtitle">$subtitle$</h2>$endif$
+$body$
         </div>
-        {% include footer.html %}
-       </div>
+      </div>
+      $footer$
     </div>
-    {% include javascript.html %}
+    $javascript$
   </body>
 </html>
