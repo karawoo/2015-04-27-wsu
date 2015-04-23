@@ -611,3 +611,12 @@ p + theme_karl()
 ~~~
 
 <img src="fig/ggplot2-use_karl_theme-1.png" title="plot of chunk use_karl_theme" alt="plot of chunk use_karl_theme" style="display: block; margin: auto;" />
+
+### Resources
+
+- [ggplot2 cheat sheet](http://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf)
+- [ggplot2 website](http://ggplot2.org)
+- [ggplot2 book](http://www.amazon.com/dp/0387981403/7210-20)
+- [R graphics cookbook](http://www.amazon.com/dp/1449316956/7210-20)
+- [R graph catalog](http://shinyapps.stat.ubc.ca/r-graph-catalog/):
+  ggplot2 code for graphs in the book [Creating more effective graphs](http://www.amazon.com/Creating-Effective-Graphs-Naomi-Robbins/dp/0985911123/7210-20)
