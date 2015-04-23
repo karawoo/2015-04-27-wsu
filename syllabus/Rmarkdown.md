@@ -202,13 +202,17 @@ $$y = \mu + \sum_{i=1}^p \beta_i x_i + \epsilon$$
 ```
 
 
-  - super-scripts and subscripts
-- How to compile to html file
 
 ### R code chunks
 
 - regular code
 - graphs
+
+
+### How things get compiled
+
+<img src="fig/Rmd-rmd_to_html_fig-1.png" title="plot of chunk rmd_to_html_fig" alt="plot of chunk rmd_to_html_fig" style="display: block; margin: auto auto auto 0;" />
+
 
 ### Chunk options
 
@@ -222,10 +226,6 @@ $$y = \mu + \sum_{i=1}^p \beta_i x_i + \epsilon$$
 - perhaps precede the paragraph with a larger code chunk that does
   calculations and defines things
 - rounding
-
-### LaTeX equations
-
-- `$` vs `$$`
 
 ### Other output options
 
