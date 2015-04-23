@@ -1,13 +1,11 @@
 ---
-title: "R-intro-01-data"
+title: "Working with data"
 author: "Kara Woo"
 date: "03/26/2015"
 output: html_document
 ---
 
 
-
-# Working with data
 
 > ### Learning Objectives {.objectives}
 >
@@ -44,8 +42,8 @@ If we want to move to a different working directory, use `setwd()`:
 setwd("~/Desktop")    ## ~/ is a shortcut for the "home" directory
 ~~~
 
-However beware that if you write a script that uses `setwd()`, others may not be 
-able to run that script on their computers if they have organized their 
+However beware that if you write a script that uses `setwd()`, others may not be
+able to run that script on their computers if they have organized their
 directories differently from you.
 
 To load the data into R, we use a function called `read.csv()`.
@@ -57,7 +55,7 @@ To load the data into R, we use a function called `read.csv()`.
 gapminder <- read.csv("gapminder.csv")
 ~~~
 
-A very useful function for examining the first few rows of your data is 
+A very useful function for examining the first few rows of your data is
 `head()`:
 
 

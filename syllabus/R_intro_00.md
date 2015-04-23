@@ -1,13 +1,11 @@
 ---
-title: "R-intro-00"
+title: "Intro to R"
 author: "Kara Woo"
 date: "03/26/2015"
 output: html_document
 ---
 
 
-
-# Intro to R
 
 > ### Learning Objectives {.objectives}
 >
@@ -290,4 +288,3 @@ factors (`factor`).
 >
 > Combine objects `x`, `y`, and `weights` into a vector called `z`. Find the
 > mean of this set of numbers (hint: there is a function called `mean()`).
-
