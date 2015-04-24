@@ -42,8 +42,7 @@ If you then want to convert 100 degrees F, you'll have to retype all
 of that. And the code itself doesn't really explain it's purpose.
 
 ```{r f2c_function}
-f2c <-
-    function(fahrenheit)
+f2c <- function(fahrenheit)
 {
     celsius <- (fahrenheit - 32)*5/9
     return(celsius)
@@ -82,8 +81,7 @@ an explicit `return` statement is not needed; the function will
 _return_ the value of the last statement, so we could write:
 
 ```{r f2c_function_2}
-f2c <-
-    function(fahrenheit)
+f2c <- function(fahrenheit)
 {
     (fahrenheit - 32)*5/9
 }
@@ -93,8 +91,7 @@ And, actually, the curly braces aren't needed when the function has
 just one statement. We could have written:
 
 ```{r f2c_function_3}
-f2c <-
-    function(fahrenheit)
+f2c <- function(fahrenheit)
     (fahrenheit - 32)*5/9
 ```
 
@@ -127,8 +124,7 @@ data(gapminder)
 Here's a function to make a plot for a particular year.
 
 ```{r plot_year}
-plot_year <-
-    function(year=2007, data=gapminder)
+plot_year <- function(year=2007, data=gapminder)
 {
     library(dplyr)
     library(ggplot2)
@@ -158,8 +154,7 @@ default value.
 
 
 ```{r plot_country}
-plot_country <-
-    function(country="China", data=gapminder)
+plot_country <- function(country="China", data=gapminder)
 {
     library(dplyr)
     library(ggplot2)
@@ -189,8 +184,7 @@ plot_country <-
 
 
 ```{r plot_year_add_curve}
-plot_year <-
-    function(year=2007, data=gapminder, add_curve=TRUE)
+plot_year <- function(year=2007, data=gapminder, add_curve=TRUE)
 {
     library(dplyr)
     library(ggplot2)
@@ -217,8 +211,7 @@ Maybe also include `include_se`?
 > as well as `geom_point()`.
 
 ```{r plot_country_add_line}
-plot_country <-
-    function(country="China", data=gapminder, add_line=FALSE)
+plot_country <- function(country="China", data=gapminder, add_line=FALSE)
 {
     library(dplyr)
     library(ggplot2)
@@ -243,8 +236,7 @@ Add `method` argument, to allow that you might use either `"loess"` or
 `"lm"` for the curve.
 
 ```{r plot_year_with_method}
-plot_year <-
-    function(year=2007, data=gapminder, add_curve=TRUE, method="loess")
+plot_year <- function(year=2007, data=gapminder, add_curve=TRUE, method="loess")
 {
     library(dplyr)
     library(ggplot2)
@@ -266,8 +258,7 @@ Can be helpful to give multiple choices. You could then use
 `match.arg()` to ensure that the selected choice is allowable.
 
 ```{r plot_year_with_multi-choice}
-plot_year <-
-    function(year=2007, data=gapminder, curve=c("none", "loess", "lm"))
+plot_year <- function(year=2007, data=gapminder, curve=c("none", "loess", "lm"))
 {
     curve <- match.arg(curve)
 
@@ -303,8 +294,7 @@ We could just go back to `add_curve` but then also include an argument
 `...` which is passed to `geom_smooth`, to cover each of `method` and `se`.
 
 ```{r plot_year_with_dots}
-plot_year <-
-    function(year=2007, data=gapminder, add_curve=FALSE, ...)
+plot_year <- function(year=2007, data=gapminder, add_curve=FALSE, ...)
 {
     curve <- match.arg(curve)
 
