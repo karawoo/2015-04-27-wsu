@@ -6,6 +6,8 @@ title: Writing R functions
 
 
 
+
+
 > ### Learning Objectives {.objectives}
 >
 > * Why write functions
@@ -158,24 +160,6 @@ enhancements after the fact.
 
 ~~~{.r}
 plot_year(1952) + aes(color=continent) + ggtitle(1952)
-~~~
-
-
-
-~~~{.output}
-
-Attaching package: 'dplyr'
-
-The following object is masked from 'package:stats':
-
-    filter
-
-The following objects are masked from 'package:base':
-
-    intersect, setdiff, setequal, union
-
-Loading required package: methods
-
 ~~~
 
 <img src="fig/functions-use_plot_year-1.png" title="plot of chunk use_plot_year" alt="plot of chunk use_plot_year" style="display: block; margin: auto;" />
@@ -364,3 +348,11 @@ plot_year <-
 
 Problem here: if they use `add_curve=TRUE`, they need to also indicate
 a method; otherwise they'll get an error. **(Or will they?)**
+
+### Resources
+
+- See the
+  [chapter on functions](http://adv-r.had.co.nz/Functions.html) in
+  [Hadley Wickham](http://had.co.nz/)'s
+  [Advanced R book](http://adv-r.had.co.nz/), also available on
+  [paper](http://www.amazon.com/exec/obidos/ASIN/1466586966/7210-20).

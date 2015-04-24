@@ -110,19 +110,6 @@
 }</code></pre>
 <p>The function returns the ggplot object. You could add further enhancements after the fact.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_year</span>(<span class="dv">1952</span>) +<span class="st"> </span><span class="kw">aes</span>(<span class="dt">color=</span>continent) +<span class="st"> </span><span class="kw">ggtitle</span>(<span class="dv">1952</span>)</code></pre>
-<pre class="output"><code>
-Attaching package: &#39;dplyr&#39;
-
-The following object is masked from &#39;package:stats&#39;:
-
-    filter
-
-The following objects are masked from &#39;package:base&#39;:
-
-    intersect, setdiff, setequal, union
-
-Loading required package: methods
-</code></pre>
 <p><img src="fig/functions-use_plot_year-1.png" title="plot of chunk use_plot_year" alt="plot of chunk use_plot_year" style="display: block; margin: auto;" /></p>
 <p>Note that I passed the data as an argument and gave each argument a default value.</p>
 <div id="challenge-1" class="challenge panel panel-success">
@@ -267,6 +254,10 @@ Loading required package: methods
     p
 }</code></pre>
 <p>Problem here: if they use <code>add_curve=TRUE</code>, they need to also indicate a method; otherwise they'll get an error. <strong>(Or will they?)</strong></p>
+<h3 id="resources">Resources</h3>
+<ul>
+<li>See the <a href="http://adv-r.had.co.nz/Functions.html">chapter on functions</a> in <a href="http://had.co.nz/">Hadley Wickham</a>'s <a href="http://adv-r.had.co.nz/">Advanced R book</a>, also available on <a href="http://www.amazon.com/exec/obidos/ASIN/1466586966/7210-20">paper</a>.</li>
+</ul>
         </div>
       </div>
       <div class="footer">

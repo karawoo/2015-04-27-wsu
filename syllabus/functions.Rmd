@@ -9,6 +9,11 @@ source("chunk_options.R")
 opts_chunk$set(fig.path="fig/functions-", fig.width=11, fig.height=8)
 ```
 
+```{r load_libraries, include=FALSE, message=FALSE}
+library(dplyr)
+library(ggplot2)
+```
+
 > ### Learning Objectives {.objectives}
 >
 > * Why write functions
@@ -321,3 +326,11 @@ plot_year <-
 
 Problem here: if they use `add_curve=TRUE`, they need to also indicate
 a method; otherwise they'll get an error. **(Or will they?)**
+
+### Resources
+
+- See the
+  [chapter on functions](http://adv-r.had.co.nz/Functions.html) in
+  [Hadley Wickham](http://had.co.nz/)'s
+  [Advanced R book](http://adv-r.had.co.nz/), also available on
+  [paper](http://www.amazon.com/exec/obidos/ASIN/1466586966/7210-20).
