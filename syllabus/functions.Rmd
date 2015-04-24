@@ -172,11 +172,66 @@ plot_country <- function(country="China", data=gapminder)
 
 ### Scope
 
-- variables defined within a function are destroyed on exit.
-- if function refers to a variable that hasn't been defined locally,
-  look outside to global environment.
-- things are more tricky for functions defined within functions, but
-  maybe we'll skip that.
+Variables defined within a function are destroyed on exit.
+
+```{r scope1}
+f1 <- function(x)
+{
+    p <- 1
+    x + p
+}
+f1(5)
+p
+```
+
+The variable `p` exists within the function but doesn't exist
+outside the function. It's created anew each time you run the
+function.
+
+The function _arguments_ (that is, the inputs) exist only within the
+function, too. Continuing from the example above, note that `x`
+doesn't exist:
+
+```{r scope2}
+f1(5)
+x
+```
+
+How about if you refer to a variable that hasn't been defined in the
+function?
+
+```{r scope3}
+f2 <- function(x)
+{
+    x + p
+}
+f2(5)
+p <- 3
+f2(5)
+```
+
+If you refer to a variable that you've not _created_ within the
+function, R will look outside, to the "global environment".
+
+You can use this to _change_ variables sitting in your workspace.
+
+```{r scope4}
+f3 <- function(x)
+{
+    p <- p + x
+}
+p <- 5
+f3(5)
+p
+```
+
+You might use this to avoid passing data into a function, but _please
+don't_! The use of global variables can make your code unpredictable
+and hard to read.
+
+Anything that the function needs should be input as an
+argument. Changes that the function makes should be through the
+return value.
 
 
 
