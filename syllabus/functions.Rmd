@@ -259,6 +259,10 @@ return value.
 ### Conditional statements
 
 
+Returning to functions to make graphs: often it's nice to include
+some options in your function, for example, an argument that controls
+whether or not to add a smooth curve to the plot.
+
 ```{r plot_year_add_curve}
 plot_year <- function(year=2007, data=gapminder, add_curve=TRUE)
 {
@@ -271,20 +275,35 @@ plot_year <- function(year=2007, data=gapminder, add_curve=TRUE)
     p <- ggplot(gm_year, aes(y=lifeExp, x=gdpPercap)) +
         geom_point() + scale_x_log10()
 
-    if(add_curve)
+    if(add_curve) {
         p <- p + geom_smooth(method="loess")
+    }
 
     p
 }
 ```
 
+Here, we've add a _conditional statement_. If `add_curve` is `TRUE`,
+the bit of code in the curly braces, `p <- p + geom_smooth(method="loess")`,
+gets run. If `add_curve` is `FALSE`, it gets skipeed over.
 
-Maybe also include `include_se`?
+The curly braces aren't needed here, since there is just one line
+within the code block that is run, but some people recommend that you
+always include them, for the sake of clarity.
+
+Here's how you might use this:
+
+```{r use_plot_year_add_curve, eval=FALSE}
+plot_year(1952)
+plot_year(1952, add_curve=FALSE)
+```
+
 
 > ### Challenge: {.challenge}
 >
 > Add an option to your `plot_country` function, to use `geom_line()`
 > as well as `geom_point()`.
+
 
 ```{r plot_country_add_line}
 plot_country <- function(country="China", data=gapminder, add_line=FALSE)
@@ -298,8 +317,9 @@ plot_country <- function(country="China", data=gapminder, add_line=FALSE)
     p <- ggplot(gm_country, aes(y=lifeExp, x=gdpPercap)) +
         geom_point()
 
-    if(add_line)
+    if(add_line) {
         p <- p + geom_line()
+    }
 
     p
 }
@@ -308,8 +328,11 @@ plot_country <- function(country="China", data=gapminder, add_line=FALSE)
 
 ### Multiple-choice arguments
 
-Add `method` argument, to allow that you might use either `"loess"` or
-`"lm"` for the curve.
+The `geom_smooth` function can take multiple arguments, for example,
+we might use `"lm"` (which will give a straight line) rather than
+`"loess"`.
+
+We could add a `method` argument that is passed to `plot_year()`, like this:
 
 ```{r plot_year_with_method}
 plot_year <- function(year=2007, data=gapminder, add_curve=TRUE, method="loess")
@@ -330,8 +353,13 @@ plot_year <- function(year=2007, data=gapminder, add_curve=TRUE, method="loess")
 }
 ```
 
-Can be helpful to give multiple choices. You could then use
-`match.arg()` to ensure that the selected choice is allowable.
+It can be helpful to give multiple choices. For example, we could drop
+the `add_curve` argument and allow `method` to be either `"lm"`,
+`"loess"`, or `"none"` (with no curve plotted in the latter place.
+
+The function `match_arg()` is useful here. You give a vector of
+choices as the default value for the argument, and `match_arg` will
+ensure that the selected choice is among those allowed.
 
 ```{r plot_year_with_multi-choice}
 plot_year <- function(year=2007, data=gapminder, curve=c("none", "loess", "lm"))
@@ -354,6 +382,13 @@ plot_year <- function(year=2007, data=gapminder, curve=c("none", "loess", "lm"))
 }
 ```
 
+Here's how you might use this:
+
+```{r use_plot_year_with_multi-choice, eval=FALSE}
+plot_year(1952, curve="none")
+plot_year(1952, curve="lm")
+```
+
 > ### Challenge {.challenge}
 >
 > Modify your function to take an argument `type` with possible values
@@ -363,14 +398,14 @@ plot_year <- function(year=2007, data=gapminder, curve=c("none", "loess", "lm"))
 
 ### The `...` argument
 
-You might also want to be able to pass `se` (taking values `TRUE` or
-`FALSE`).
-
-We could just go back to `add_curve` but then also include an argument
-`...` which is passed to `geom_smooth`, to cover each of `method` and `se`.
+The `geom_smooth()` argument also has an argument `se` (taking values
+`TRUE` or `FALSE`) that indicates whether the confidence bands should
+be plotted or not. We might add this to _our_ function as an
+argument. Or, we could include an argument `...` to cover any other
+things that we might want to pass to `geom_smooth`
 
 ```{r plot_year_with_dots}
-plot_year <- function(year=2007, data=gapminder, add_curve=FALSE, ...)
+plot_year <- function(year=2007, data=gapminder, curve=c("none", "loess", "lm"), ...)
 {
     curve <- match.arg(curve)
 
@@ -383,15 +418,20 @@ plot_year <- function(year=2007, data=gapminder, add_curve=FALSE, ...)
     p <- ggplot(gm_year, aes(y=lifeExp, x=gdpPercap)) +
         geom_point() + scale_x_log10()
 
-    if(add_curve)
-        p <- p + geom_smooth(...)
+    if(curve != "none")
+        p <- p + geom_smooth(method="curve", ...)
 
     p
 }
 ```
 
-Problem here: if they use `add_curve=TRUE`, they need to also indicate
-a method; otherwise they'll get an error. **(Or will they?)**
+Here's how you might use this:
+
+```{r use_plot_year_with_dots, eval=FALSE}
+plot_year(1952, curve="loess")
+plot_year(1952, curve="loess", se=FALSE)
+```
+
 
 ### Resources
 
