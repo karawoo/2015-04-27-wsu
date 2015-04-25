@@ -113,7 +113,7 @@ ls()
 
 
 ~~~{.output}
-[1] "hook_in"  "hook_out" "x"        "y"       
+[1] "x" "y"
 
 ~~~
 
