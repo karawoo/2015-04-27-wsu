@@ -130,11 +130,11 @@ gapminder[gapminder$country == "Finland", ]
 >
 > Which of the following are NOT equivalent?
 >
-> a) gapminder[50, 4] and gapminder[50, "lifeExp"]
+> a) `gapminder[50, 4]` and `gapminder[50, "lifeExp"]`
 >
-> b) gapminder[50, 4] and gapminder[4, 50]
+> b) `gapminder[50, 4]` and `gapminder[4, 50]`
 >
-> c) gapminder[50, 4] and gapminder$lifeExp[50]
+> c) `gapminder[50, 4]` and `gapminder$lifeExp[50]`
 
 > ### Challenge {.challenge}
 >
