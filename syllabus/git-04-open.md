@@ -4,15 +4,13 @@ root: ..
 title: Open Science
 ---
 
-<div class="objectives" markdown="1">
+> ### Objectives {.objectives}
+>
+> *   Explain how the GNU General Public License (GPL) differs from most other open licenses.
+> *   Explain the four kinds of restrictions that can be combined in a Creative Commons license.
+> *   Correctly add licensing and citation information to a project repository.
+> *   Outline options for hosting code and data and the pros and cons of each.
 
-#### Objectives
-*   Explain how the GNU General Public License (GPL) differs from most other open licenses.
-*   Explain the four kinds of restrictions that can be combined in a Creative Commons license.
-*   Correctly add licensing and citation information to a project repository.
-*   Outline options for hosting code and data and the pros and cons of each.
-
-</div>
 
 <blockquote>
 The opposite of "open" isn't "closed".
@@ -148,31 +146,16 @@ The table below shows how the six Creative Commons licenses and PD relate to one
 <!--- Replace the caption with colspan when it was supported by pandoc:
 https://github.com/jgm/pandoc/issues/1340 -->
 <table border="1">
-  <caption>Licenses that can be used for derivative work or adaptation</caption>
-  <tr>
-    <td>Original work</td> <td>by</td> <td>by-nc</td> <td>by-nc-nd</td> <td>by-nc-sa</td> <td>by-nd</td> <td>by-sa</td> <td>pd</td>
-  </tr>
-  <tr>
-    <td>by</td>       <td>X</td> <td>X</td> <td>X</td> <td>X</td> <td>X</td> <td>X</td> <td> </td>
-  </tr>
-  <tr>
-    <td>by-nc</td>    <td> </td> <td>X</td> <td>X</td> <td>X</td> <td> </td> <td> </td> <td> </td>
-  </tr>
-  <tr>
-    <td>by-nc-nd</td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td>
-  </tr>
-  <tr>
-    <td>by-nc-sa</td> <td> </td> <td> </td> <td> </td> <td>X</td> <td> </td> <td> </td> <td> </td>
-  </tr>
-  <tr>
-    <td>by-nd</td>    <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td>
-  </tr>
-  <tr>
-    <td>by-sa</td>    <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td>X</td> <td> </td>
-  </tr>
-  <tr>
-    <td>pd</td>       <td>X</td> <td>X</td> <td>X</td> <td>X</td> <td>X</td> <td>X</td> <td>X</td>
-  </tr>
+<caption>Licenses that can be used for derivative work or adaptation</caption>
+<tr>
+<td>Original work</td> <td>by</td> <td>by-nc</td> <td>by-nc-nd</td> <td>by-nc-sa</td> <td>by-nd</td> <td>by-sa</td> <td>pd</td></tr>
+<tr><td>by</td><td>X</td> <td>X</td> <td>X</td> <td>X</td> <td>X</td> <td>X</td> <td> </td></tr>
+<tr><td>by-nc</td><td> </td> <td>X</td> <td>X</td> <td>X</td> <td> </td> <td> </td> <td> </td></tr>
+<tr><td>by-nc-nd</td><td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td></tr>
+<tr><td>by-nc-sa</td><td> </td> <td> </td> <td> </td> <td>X</td> <td> </td> <td> </td> <td> </td></tr>
+<tr><td>by-nd</td><td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td></tr>
+<tr><td>by-sa</td><td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td>X</td> <td> </td></tr>
+<tr><td>pd</td><td>X</td> <td>X</td> <td>X</td> <td>X</td> <td>X</td> <td>X</td> <td>X</td></tr>
 </table>
 
 [Software Carpentry](http://software-carpentry.org/license.html)
@@ -254,39 +237,37 @@ either because they want to protect future patent applications
 or simply because what's new is often also frightening.
 
 __Link to 9 simple ways to share your data paper:
-http://library.queensu.ca/ojs/index.php/IEE/article/view/4608
-https://peerj.com/preprints/7/__
+<http://library.queensu.ca/ojs/index.php/IEE/article/view/4608>
+<https://peerj.com/preprints/7/> __
 
-<div class="keypoints" markdown="1">
+> ### Key Points {.objective}
+>
+> *   Open scientific work is more useful and more highly cited than closed.
+> *   People who incorporate GPL'd software into theirs must make theirs open;
+>     most other open licenses do not require this.
+> *   The Creative Commons family of licenses allow people to mix and match
+>     requirements and restrictions on attribution,
+>     creation of derivative works,
+>     further sharing,
+>     and commercialization.
+> *   People who are not lawyers should not try to write licenses from scratch.
+> *   Projects can be hosted on university servers,
+>     on personal domains,
+>     or on public forges.
+> *   Rules regarding intellectual property and storage of sensitive information apply
+>     no matter where code and data are hosted.
 
-#### Key Points
-*   Open scientific work is more useful and more highly cited than closed.
-*   People who incorporate GPL'd software into theirs must make theirs open;
-    most other open licenses do not require this.
-*   The Creative Commons family of licenses allow people to mix and match
-    requirements and restrictions on attribution,
-    creation of derivative works,
-    further sharing,
-    and commercialization.
-*   People who are not lawyers should not try to write licenses from scratch.
-*   Projects can be hosted on university servers,
-    on personal domains,
-    or on public forges.
-*   Rules regarding intellectual property and storage of sensitive information apply
-    no matter where code and data are hosted.
 
-</div>
+> ### Challenge {.challenge}
+>
+> Find out whether you are allowed to apply an open license to your software.
+> Can you do this unilaterally,
+> or do you need permission from someone in your institution?
+> If so, who?
 
-<div class="challenge" markdown="1">
-Find out whether you are allowed to apply an open license to your software.
-Can you do this unilaterally,
-or do you need permission from someone in your institution?
-If so, who?
-</div>
-
-<div class="challenge" markdown="1">
-Find out whether you are allowed to host your work openly on a public forge.
-Can you do this unilaterally,
-or do you need permission from someone in your institution?
-If so, who?
-</div>
+> ### Challenge {.challenge}
+>
+> Find out whether you are allowed to host your work openly on a public forge.
+> Can you do this unilaterally,
+> or do you need permission from someone in your institution?
+> If so, who?

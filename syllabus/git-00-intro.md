@@ -81,17 +81,13 @@ Version control is better than mailing files back and forth because:
     the version control system automatically notifies users
     whenever there's a conflict between one person's work and another's.
 
-<div class="challenges" markdown="1">
-
-#### Challenges
-
-On Wikipedia all changes and their authors are tracked. You can go
-[here](https://en.wikipedia.org/w/index.php?title=Mars&action=history)
-and you will find the history of all changes done to the article about the planet
-Mars. Find the last edit done last month and look at the changes made by
-clicking on the "prev" link on the left of the history entry.
-
-</div>
+> ### Challenge {.challenge}
+>
+> On Wikipedia all changes and their authors are tracked. You can go
+> [here](https://en.wikipedia.org/w/index.php?title=Mars&action=history)
+> and you will find the history of all changes done to the article about the planet
+> Mars. Find the last edit done last month and look at the changes made by
+> clicking on the "prev" link on the left of the history entry.
 
 This lesson shows how to use
 a popular open source version control system called Git.
