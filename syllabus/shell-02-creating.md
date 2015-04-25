@@ -11,10 +11,9 @@ I'm going to be working mainly in the `Desktop` directory -- recommend that peop
 
 Lets create an empty file using the `touch` command. Enter the command:
 
-~~~
+~~~ {.bash}
 $ touch testfile
 ~~~
-{:class="in"}
 
 Then list the contents of the directory again using `ls`. You should see that a new entry, called `testfile`, exists. It does not have a slash at the end, showing that it is not a directory. The `touch` command just creates an empty file.
 
@@ -22,17 +21,16 @@ Some terminals can color the directory entries in this very convenient way. In t
 
 Now if you use the command `ls -l` you will notice that `testfile` has a size of zero. OK then, let's get rid of `testfile`. To remove a file, just enter the command:
 
-~~~
+~~~ {.bash}
 $ rm -i testfile
 ~~~
-{:class="in"}
 
 When prompted, type:
 
-~~~
+~~~ {.bash}
 $ y
 ~~~
-{:class="in"}
+
 
 The `rm` command can be used to remove files. The `-i` adds the "are you sure?" message. If you enter `ls` again, you will see that `testfile` is gone.
 
@@ -62,10 +60,10 @@ If you want to create a file with some text, say notes about what you are doing,
 
 To create a new file and open nano, type
 
-~~~
+~~~ {.bash}
 $ nano notes.txt
 ~~~
-{:class="in"}
+
 
 *Pause to make sure this worked for everyone, especially Windows users who may not have installed nano.*
 
@@ -79,47 +77,47 @@ Now use `ls` to view the contents of your desktop. Do you see the file you creat
 
 Make directories with `mkdir`. This will create a new directory within the current directory.
 
-~~~
+~~~ {.bash}
 $ mkdir software-carpentry
 ~~~
-{:class="in"}
+
 
 You can create as many folders as you like in a single call.
 
-~~~
+~~~ {.bash}
 $ mkdir directory_name_1 directory_name_2 directory_name_3
 ~~~
-{:class="in"}
+
 
 To copy and move files, we use the commands `cp` and `mv`, followed by the file you want to copy/move, and then the location that you want to copy/move it to.
 
-~~~
+~~~ {.bash}
 $ cp file1 file2
 $ mv file1 file2
 ~~~
-{:class="in"}
+
 
 So if I am in my data directory and I want to copy or move one of the data files to my desktop, I would do. *(Do these, then show them on the Desktop. Do rm ~/Desktop/car-speeds.csv in between.)*
 
-~~~
+~~~ {.bash}
 $ cp gapminder.csv software-carpentry/
 $ mv gapminder.csv software-carpentry/
 ~~~
-{:class="in"}
+
 
 `cp` and `mv` can also rename files. If you want to rename a file in place, just do:
 
-~~~
+~~~ {.bash}
 $ mv file_oldname file_newname
 ~~~
-{:class="in"}
+
 
 When we moved `gapminder.csv` to the `software-carpentry` folder, if we'd wanted to rename it at the same time we could have done:
 
-~~~
+~~~ {.bash}
 $ cp gapminder.csv software-carpentry/gapminder-2.csv
 ~~~
-{:class="in"}
+
 
 Both `cp` and `mv` can be used with directories in addition to files.
 
@@ -131,20 +129,20 @@ Remove files with `rm`.
 
 First create a temporary directory on your desktop. *Ask for people to call out commands to make directory and navigate into it.*
 
-~~~
+~~~ {.bash}
 $ cd ~/Desktop
 $ mkdir scratchpad
 $ cd scratchpad
 ~~~
-{:class="in"}
+
 
 Make a few directories inside `scratchpad`
 
-~~~
+~~~ {.bash}
 $ mkdir dir1 dir2 dir3
 $ cp ~/Desktop/swc-data/*.png .
 ~~~
-{:class="in"}
+
 
 Use `ls` to view the contents of the current directory. What just happened? *(Ask for a volunteer)*
 
@@ -152,32 +150,32 @@ This is our first introduction to wildcards, which I'm going to talk a bit more 
 
 Now try and remove scratchpad.
 
-~~~
+~~~ {.bash}
 rm scratchpad
 ~~~
-{:class="in"}
+
 
 What just happened? If you want to remove everything within scratchpad no matter what, you will need to add the `-r` argument to function `rm`
 
-~~~
+~~~ {.bash}
 rm -r scratchpad
 ~~~
-{:class="in"}
+
 
 *Maybe skip the below since it won't work for Windows users*
 
 You can also create an entire directory structure with a single call (unfortunately this shortcut does not work in GitBash). e.g.
 
-~~~
+~~~ {.bash}
 cd
 mkdir -p test_project/{R,data,output/{data,figures},doc}
 ls test_project/
 ~~~
-{:class="in"}
+
 
 This will create a project called `test_project` with the following structure:
 
-~~~
+~~~ {.output}
 |-- R/
 |-- data/
 |-- output/
@@ -185,11 +183,11 @@ This will create a project called `test_project` with the following structure:
 |-- |-- figures/
 |-- doc/
 ~~~
-{:class="out"}
+
 
 One could also create lots of subdirectories at once using curly brackets expansions.
 
-~~~
+~~~ {.bash}
 mkdir temp
 cd temp
 ls
@@ -197,14 +195,14 @@ mkdir dir-{0..10}
 ls
 rm -r temp
 ~~~
-{:class="in"}
+
 
 > ### Challenge {.challenge}
 >
 > Using the shell, create a folder on your desktop for materials from this
 > workshop that looks like this *(Draw on the board)*.
 
-~~~
+~~~ {.output}
 |-- software-carpentry/
 |-- |-- data/
 |-- |-- |-- (data here)
@@ -214,7 +212,7 @@ rm -r temp
 |-- |-- figures/
 |-- |-- |-- (figures here)
 ~~~
-{:class="out"}
+
 
 Note that this will break read.csv in your R script *go to RStudio and demonstrate, then use relative paths to fix loading of data*
 

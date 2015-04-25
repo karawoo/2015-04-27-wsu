@@ -17,24 +17,21 @@ Yours might look different (these can be easily customized). Usually includes so
 
 You can just enter commands directly into the shell.
 
-~~~
+~~~ {.bash}
 $ echo Morning People
 ~~~
-{:class="in"}
 
 We just used a command called `echo` and gave it an argument called `Morning People`.
 
 If you enter a command that shell doesn't recognize, it will just report an error
 
-~~~
+~~~ {.bash}
 $ gobbeltdfsf
 ~~~
-{:class="in"}
 
-~~~
+~~~ {.output}
 -bash: gobbeltdfsf: command not found
 ~~~
-{:class="out"}
 
 ---
 
@@ -42,22 +39,19 @@ $ gobbeltdfsf
 
 Commands are often followed by one or more options that modify their behavior, and further, by one or more arguments, the items upon which the command acts. So most commands look kind of like this:
 
-~~~
+~~~ {.bash}
 $ ls -l ~/
 ~~~
-{:class="in"}
 
-~~~
+~~~ {.bash}
 $ command -letter
 ~~~
-{:class="in"}
 
 **OR**
 
-~~~
+~~~ {.bash}
 $ command --word
 ~~~
-{:class="in"}
 
 ## Knowing where you are and seeing what's around
 
@@ -71,15 +65,13 @@ Three really imporant commands:
 
 Most operating systems have a hierarchical directory structure. The very top is called the *home* directory. Directories are often called "folders" because of how they are represented in GUIs. Directories are just listings of files. They can contain other files or (sub) directories.
 
-~~~
+~~~ {.bash}
 $ pwd
 ~~~
-{:class="in"}
 
-~~~
+~~~ {.output}
 /Users/Kara
 ~~~
-{:class="out"}
 
 Note that I'm in my *home* directory. Whenever you start up a terminal, you will start in the home directory. Every user has their own home directory where they have full access to do whatever they want. For example, my user ID is `Kara`, the `pwd` command tells me that I am in the `/Users/Kara` directory. This is the home directory for the `Kara` user. Yours should (hopefully) look different.
 
@@ -87,20 +79,18 @@ Note that I'm in my *home* directory. Whenever you start up a terminal, you will
 
 You can change the working directory at any time using the `cd` command.
 
-~~~
+~~~ {.bash}
 $ cd
 $ cd /usr/bin
 $ pwd
 $ ls
 ~~~
-{:class="in"}
 
 Now change back to your home again
 
-~~~
+~~~ {.bash}
 $ cd ~
 ~~~
-{:class="in"}
 
 Tip: `~` is a shortcut for the HOME directory for any user. My home is `/Users/Kara` and I can get there three ways:
 
@@ -112,34 +102,30 @@ You might be wondering why there is a **standard** shortcut for the home directo
 
 In the command line you can use both full paths (much like someone's street address with post code) OR offer relative directions from one's current location. You can do the same here.
 
-~~~
+~~~ {.bash}
 $ cd /usr
 $ pwd
 ~~~
-{:class="in"}
 
 We're now in the `usr/` directory. Now change to `bin/`
 
-~~~
+~~~ {.bash}
 $ cd bin
 ~~~
-{:class="in"}
 
 This is the same as doing:
 
-~~~
+~~~ {.bash}
 $ cd /usr/bin
 ~~~
-{:class="in"}
 
 from **anywhere**.
 
 **An important note:** having spaces in folder names or file names will confuse the computer. Once it sees a space, it will think the path is complete. For this reason it's recommended not to use spaces in your file/folder names. If you do have paths that contain spaces, you can encase the path that you type into the shell with quotation marks, e.g.:
 
-~~~
+~~~ {.bash}
 $ cd "Users/Kara/Desktop/folder with a space"
 ~~~
-{:class="in"}
 
 But note that the tilde shortcut for the home directory doesn't work within the quotations.
 
@@ -149,26 +135,23 @@ But note that the tilde shortcut for the home directory doesn't work within the 
 
 Now we're going to talk about how to view the contents of a folder (directory).
 
-~~~
+~~~ {.bash}
 $ ls
 ~~~
-{:class="in"}
 
 When you enter the `ls` command lists the contents of the current directory. `ls` is extremely useful both for beginners and experts. `ls` can not only list the current directory contents but also contents from anywhere without changing working directories.
 
 e.g.
 
-~~~
+~~~ {.bash}
 $ ls /usr
 ~~~
-{:class="in"}
 
 or even multiple directories at once
 
-~~~
+~~~ {.bash}
 $ ls ~ /usr
 ~~~
-{:class="in"}
 
 > ### Challenge {.challenge}
 >
@@ -177,27 +160,25 @@ $ ls ~ /usr
 > 3. Change back into your home directory.
 > 4. Now, without changing your directory (i.e. without using `cd`), list the contents of the data directory again.
 
-~~~
+~~~ {.bash}
 $ cd ~/Desktop/swc-data/
 $ ls
 $ cd ~
 $ ls ~/Desktop/swc-data
 ~~~
-{:class="in"}
 
 ### Arguments
 
 Now we can start adding more options. Recall that commands can take both options (with a `-` or `--`) followed by arguments. Let's add some to `ls`.
 
-~~~
+~~~ {.bash}
 $ cd
 $ cd ~/Desktop/swc-data
 $ ls -l
 ~~~
-{:class="in"}
 
 (This workshop won't have these files, but this is some example output):
-~~~
+~~~ {.output}
 total 2288
 -rwxr-xr-x@ 1 Kara  staff     1715 Dec 31 09:15 car-speeds.csv
 -rwxr-xr-x@ 1 Kara  staff     5374 Dec 31 09:15 inflammation-02.csv
@@ -217,13 +198,12 @@ total 2288
 -rwxr-xr-x@ 1 Kara  staff     2115 Jan  2 11:34 species.csv
 -rwxr-xr-x@ 1 Kara  staff  1058902 Jan  2 11:01 surveys.csv
 ~~~
-{:class="out"}
 
 By adding `-l` to the command, we changed the output to the long format.
 
 Now let's add more options
 
-~~~
+~~~ {.bash}
 $ ls -lt
 ~~~
 {:class="in"}
@@ -245,12 +225,11 @@ Try some of these. Do you see any new files that we have not discussed before? Y
 
 What are all the extra fields in the long format?
 
-~~~
+~~~ {.bash}
 $ ls -l
 ~~~
-{:class="in"}
 
-~~~
+~~~ {.output}
 total 2288
 -rwxr-xr-x@ 1 Kara  staff     1715 Dec 31 09:15 car-speeds.csv
 -rwxr-xr-x@ 1 Kara  staff     5374 Dec 31 09:15 inflammation-02.csv
@@ -270,7 +249,6 @@ total 2288
 -rwxr-xr-x@ 1 Kara  staff     2115 Jan  2 11:34 species.csv
 -rwxr-xr-x@ 1 Kara  staff  1058902 Jan  2 11:01 surveys.csv
 ~~~
-{:class="out"}
 
 * Files begin with a `-` and directories with a `d`.
 * Followed by permissions for the user, group, and everyone.
@@ -291,20 +269,18 @@ Most programs take additional arguments that control their exact behavior. For e
 
 Most commonly used shell programs have a manual. You can access the manual using the `man` program. Try entering:
 
-~~~
+~~~ {.bash}
 $ man ls
 ~~~
-{:class="in"}
 
 This will open the manual page for `ls`. Use the space key to go forward and b to go backwards. When you are done reading, just hit `q` to exit.
 
 Unfortunately GitBash for Windows does not have the `man` command. Instead, try using the `--help` flag after the command you want to learn about. For internal bahs commands such as `cd` and  `pwd` you will be able to access the help file by typing `help function`.
 
-~~~
+~~~ {.bash}
 $ ls --help
 $ help cd
 ~~~
-{:class="in"}
 
 And you also find the manual pages at many different sites online, e.g. [http://linuxmanpages.com/]().
 
@@ -321,30 +297,27 @@ Other really important commands
 
 **Determining file type**
 
-~~~
+~~~ {.bash}
 $ file <filename>
 ~~~
-{:class="in"}
 
 e.g.
 
-~~~
+~~~ {.bash}
 $ file surveys.csv
 ~~~
-{:class="in"}
 
-~~~
+~~~ {.output}
 surveys.csv: ASCII text
 ~~~
-{:class="out"}
+
 Notice that the function `file` is unfortunately not defined in GitBash.
 
 You can have a quick look at the file to see the contents of its first lines using the function `head` (similar to the `head()` function in R).
 
-~~~
+~~~ {.bash}
 $ head <filename>
 ~~~
-{:class="in"}
 
 `wc` will give you the word count of a file. The output shows the number of lines, words, and bytes in a file. `wc -l` will tell you just the number of lines.
 
