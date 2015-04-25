@@ -27,13 +27,17 @@
         <div class="col-md-10 col-md-offset-1">
           <h1 class="title">Collaborating</h1>
           
-<div class="objectives" markdown="1">
-<h4>Objectives</h4>
+<div id="objectives" class="objectives panel panel-warning">
+<div class="panel-heading">
+<h3><span class="glyphicon glyphicon-certificate"></span>Objectives</h3>
+</div>
+<div class="panel-body">
 <ul>
 <li>Explain what remote repositories are and why they are useful.</li>
 <li>Explain what happens when a remote repository is cloned.</li>
 <li>Explain what happens when changes are pushed to or pulled from a remote repository.</li>
 </ul>
+</div>
 </div>
 <p>Version control really comes into its own when we begin to collaborate with other people. We already have most of the machinery we need to do this; the only thing missing is to copy changes from one repository to another.</p>
 <p>Systems like Git allow us to move work between any two repositories. In practice, though, it's easiest to use one copy as a central hub, and to keep it on the web rather than on someone's laptop. Most programmers use hosting services like <a href="http://github.com">GitHub</a> or <a href="http://bitbucket.org">BitBucket</a> to hold those master copies; we'll explore the pros and cons of this in the final section of this lesson.</p>
@@ -82,10 +86,9 @@
 <p>As soon as the repository is created, GitHub displays a page with a URL and some information on how to configure your local repository:</p>
 <p><img src="img/github-create-repo-03.png" alt="Creating a Repository on GitHub (Step 3)" /></p>
 <p>This effectively does the following on GitHub's servers:</p>
-<pre><code>$ mkdir planets
-$ cd planets
-$ git init</code></pre>
-<p>{:class=&quot;in&quot;}</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">mkdir</span> planets
+$ <span class="kw">cd</span> planets
+$ <span class="kw">git</span> init</code></pre>
 <p>Our local repository still contains our earlier work on <code>mars.txt</code>, but the remote repository on GitHub doesn't contain any files yet:</p>
 <p><img src="img/git-freshly-made-github-repo.svg" alt="Freshly-Made GitHub Repository" /></p>
 <p>The next step is to connect the two repositories. We do this by making the GitHub repository a <a href="../../gloss.html#remote-repository">remote</a> for the local repository. The home page of the repository on GitHub includes the string we need to identify it:</p>
@@ -98,33 +101,37 @@ $ git init</code></pre>
 </blockquote>
 <p><img src="img/github-change-repo-string.png" alt="Changing the Repository URL on GitHub" /></p>
 <p>Copy that URL from the browser, go into the local <code>planets</code> repository, and run this command:</p>
-<pre><code>$ git remote add origin https://github.com/vlad/planets.git</code></pre>
-<p>{:class=&quot;in&quot;}</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> remote add origin https://github.com/vlad/planets.git</code></pre>
 <p>Make sure to use the URL for your repository rather than Vlad's: the only difference should be your username instead of <code>vlad</code>.</p>
 <p>We can check that the command has worked by running <code>git remote -v</code>:</p>
-<pre><code>$ git remote -v</code></pre>
-<p>{:class=&quot;in&quot;} <sub>~</sub> origin https://github.com/vlad/planets.git (push) origin https://github.com/vlad/planets.git (fetch) <sub>~</sub> {:class=&quot;out&quot;}</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> remote -v</code></pre>
+<pre class="output"><code>origin   https://github.com/vlad/planets.git (push)
+origin   https://github.com/vlad/planets.git (fetch)</code></pre>
 <p>The name <code>origin</code> is a local nickname for your remote repository: we could use something else if we wanted to, but <code>origin</code> is by far the most common choice.</p>
 <p>Once the nickname <code>origin</code> is set up, this command will push the changes from our local repository to the repository on GitHub:</p>
-<pre><code>$ git push origin master</code></pre>
-<p>{:class=&quot;in&quot;} <sub>~</sub> Counting objects: 9, done. Delta compression using up to 4 threads. Compressing objects: 100% (6/6), done. Writing objects: 100% (9/9), 821 bytes, done. Total 9 (delta 2), reused 0 (delta 0) To https://github.com/vlad/planets * [new branch] master -&gt; master Branch master set up to track remote branch master from origin. <sub>~</sub> {:class=&quot;out&quot;}</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> push origin master</code></pre>
+<pre class="output"><code>Counting objects: 9, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (6/6), done.
+Writing objects: 100% (9/9), 821 bytes, done.
+Total 9 (delta 2), reused 0 (delta 0)
+To https://github.com/vlad/planets
+ * [new branch]      master -&gt; master
+Branch master set up to track remote branch master from origin.</code></pre>
 <p><strong>Show that the files now exist online</strong></p>
 <blockquote>
 <h5>Proxy</h5>
 <p>If the network you are connected to uses a proxy there is an chance that your last command failed with &quot;Could not resolve hostname&quot; as the error message. To solve this issue you need to tell Git about the proxy:</p>
-<pre><code>$ git config --global http.proxy http://user:password@proxy.url
-$ git config --global https.proxy http://user:password@proxy.url</code></pre>
-<p>{:class=&quot;in&quot;}</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> config --global http.proxy http://user:password@proxy.url
+$ <span class="kw">git</span> config --global https.proxy http://user:password@proxy.url</code></pre>
 <p>When you connect to another network that doesn't use a proxy you will need to tell Git to disable the proxy using</p>
-<pre><code>$ git config --global --unset http.proxy
-$ git config --global --unset https.proxy</code></pre>
-<p>{:class=&quot;in&quot;}</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> config --global --unset http.proxy
+$ <span class="kw">git</span> config --global --unset https.proxy</code></pre>
 </blockquote>
 <blockquote>
 <h4>Password Managers</h4>
 <p>If your operating system has a password manager configured, <code>git push</code> will try to use it when it needs your username and password. If you want to type your username and password at the terminal instead of using a password manager, type</p>
-<pre><code>$ unset SSH_ASKPASS</code></pre>
-<p>{:class=&quot;in&quot;}</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">unset</span> <span class="ot">SSH_ASKPASS</span></code></pre>
 <p>You may want to add this command at the end of your <code>~/.bashrc</code> to make it the default behavior.</p>
 </blockquote>
 <p>Our local and remote repositories are now in this state:</p>
@@ -134,8 +141,10 @@ $ git config --global --unset https.proxy</code></pre>
 <p>You may see a <code>-u</code> option used with <code>git push</code> in some documentation. It is related to concepts we cover in our intermediate lesson, and can safely be ignored for now.</p>
 </blockquote>
 <p>We can pull changes from the remote repository to the local one as well:</p>
-<pre><code>$ git pull origin master</code></pre>
-<p>{:class=&quot;in&quot;} <sub>~</sub> From https://github.com/vlad/planets * branch master -&gt; FETCH_HEAD Already up-to-date. <sub>~</sub> {:class=&quot;out&quot;}</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> pull origin master</code></pre>
+<pre class="output"><code>From https://github.com/vlad/planets
+ * branch            master     -&gt; FETCH_HEAD
+Already up-to-date.</code></pre>
 <p>Pulling has no effect in this case because the two repositories are already synchronized. If someone else had pushed some changes to the repository on GitHub, though, this command would download them to our local repository.</p>
 <p><strong>Add a README.md file on the browser. Demonstrate pulling changes back down to your machine</strong> <strong>Add NASA data to my local repository (http://www.nasa.gov/open/data.html). Push changes</strong></p>
 <p>For the next step, get into pairs. Pick one of your repositories on Github to use for collaboration.</p>
@@ -147,25 +156,47 @@ $ git config --global --unset https.proxy</code></pre>
 <p><strong>Demonstrate how to add collaborators</strong></p>
 <p><img src="img/github-add-collaborators.png" alt="Adding collaborators on Github" /></p>
 <p>The other partner should <code>cd</code> to another directory (so <code>ls</code> doesn't show a <code>planets</code> folder), and then make a copy of this repository on your own computer:</p>
-<pre><code>$ git clone https://github.com/vlad/planets.git</code></pre>
-<p>{:class=&quot;in&quot;}</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> clone https://github.com/vlad/planets.git</code></pre>
 <p>Replace 'vlad' with your partner's username (the one who owns the repository).</p>
 <p><code>git clone</code> creates a fresh local copy of a remote repository.</p>
 <p><img src="img/github-collaboration.svg" alt="After Creating Clone of Repository" /></p>
 <p>The new collaborator can now make a change in their copy of the repository:</p>
-<pre><code>$ cd planets
-$ nano pluto.txt
-$ cat pluto.txt</code></pre>
-<p>{:class=&quot;in&quot;} <sub>~</sub> It is so a planet! <sub><sub><sub> {:class=&quot;out&quot;} </sub></sub></sub> $ git add pluto.txt $ git commit -m &quot;Some notes about Pluto&quot; <sub><sub><sub> {:class=&quot;in&quot;} </sub></sub></sub> 1 file changed, 1 insertion(+) create mode 100644 pluto.txt <sub>~</sub> {:class=&quot;out&quot;}</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cd</span> planets
+$ <span class="kw">nano</span> pluto.txt
+$ <span class="kw">cat</span> pluto.txt</code></pre>
+<pre class="output"><code>It is so a planet!</code></pre>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> add pluto.txt
+$ <span class="kw">git</span> commit -m <span class="st">&quot;Some notes about Pluto&quot;</span></code></pre>
+<pre class="output"><code> 1 file changed, 1 insertion(+)
+ create mode 100644 pluto.txt</code></pre>
 <p>then push the change to GitHub:</p>
-<pre><code>$ git push origin master</code></pre>
-<p>{:class=&quot;in&quot;} <sub>~</sub> Counting objects: 4, done. Delta compression using up to 4 threads. Compressing objects: 100% (2/2), done. Writing objects: 100% (3/3), 306 bytes, done. Total 3 (delta 0), reused 0 (delta 0) To https://github.com/vlad/planets.git 9272da5..29aba7c master -&gt; master <sub>~</sub> {:class=&quot;out&quot;}</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> push origin master</code></pre>
+<pre class="output"><code>Counting objects: 4, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 306 bytes, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To https://github.com/vlad/planets.git
+   9272da5..29aba7c  master -&gt; master</code></pre>
 <p>Note that we didn't have to create a remote called <code>origin</code>: Git does this automatically, using that name, when we clone a repository. (This is why <code>origin</code> was a sensible choice earlier when we were setting up remotes by hand.)</p>
 <p>We can now download changes into the original repository on our machine:</p>
-<pre><code>$ git pull origin master</code></pre>
-<p>{:class=&quot;in&quot;} <sub>~</sub> remote: Counting objects: 4, done. remote: Compressing objects: 100% (2/2), done. remote: Total 3 (delta 0), reused 3 (delta 0) Unpacking objects: 100% (3/3), done. From https://github.com/vlad/planets * branch master -&gt; FETCH_HEAD Updating 9272da5..29aba7c Fast-forward pluto.txt | 1 + 1 file changed, 1 insertion(+) create mode 100644 pluto.txt <sub>~</sub> {:class=&quot;out&quot;}</p>
-<div class="keypoints" markdown="1">
-<h4>Key Points</h4>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> pull origin master</code></pre>
+<pre class="output"><code>remote: Counting objects: 4, done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 3 (delta 0), reused 3 (delta 0)
+Unpacking objects: 100% (3/3), done.
+From https://github.com/vlad/planets
+ * branch            master     -&gt; FETCH_HEAD
+Updating 9272da5..29aba7c
+Fast-forward
+ pluto.txt | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 pluto.txt</code></pre>
+<div id="key-points" class="objectives panel panel-warning">
+<div class="panel-heading">
+<h3><span class="glyphicon glyphicon-certificate"></span>Key Points</h3>
+</div>
+<div class="panel-body">
 <ul>
 <li>A local Git repository can be connected to one or more remote repositories.</li>
 <li>Use the HTTPS protocol to connect to remote repositories until you have learned how to set up SSH.</li>
@@ -174,8 +205,14 @@ $ cat pluto.txt</code></pre>
 <li><code>git clone</code> copies a remote repository to create a local repository with a remote called <code>origin</code> automatically set up.</li>
 </ul>
 </div>
-<div class="challenge" markdown="1">
-Create a repository on GitHub, clone it, add a file, push those changes to GitHub, and then look at the <a href="../../gloss.html#timestamp">timestamp</a> of the change on GitHub. How does GitHub record times, and why?
+</div>
+<div id="challenge" class="challenge panel panel-success">
+<div class="panel-heading">
+<h3><span class="glyphicon glyphicon-pencil"></span>Challenge</h3>
+</div>
+<div class="panel-body">
+<p>Create a repository on GitHub, clone it, add a file, push those changes to GitHub, and then look at the <a href="../../gloss.html#timestamp">timestamp</a> of the change on GitHub. How does GitHub record times, and why?</p>
+</div>
 </div>
         </div>
       </div>

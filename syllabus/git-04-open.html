@@ -27,14 +27,18 @@
         <div class="col-md-10 col-md-offset-1">
           <h1 class="title">Open Science</h1>
           
-<div class="objectives" markdown="1">
-<h4>Objectives</h4>
+<div id="objectives" class="objectives panel panel-warning">
+<div class="panel-heading">
+<h3><span class="glyphicon glyphicon-certificate"></span>Objectives</h3>
+</div>
+<div class="panel-body">
 <ul>
 <li>Explain how the GNU General Public License (GPL) differs from most other open licenses.</li>
 <li>Explain the four kinds of restrictions that can be combined in a Creative Commons license.</li>
 <li>Correctly add licensing and citation information to a project repository.</li>
 <li>Outline options for hosting code and data and the pros and cons of each.</li>
 </ul>
+</div>
 </div>
 <blockquote>
 The opposite of &quot;open&quot; isn't &quot;closed&quot;. The opposite of &quot;open&quot; is &quot;broken&quot;. <br/> — John Wilbanks
@@ -83,28 +87,181 @@ https://github.com/jgm/pandoc/issues/1340 -->
 Licenses that can be used for derivative work or adaptation
 </caption>
 <tr>
-<pre><code>&lt;td&gt;Original work&lt;/td&gt; &lt;td&gt;by&lt;/td&gt; &lt;td&gt;by-nc&lt;/td&gt; &lt;td&gt;by-nc-nd&lt;/td&gt; &lt;td&gt;by-nc-sa&lt;/td&gt; &lt;td&gt;by-nd&lt;/td&gt; &lt;td&gt;by-sa&lt;/td&gt; &lt;td&gt;pd&lt;/td&gt;</code></pre>
+<td>
+Original work
+</td>
+<td>
+by
+</td>
+<td>
+by-nc
+</td>
+<td>
+by-nc-nd
+</td>
+<td>
+by-nc-sa
+</td>
+<td>
+by-nd
+</td>
+<td>
+by-sa
+</td>
+<td>
+pd
+</td>
 </tr>
 <tr>
-<pre><code>&lt;td&gt;by&lt;/td&gt;       &lt;td&gt;X&lt;/td&gt; &lt;td&gt;X&lt;/td&gt; &lt;td&gt;X&lt;/td&gt; &lt;td&gt;X&lt;/td&gt; &lt;td&gt;X&lt;/td&gt; &lt;td&gt;X&lt;/td&gt; &lt;td&gt; &lt;/td&gt;</code></pre>
+<td>
+by
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+</td>
 </tr>
 <tr>
-<pre><code>&lt;td&gt;by-nc&lt;/td&gt;    &lt;td&gt; &lt;/td&gt; &lt;td&gt;X&lt;/td&gt; &lt;td&gt;X&lt;/td&gt; &lt;td&gt;X&lt;/td&gt; &lt;td&gt; &lt;/td&gt; &lt;td&gt; &lt;/td&gt; &lt;td&gt; &lt;/td&gt;</code></pre>
+<td>
+by-nc
+</td>
+<td>
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
 </tr>
 <tr>
-<pre><code>&lt;td&gt;by-nc-nd&lt;/td&gt; &lt;td&gt; &lt;/td&gt; &lt;td&gt; &lt;/td&gt; &lt;td&gt; &lt;/td&gt; &lt;td&gt; &lt;/td&gt; &lt;td&gt; &lt;/td&gt; &lt;td&gt; &lt;/td&gt; &lt;td&gt; &lt;/td&gt;</code></pre>
+<td>
+by-nc-nd
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
 </tr>
 <tr>
-<pre><code>&lt;td&gt;by-nc-sa&lt;/td&gt; &lt;td&gt; &lt;/td&gt; &lt;td&gt; &lt;/td&gt; &lt;td&gt; &lt;/td&gt; &lt;td&gt;X&lt;/td&gt; &lt;td&gt; &lt;/td&gt; &lt;td&gt; &lt;/td&gt; &lt;td&gt; &lt;/td&gt;</code></pre>
+<td>
+by-nc-sa
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+X
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
 </tr>
 <tr>
-<pre><code>&lt;td&gt;by-nd&lt;/td&gt;    &lt;td&gt; &lt;/td&gt; &lt;td&gt; &lt;/td&gt; &lt;td&gt; &lt;/td&gt; &lt;td&gt; &lt;/td&gt; &lt;td&gt; &lt;/td&gt; &lt;td&gt; &lt;/td&gt; &lt;td&gt; &lt;/td&gt;</code></pre>
+<td>
+by-nd
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
 </tr>
 <tr>
-<pre><code>&lt;td&gt;by-sa&lt;/td&gt;    &lt;td&gt; &lt;/td&gt; &lt;td&gt; &lt;/td&gt; &lt;td&gt; &lt;/td&gt; &lt;td&gt; &lt;/td&gt; &lt;td&gt; &lt;/td&gt; &lt;td&gt;X&lt;/td&gt; &lt;td&gt; &lt;/td&gt;</code></pre>
+<td>
+by-sa
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+X
+</td>
+<td>
+</td>
 </tr>
 <tr>
-<pre><code>&lt;td&gt;pd&lt;/td&gt;       &lt;td&gt;X&lt;/td&gt; &lt;td&gt;X&lt;/td&gt; &lt;td&gt;X&lt;/td&gt; &lt;td&gt;X&lt;/td&gt; &lt;td&gt;X&lt;/td&gt; &lt;td&gt;X&lt;/td&gt; &lt;td&gt;X&lt;/td&gt;</code></pre>
+<td>
+pd
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
 </tr>
 </table>
 <p><a href="http://software-carpentry.org/license.html">Software Carpentry</a> uses CC-BY for its lessons and the MIT License for its code in order to encourage the widest possible re-use. Again, the most important thing is for the <code>LICENSE</code> file in the root directory of your project to state clearly what your license is. You may also want to include a file called <code>CITATION</code> or <code>CITATION.txt</code> that describes how to reference your project; the one for Software Carpentry states:</p>
@@ -127,9 +284,9 @@ Greg Wilson: &quot;Software Carpentry: Lessons Learned&quot;. arXiv:1307.5448, J
 <p>Another option is to purchase a domain and pay an Internet service provider (ISP) to host it. This gives the individual or group more control, and sidesteps problems that can arise when moving from one institution to another, but requires more time and effort to set up than either the option above or the option below.</p>
 <p>The third option is to use a public hosting service like <a href="http://github.com">GitHub</a>, <a href="http://bitbucket.org">BitBucket</a>, <a href="http://code.google.com">Google Code</a>, or <a href="http://sourceforge.net">SourceForge</a>. All of these allow people to create repositories through a web interface, and also provide mailing lists, ways to keep track of who's doing what, and so on. They all benefit from economies of scale and network effects: it's easier to run one large service well than to run many smaller services to the same standard, and it's also easier for people to collaborate if they're using the same service, not least because it gives them fewer passwords to remember.</p>
 <p>However, all of these services place some constraints on people's work. In particular, most give users a choice: if they're willing to share their work with others, it will be hosted for free, but if they want privacy, they may have to pay. Sharing might seem like the only valid choice for science, but many institutions may not allow researchers to do this, either because they want to protect future patent applications or simply because what's new is often also frightening.</p>
-<p><strong>Link to 9 simple ways to share your data paper: http://library.queensu.ca/ojs/index.php/IEE/article/view/4608 https://peerj.com/preprints/7/</strong></p>
-<div class="keypoints" markdown="1">
-<h4>Key Points</h4>
+<p><strong>Link to 9 simple ways to share your data paper: <a href="http://library.queensu.ca/ojs/index.php/IEE/article/view/4608" class="uri">http://library.queensu.ca/ojs/index.php/IEE/article/view/4608</a> <a href="https://peerj.com/preprints/7/" class="uri">https://peerj.com/preprints/7/</a> </strong></p>
+<blockquote>
+<h3>Key Points</h3>
 <ul>
 <li>Open scientific work is more useful and more highly cited than closed.</li>
 <li>People who incorporate GPL'd software into theirs must make theirs open; most other open licenses do not require this.</li>
@@ -138,12 +295,22 @@ Greg Wilson: &quot;Software Carpentry: Lessons Learned&quot;. arXiv:1307.5448, J
 <li>Projects can be hosted on university servers, on personal domains, or on public forges.</li>
 <li>Rules regarding intellectual property and storage of sensitive information apply no matter where code and data are hosted.</li>
 </ul>
+</blockquote>
+<div id="challenge" class="challenge panel panel-success">
+<div class="panel-heading">
+<h3><span class="glyphicon glyphicon-pencil"></span>Challenge</h3>
 </div>
-<div class="challenge" markdown="1">
-Find out whether you are allowed to apply an open license to your software. Can you do this unilaterally, or do you need permission from someone in your institution? If so, who?
+<div class="panel-body">
+<p>Find out whether you are allowed to apply an open license to your software. Can you do this unilaterally, or do you need permission from someone in your institution? If so, who?</p>
 </div>
-<div class="challenge" markdown="1">
-Find out whether you are allowed to host your work openly on a public forge. Can you do this unilaterally, or do you need permission from someone in your institution? If so, who?
+</div>
+<div id="challenge-1" class="challenge panel panel-success">
+<div class="panel-heading">
+<h3><span class="glyphicon glyphicon-pencil"></span>Challenge</h3>
+</div>
+<div class="panel-body">
+<p>Find out whether you are allowed to host your work openly on a public forge. Can you do this unilaterally, or do you need permission from someone in your institution? If so, who?</p>
+</div>
 </div>
         </div>
       </div>

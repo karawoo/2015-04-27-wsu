@@ -4,14 +4,11 @@ root: ..
 title: Collaborating
 ---
 
-<div class="objectives" markdown="1">
-
-#### Objectives
-*   Explain what remote repositories are and why they are useful.
-*   Explain what happens when a remote repository is cloned.
-*   Explain what happens when changes are pushed to or pulled from a remote repository.
-
-</div>
+> ### Objectives {.objectives}
+>
+> *   Explain what remote repositories are and why they are useful.
+> *   Explain what happens when a remote repository is cloned.
+> *   Explain what happens when changes are pushed to or pulled from a remote repository.
 
 Version control really comes into its own
 when we begin to collaborate with other people.
@@ -99,12 +96,11 @@ GitHub displays a page with a URL and some information on how to configure your 
 
 This effectively does the following on GitHub's servers:
 
-~~~
+~~~ {.bash}
 $ mkdir planets
 $ cd planets
 $ git init
 ~~~
-{:class="in"}
 
 Our local repository still contains our earlier work on `mars.txt`,
 but the remote repository on GitHub doesn't contain any files yet:
@@ -140,25 +136,23 @@ Copy that URL from the browser,
 go into the local `planets` repository,
 and run this command:
 
-~~~
+~~~ {.bash}
 $ git remote add origin https://github.com/vlad/planets.git
 ~~~
-{:class="in"}
 
 Make sure to use the URL for your repository rather than Vlad's:
 the only difference should be your username instead of `vlad`.
 
 We can check that the command has worked by running `git remote -v`:
 
-~~~
+~~~ {.bash}
 $ git remote -v
 ~~~
-{:class="in"}
-~~~
+
+~~~ {.output}
 origin   https://github.com/vlad/planets.git (push)
 origin   https://github.com/vlad/planets.git (fetch)
 ~~~
-{:class="out"}
 
 The name `origin` is a local nickname for your remote repository:
 we could use something else if we wanted to,
@@ -168,11 +162,11 @@ Once the nickname `origin` is set up,
 this command will push the changes from our local repository
 to the repository on GitHub:
 
-~~~
+~~~ {.bash}
 $ git push origin master
 ~~~
-{:class="in"}
-~~~
+
+~~~ {.output}
 Counting objects: 9, done.
 Delta compression using up to 4 threads.
 Compressing objects: 100% (6/6), done.
@@ -182,7 +176,6 @@ To https://github.com/vlad/planets
  * [new branch]      master -> master
 Branch master set up to track remote branch master from origin.
 ~~~
-{:class="out"}
 
 __Show that the files now exist online__
 
@@ -193,20 +186,18 @@ __Show that the files now exist online__
 > command failed with "Could not resolve hostname" as the error message. To
 > solve this issue you need to tell Git about the proxy:
 >
-> ~~~
+> ~~~ {.bash}
 > $ git config --global http.proxy http://user:password@proxy.url
 > $ git config --global https.proxy http://user:password@proxy.url
 > ~~~
-> {:class="in"}
 >
 > When you connect to another network that doesn't use a proxy you will need to
 > tell Git to disable the proxy using
 >
-> ~~~
+> ~~~ {.bash}
 > $ git config --global --unset http.proxy
 > $ git config --global --unset https.proxy
 > ~~~
-> {:class="in"}
 
 > #### Password Managers
 >
@@ -215,10 +206,9 @@ __Show that the files now exist online__
 > your username and password at the terminal instead of using
 > a password manager, type
 >
-> ~~~
+> ~~~ {.bash}
 > $ unset SSH_ASKPASS
 > ~~~
-> {:class="in"}
 >
 > You may want to add this command at the end of your `~/.bashrc` to make it the
 > default behavior.
@@ -235,16 +225,15 @@ Our local and remote repositories are now in this state:
 
 We can pull changes from the remote repository to the local one as well:
 
-~~~
+~~~ {.bash}
 $ git pull origin master
 ~~~
-{:class="in"}
-~~~
+
+~~~ {.output}
 From https://github.com/vlad/planets
  * branch            master     -> FETCH_HEAD
 Already up-to-date.
 ~~~
-{:class="out"}
 
 Pulling has no effect in this case
 because the two repositories are already synchronized.
@@ -277,10 +266,9 @@ The other partner should `cd` to another directory
 (so `ls` doesn't show a `planets` folder),
 and then make a copy of this repository on your own computer:
 
-~~~
+~~~ {.bash}
 $ git clone https://github.com/vlad/planets.git
 ~~~
-{:class="in"}
 
 Replace 'vlad' with your partner's username (the one who owns the repository).
 
@@ -290,34 +278,33 @@ Replace 'vlad' with your partner's username (the one who owns the repository).
 
 The new collaborator can now make a change in their copy of the repository:
 
-~~~
+~~~ {.bash}
 $ cd planets
 $ nano pluto.txt
 $ cat pluto.txt
 ~~~
-{:class="in"}
-~~~
+
+~~~ {.output}
 It is so a planet!
 ~~~
-{:class="out"}
-~~~
+
+~~~ {.bash}
 $ git add pluto.txt
 $ git commit -m "Some notes about Pluto"
 ~~~
-{:class="in"}
-~~~
+
+~~~ {.output}
  1 file changed, 1 insertion(+)
  create mode 100644 pluto.txt
 ~~~
-{:class="out"}
 
 then push the change to GitHub:
 
-~~~
+~~~ {.bash}
 $ git push origin master
 ~~~
-{:class="in"}
-~~~
+
+~~~ {.output}
 Counting objects: 4, done.
 Delta compression using up to 4 threads.
 Compressing objects: 100% (2/2), done.
@@ -326,7 +313,6 @@ Total 3 (delta 0), reused 0 (delta 0)
 To https://github.com/vlad/planets.git
    9272da5..29aba7c  master -> master
 ~~~
-{:class="out"}
 
 Note that we didn't have to create a remote called `origin`:
 Git does this automatically,
@@ -337,11 +323,11 @@ when we were setting up remotes by hand.)
 
 We can now download changes into the original repository on our machine:
 
-~~~
+~~~ {.bash}
 $ git pull origin master
 ~~~
-{:class="in"}
-~~~
+
+~~~ {.output}
 remote: Counting objects: 4, done.
 remote: Compressing objects: 100% (2/2), done.
 remote: Total 3 (delta 0), reused 3 (delta 0)
@@ -354,24 +340,21 @@ Fast-forward
  1 file changed, 1 insertion(+)
  create mode 100644 pluto.txt
 ~~~
-{:class="out"}
 
-<div class="keypoints" markdown="1">
+> ### Key Points {.objectives}
+>
+> *   A local Git repository can be connected to one or more remote repositories.
+> *   Use the HTTPS protocol to connect to remote repositories until you have learned how to set up SSH.
+> *   `git push` copies changes from a local repository to a remote repository.
+> *   `git pull` copies changes from a remote repository to a local repository.
+> *   `git clone` copies a remote repository to create a local repository with a remote called `origin` automatically set up.
 
-#### Key Points
-*   A local Git repository can be connected to one or more remote repositories.
-*   Use the HTTPS protocol to connect to remote repositories until you have learned how to set up SSH.
-*   `git push` copies changes from a local repository to a remote repository.
-*   `git pull` copies changes from a remote repository to a local repository.
-*   `git clone` copies a remote repository to create a local repository with a remote called `origin` automatically set up.
 
-</div>
-
-<div class="challenge" markdown="1">
-Create a repository on GitHub,
-clone it,
-add a file,
-push those changes to GitHub,
-and then look at the [timestamp](../../gloss.html#timestamp) of the change on GitHub.
-How does GitHub record times, and why?
-</div>
+> ### Challenge {.challenge}
+>
+> Create a repository on GitHub,
+> clone it,
+> add a file,
+> push those changes to GitHub,
+> and then look at the [timestamp](../../gloss.html#timestamp) of the change on GitHub.
+> How does GitHub record times, and why?
