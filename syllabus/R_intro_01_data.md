@@ -78,7 +78,7 @@ head(gapminder)
 
 > ### Challenge {.challenge}
 >
-> Based on the output of str(gapminder), can you answer the following questions?
+> Based on the output of `str(gapminder)`, can you answer the following questions?
 >
 > * What is the class of the object gapminder?
 > * How many rows and how many columns are in this object?
