@@ -94,9 +94,9 @@ gapminder[gapminder$country ==<span class="st"> &quot;Finland&quot;</span>, ]</c
 <div class="panel-body">
 <p>Which of the following are NOT equivalent?</p>
 <ol style="list-style-type: lower-alpha">
-<li><p>gapminder[50, 4] and gapminder[50, &quot;lifeExp&quot;]</p></li>
-<li><p>gapminder[50, 4] and gapminder[4, 50]</p></li>
-<li><p>gapminder[50, 4] and gapminder$lifeExp[50]</p></li>
+<li><p><code>gapminder[50, 4]</code> and <code>gapminder[50, &quot;lifeExp&quot;]</code></p></li>
+<li><p><code>gapminder[50, 4]</code> and <code>gapminder[4, 50]</code></p></li>
+<li><p><code>gapminder[50, 4]</code> and <code>gapminder$lifeExp[50]</code></p></li>
 </ol>
 </div>
 </div>
@@ -117,7 +117,7 @@ gapminder[gapminder$country ==<span class="st"> &quot;Finland&quot;</span>, ]</c
 <p>You only need to install a package once per computer, but you need to load it every time you open a new R session and want to use that package.</p>
 <h2 id="what-is-dplyr">What is dplyr?</h2>
 <p>The package <code>dplyr</code> is a fairly new (2014) package that tries to provide easy tools for the most common data manipulation tasks. It is built to work directly with data frames. The thinking behind it was largely inspired by the package <code>plyr</code> which has been in use for some time but suffered from being slow in some cases.<code>dplyr</code> addresses this by porting much of the computation to C++. An additional feature is the ability to work with data stored directly in an external database. The benefits of doing this are that the data can be managed natively in a relational database, queries can be conducted on that database, and only the results of the query returned.</p>
-<p>This addresses a common problem with R in that all operations are conducted in memory and thus the amount of data you can work with is limited by available memory. The database connections essentially remove that limitation in that you can have a database of many 100s GB, conduct queries on it directly and pull back just what you need for analysis in R. There is a lot of great info on <code>dplyr</code>. If you have an interest, i’d encourage you to look more. The vignettes are particularly good.</p>
+<p>This addresses a common problem with R in that all operations are conducted in memory and thus the amount of data you can work with is limited by available memory. The database connections essentially remove that limitation in that you can have a database of many 100s GB, conduct queries on it directly and pull back just what you need for analysis in R. There is a lot of great info on <code>dplyr</code>. If you have an interest, I'd encourage you to look more. The vignettes are particularly good.</p>
 <h3 id="selecting-columns-and-filtering-rows">Selecting columns and filtering rows</h3>
 <p>We're going to learn some of the most common <code>dplyr</code> functions: <code>select()</code>, <code>filter()</code>, <code>mutate()</code>, <code>group_by()</code>, and <code>summarize()</code>. To select columns of a data frame, use <code>select()</code>. The first argument to this function is the data frame (<code>gapminder</code>), and the subsequent arguments are the columns to keep.</p>
 <pre class="sourceCode r"><code class="sourceCode r">## Keep columns &quot;country&quot;, &quot;year&quot;, and &quot;pop&quot;

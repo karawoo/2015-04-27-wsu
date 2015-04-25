@@ -8,17 +8,21 @@ ifile = ARGV.length > 0 ? ARGV[0] : "ggplot2.Rmd"
 
 # ofile name adds _slides
 ofile = ifile.sub(/(\.\w+)$/, '_slides.Rmd')
-abort("file #{ofile} already exists") if File.exists?(ofile)
+#abort("file #{ofile} already exists") if File.exists?(ofile)
 
 output = []
 
-ifilep = File.open(ifile)
+ifilep = File.open("../" + ifile)
 
 ifilep.each do |line|
     if line =~ /^> ### Challenge/
         this_output = ''
-        while (line2 = ifilep.readline()) =~ /^>/
-            line2.sub!(/^>\s*/, '')
+        while !(ifilep.eof?) and (line2 = ifilep.readline()) =~ /^>/
+            if line2 =~ /^>\s+$/
+                line2 = "\n"
+            else
+                line2.sub!(/^>\s?/, "")
+            end
             this_output += line2
         end
         output.push(this_output)
