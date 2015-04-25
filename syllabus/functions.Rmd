@@ -234,6 +234,27 @@ argument. Changes that the function makes should be through the
 return value.
 
 
+> ### Challenge {.challenge}
+>
+> Consider the following code.
+>
+> ```
+> x <- 5
+> g <- function(y)
+> {
+>     x <- 3
+>     y + x
+> }
+> z <- g(5)
+> ```
+>
+> What value will `x` have after this is executed?
+>
+> a. 3
+> b. 8
+> c. 5
+
+
 
 ### Conditional statements
 
