@@ -12,12 +12,12 @@ abort("file #{ofile} already exists") if File.exists?(ofile)
 
 output = []
 
-ifilep = File.open(ifile)
+ifilep = File.open("../" + ifile)
 
 ifilep.each do |line|
     if line =~ /^> ### Challenge/
         this_output = ''
-        while (line2 = ifilep.readline()) =~ /^>/
+        while !(ifilep.eof?) and (line2 = ifilep.readline()) =~ /^>/
             line2.sub!(/^>\s*/, '')
             this_output += line2
         end

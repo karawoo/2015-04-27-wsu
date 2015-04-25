@@ -183,7 +183,7 @@ memory and thus the amount of data you can work with is limited by available
 memory. The database connections essentially remove that limitation in that you
 can have a database of many 100s GB, conduct queries on it directly and pull
 back just what you need for analysis in R. There is a lot of great info on
-`dplyr`. If you have an interest, i’d encourage you to look more. The vignettes
+`dplyr`. If you have an interest, I'd encourage you to look more. The vignettes
 are particularly good.
 
 ### Selecting columns and filtering rows

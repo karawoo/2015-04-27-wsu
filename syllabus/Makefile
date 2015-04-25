@@ -75,3 +75,9 @@ settings :
 unittest: ../tools/check.py ../tools/validation_helpers.py ../tools/test_check.py
 	cd ../tools/ && python2 test_check.py
 	cd ../tools/ && python3 test_check.py
+
+## slidesRmd: Rmd files for slides with challenges
+DST_SLIDES_RMD = $(patsubst %.md,slides/%_slides.Rmd,$(SRC_MD))
+slidesRmd: $(DST_SLIDES_RMD)
+slides/%_slides.Rmd: %.md
+	cd slides;grab_challenges.rb $<
