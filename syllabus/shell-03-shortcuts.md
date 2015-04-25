@@ -12,28 +12,28 @@ directory is very common. So, in the shell the tilde character, `~`, is a
 shortcut for your home directory. Navigate to the `data` directory in your
 workshop directory, then enter the command:
 
-~~~
+~~~ {.bash}
 $ ls ~
 ~~~
-{:class="in"}
+
 
 This prints the contents of your home directory, without you having to type the
 absolute path. The shortcut `..` always refers to the directory above your
 current directory. If I'm located at
 `/Users/Kara/Desktop/software-carpentry/data/`, thus:
 
-~~~
+~~~ {.bash}
 $ ls ..
 ~~~
-{:class="in"}
+
 
 prints the contents of the `/Users/Kara/Desktop/software-carpentry/`. You can
 chain these together, so:
 
-~~~
+~~~ {.bash}
 $ ls ../../
 ~~~
-{:class="in"}
+
 
 prints the contents of `/Users/Kara/Desktop`. Finally, the special directory `.`
 always refers to your current directory. So, `ls` and `ls .` do the same thing,
@@ -48,11 +48,11 @@ begin typing in a command name or file name and just hit tab to complete
 entering the text. If there are multiple matches, the shell will show you all
 available options.
 
-~~~
+~~~ {.bash}
 $ cd ~/Desktop/software-carpentry
 $ cd f<tab>
 ~~~
-{:class="in"}
+
 
 What just happened?
 
@@ -71,24 +71,24 @@ Wildcard examples:
 
 By default, `ls` lists all of the files in a given directory. The `*` character is a shortcut for "everything". Thus, if you enter `ls *`, you will see all of the contents of a given directory. Now try this command:
 
-~~~
+~~~ {.bash}
 $ ls *.png
 ~~~
-{:class="in"}
+
 
 This lists every file that ends with a `.png`. This command:
 
-~~~
+~~~ {.bash}
 $ ls /usr/bin/*.sh
 ~~~
-{:class="in"}
+
 
 lists every file in `/usr/bin` that ends in the characters `.sh`. And this command:
 
-~~~
+~~~ {.bash}
 $ ls scatter*
 ~~~
-{:class="in"}
+
 
 Lists all csv files in the current directory whose names begin with the letter s.
 
@@ -100,28 +100,27 @@ You can easily access previous commands.  Hit the up arrow. Hit it again.  You c
 
 You can also review your recent commands with the `history` command. Just enter:
 
-~~~
+~~~ {.bash}
 $ history
 ~~~
-{:class="in"}
+
 
 to see a numbered list of recent commands, including this just issues `history` command.  You can reuse one of these commands directly by referring to the number of that command.
 
 If your history looked like this:
 
-~~~
+~~~ {.output}
 259  cd
 260  ls ~/Desktop/software-carpentry
 261  history
 ~~~
-{:class="out"}
 
 then you could repeat command #260 by simply entering:
 
-~~~
+~~~ {.bash}
 !260
 ~~~
-{:class="in"}
+
 
 (that's an exclamation mark, or `bang`).
 
@@ -132,10 +131,10 @@ then you could repeat command #260 by simply entering:
 
 e.g.
 
-~~~
+~~~ {.bash}
 $ which git
 ~~~
-{:class="in"}
+
 
 ***
 Acknowledgments: these lessons were adapted by Kara Woo from materials by [Diego Barneche](http://nicercode.github.io/2014-02-13-UNSW/lessons/60-shell/).
