@@ -24,3 +24,6 @@ hook_out <- function(x, options) {
 
 knit_hooks$set(source = hook_in, output = hook_out, warning = hook_out,
                error = hook_out, message = hook_out)
+
+# remove those functions so they don't show up in ls()
+rm(hook_in, hook_out)
