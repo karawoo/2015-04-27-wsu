@@ -12,4 +12,4 @@ slides: $(DST_SLIDES_HTML)
 	R -e "rmarkdown::render('$(<F)')"
 
 %_slides.Rmd: ../%.md
-	grab_challenges.rb $(<F)
+	ruby grab_challenges.rb $(<F)
