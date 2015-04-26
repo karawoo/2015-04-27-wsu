@@ -178,6 +178,7 @@ $ ls -l
 ~~~
 
 (This workshop won't have these files, but this is some example output):
+
 ~~~ {.output}
 total 2288
 -rwxr-xr-x@ 1 Kara  staff     1715 Dec 31 09:15 car-speeds.csv
@@ -206,7 +207,6 @@ Now let's add more options
 ~~~ {.bash}
 $ ls -lt
 ~~~
-{:class="in"}
 
 The `t` options now sorts by time.
 
