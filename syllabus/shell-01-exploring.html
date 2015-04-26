@@ -92,7 +92,7 @@ $ <span class="kw">pwd</span></code></pre>
 <pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">ls</span> ~ /usr</code></pre>
 <div id="challenge" class="challenge panel panel-success">
 <div class="panel-heading">
-<h3><span class="glyphicon glyphicon-pencil"></span>Challenge</h3>
+<h3 id="challenge" class="challenge panel panel-success"><span class="glyphicon glyphicon-pencil"></span>Challenge</h3>
 </div>
 <div class="panel-body">
 <ol style="list-style-type: decimal">
@@ -103,20 +103,37 @@ $ <span class="kw">pwd</span></code></pre>
 </ol>
 </div>
 </div>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cd</span> ~/Desktop/swc-data/
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cd</span> ~/Desktop/
 $ <span class="kw">ls</span>
 $ <span class="kw">cd</span> ~
-$ <span class="kw">ls</span> ~/Desktop/swc-data</code></pre>
+$ <span class="kw">ls</span> ~/Desktop/</code></pre>
 <h3 id="arguments">Arguments</h3>
 <p>Now we can start adding more options. Recall that commands can take both options (with a <code>-</code> or <code>--</code>) followed by arguments. Let's add some to <code>ls</code>.</p>
 <pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cd</span>
-$ <span class="kw">cd</span> ~/Desktop/swc-data
+$ <span class="kw">cd</span> ~/Desktop/swc-wsu
 $ <span class="kw">ls</span> -l</code></pre>
-<p>(This workshop won't have these files, but this is some example output): <sub>~</sub> {.output} total 2288 -rwxr-xr-x@ 1 Kara staff 1715 Dec 31 09:15 car-speeds.csv -rwxr-xr-x@ 1 Kara staff 5374 Dec 31 09:15 inflammation-02.csv -rwxr-xr-x@ 1 Kara staff 5403 Dec 31 09:15 inflammation-03.csv -rwxr-xr-x@ 1 Kara staff 5427 Dec 31 09:15 inflammation-04.csv -rwxr-xr-x@ 1 Kara staff 5405 Dec 31 09:15 inflammation-05.csv -rwxr-xr-x@ 1 Kara staff 5390 Dec 31 09:15 inflammation-06.csv -rwxr-xr-x@ 1 Kara staff 5402 Dec 31 09:15 inflammation-07.csv -rwxr-xr-x@ 1 Kara staff 5412 Dec 31 09:15 inflammation-08.csv -rwxr-xr-x@ 1 Kara staff 5387 Dec 31 09:15 inflammation-09.csv -rwxr-xr-x@ 1 Kara staff 5402 Dec 31 09:15 inflammation-10.csv -rwxr-xr-x@ 1 Kara staff 5423 Dec 31 09:15 inflammation-11.csv -rwxr-xr-x@ 1 Kara staff 5400 Dec 31 09:15 inflammation-12.csv -rwxr-xr-x@ 1 Kara staff 14 Dec 31 09:15 small-01.csv -rwxr-xr-x@ 1 Kara staff 17 Dec 31 09:15 small-02.csv -rwxr-xr-x@ 1 Kara staff 14 Dec 31 09:15 small-03.csv -rwxr-xr-x@ 1 Kara staff 2115 Jan 2 11:34 species.csv -rwxr-xr-x@ 1 Kara staff 1058902 Jan 2 11:01 surveys.csv <sub>~</sub></p>
+<p>(This workshop won't have these files, but this is some example output):</p>
+<pre class="output"><code>total 2288
+-rwxr-xr-x@ 1 Kara  staff     1715 Dec 31 09:15 car-speeds.csv
+-rwxr-xr-x@ 1 Kara  staff     5374 Dec 31 09:15 inflammation-02.csv
+-rwxr-xr-x@ 1 Kara  staff     5403 Dec 31 09:15 inflammation-03.csv
+-rwxr-xr-x@ 1 Kara  staff     5427 Dec 31 09:15 inflammation-04.csv
+-rwxr-xr-x@ 1 Kara  staff     5405 Dec 31 09:15 inflammation-05.csv
+-rwxr-xr-x@ 1 Kara  staff     5390 Dec 31 09:15 inflammation-06.csv
+-rwxr-xr-x@ 1 Kara  staff     5402 Dec 31 09:15 inflammation-07.csv
+-rwxr-xr-x@ 1 Kara  staff     5412 Dec 31 09:15 inflammation-08.csv
+-rwxr-xr-x@ 1 Kara  staff     5387 Dec 31 09:15 inflammation-09.csv
+-rwxr-xr-x@ 1 Kara  staff     5402 Dec 31 09:15 inflammation-10.csv
+-rwxr-xr-x@ 1 Kara  staff     5423 Dec 31 09:15 inflammation-11.csv
+-rwxr-xr-x@ 1 Kara  staff     5400 Dec 31 09:15 inflammation-12.csv
+-rwxr-xr-x@ 1 Kara  staff       14 Dec 31 09:15 small-01.csv
+-rwxr-xr-x@ 1 Kara  staff       17 Dec 31 09:15 small-02.csv
+-rwxr-xr-x@ 1 Kara  staff       14 Dec 31 09:15 small-03.csv
+-rwxr-xr-x@ 1 Kara  staff     2115 Jan  2 11:34 species.csv
+-rwxr-xr-x@ 1 Kara  staff  1058902 Jan  2 11:01 surveys.csv</code></pre>
 <p>By adding <code>-l</code> to the command, we changed the output to the long format.</p>
 <p>Now let's add more options</p>
 <pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">ls</span> -lt</code></pre>
-<p>{:class=&quot;in&quot;}</p>
 <p>The <code>t</code> options now sorts by time.</p>
 <p>Similarly you can try the following:</p>
 <p>Some options: <em>(list these on the board -- show output of ls -a and explain . and ..)</em></p>
@@ -160,7 +177,14 @@ $ <span class="kw">ls</span> -l</code></pre>
 <li>Date and time the file was last modified</li>
 <li>Name of file.</li>
 </ul>
-<p><strong>Quick exercise:</strong> List the files in your data directory in long format, by file size, with human readable file sizes.</p>
+<div id="challenge-1" class="challenge panel panel-success">
+<div class="panel-heading">
+<h3 id="challenge-1" class="challenge panel panel-success"><span class="glyphicon glyphicon-pencil"></span>Challenge</h3>
+</div>
+<div class="panel-body">
+<p>Pick a directory and list the files in that directory in long format, by file size, with human readable file sizes.</p>
+</div>
+</div>
 <p><strong>Arguments</strong></p>
 <p>Most programs take additional arguments that control their exact behavior. For example, <code>-F</code> and <code>-l</code> are arguments to <code>ls</code>. The <code>ls</code> program, like many programs, take a lot of arguments. But how do we know what the options are to particular commands?</p>
 <p>Most commonly used shell programs have a manual. You can access the manual using the <code>man</code> program. Try entering:</p>
@@ -182,8 +206,8 @@ $ <span class="kw">help</span> cd</code></pre>
 <p><strong>Determining file type</strong></p>
 <pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">file</span> <span class="kw">&lt;</span>filename<span class="kw">&gt;</span></code></pre>
 <p>e.g.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">file</span> surveys.csv</code></pre>
-<pre class="output"><code>surveys.csv: ASCII text</code></pre>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">file</span> gapminder.csv</code></pre>
+<pre class="output"><code>gapminder.csv: ASCII text</code></pre>
 <p>Notice that the function <code>file</code> is unfortunately not defined in GitBash.</p>
 <p>You can have a quick look at the file to see the contents of its first lines using the function <code>head</code> (similar to the <code>head()</code> function in R).</p>
 <pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">head</span> <span class="kw">&lt;</span>filename<span class="kw">&gt;</span></code></pre>

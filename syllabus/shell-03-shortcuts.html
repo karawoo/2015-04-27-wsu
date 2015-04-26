@@ -31,14 +31,14 @@
 <h2 id="shortcuts">Shortcuts</h2>
 <p>There are some shortcuts which you should know about. Dealing with the home directory is very common. So, in the shell the tilde character, <code>~</code>, is a shortcut for your home directory. Navigate to the <code>data</code> directory in your workshop directory, then enter the command:</p>
 <pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">ls</span> ~</code></pre>
-<p>This prints the contents of your home directory, without you having to type the absolute path. The shortcut <code>..</code> always refers to the directory above your current directory. If I'm located at <code>/Users/Kara/Desktop/software-carpentry/data/</code>, thus:</p>
+<p>This prints the contents of your home directory, without you having to type the absolute path. The shortcut <code>..</code> always refers to the directory above your current directory. If I'm located at <code>/Users/Kara/Desktop/swc-wsu/data/</code>, thus:</p>
 <pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">ls</span> ..</code></pre>
-<p>prints the contents of the <code>/Users/Kara/Desktop/software-carpentry/</code>. You can chain these together, so:</p>
+<p>prints the contents of the <code>/Users/Kara/Desktop/swc-wsu/</code>. You can chain these together, so:</p>
 <pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">ls</span> ../../</code></pre>
 <p>prints the contents of <code>/Users/Kara/Desktop</code>. Finally, the special directory <code>.</code> always refers to your current directory. So, <code>ls</code> and <code>ls .</code> do the same thing, they print the contents of the current directory. To summarize, the commands <code>ls ~</code>, <code>ls ~/.</code> and <code>ls /Users/Kara</code> all do exactly the same thing. These shortcuts are not necessary, they are provided for your convenience.</p>
 <h2 id="tab-completion">Tab completion</h2>
 <p>Bash and most other shell programs have tab completion. This means that you can begin typing in a command name or file name and just hit tab to complete entering the text. If there are multiple matches, the shell will show you all available options.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cd</span> ~/Desktop/software-carpentry
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cd</span> ~/Desktop/swc-wsu
 $ <span class="kw">cd</span> f<span class="kw">&lt;</span>tab<span class="kw">&gt;</span></code></pre>
 <p>What just happened?</p>
 <p>Tab completion can also fill in the names of programs. For example, type <code>e&lt;tab&gt;&lt;tab&gt;</code>. You will see the name of every program that starts with an e. One of those is echo. If you enter <code>ech&lt;tab&gt;</code> you will see that <code>tab</code> completion works.</p>
@@ -68,7 +68,7 @@ $ <span class="kw">cd</span> f<span class="kw">&lt;</span>tab<span class="kw">&g
 <p>to see a numbered list of recent commands, including this just issues <code>history</code> command. You can reuse one of these commands directly by referring to the number of that command.</p>
 <p>If your history looked like this:</p>
 <pre class="output"><code>259  cd
-260  ls ~/Desktop/software-carpentry
+260  ls ~/Desktop/swc-wsu
 261  history</code></pre>
 <p>then you could repeat command #260 by simply entering:</p>
 <pre class="sourceCode bash"><code class="sourceCode bash">!<span class="kw">260</span></code></pre>

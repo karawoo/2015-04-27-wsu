@@ -42,7 +42,7 @@
 <p><strong><em>Warning: The shell does not have a recycling bin. So any file removed with <code>rm</code> is gone forever. Use with caution. Remember the -i argument</em></strong></p>
 <p>If you want to create a file with some text, say notes about what you are doing, you'll need to use a text editor. The one we'll be using here is nano.</p>
 <blockquote>
-<h4>Which Editor?</h4>
+<h4 id="which-editor">Which Editor?</h4>
 <p>When we say, &quot;<code>nano</code> is a text editor,&quot; we really do mean &quot;text&quot;: it can only work with plain character data, not tables, images, or any other human-friendly media. We use it in examples because almost anyone can drive it anywhere without training, but please use something more powerful for real work. On Unix systems (such as Linux and Mac OS X), many programmers use <a href="http://www.gnu.org/software/emacs/">Emacs</a> or <a href="http://www.vim.org/">Vim</a> (both of which are completely unintuitive, even by Unix standards), or a graphical editor such as <a href="http://projects.gnome.org/gedit/">Gedit</a>. On Windows, you may wish to use <a href="http://notepad-plus-plus.org/">Notepad++</a>.</p>
 <p>No matter what editor you use, you will need to know where it searches for and saves files. If you start it from the shell, it will (probably) use your current working directory as its default location. If you use your computer's start menu, it may want to save files in your desktop or documents directory instead. You can change this by navigating to another directory the first time you &quot;Save As...&quot;</p>
 </blockquote>
@@ -54,22 +54,30 @@
 <p><strong>Exercise:</strong> View the contents of the file you just created within your terminal (hint: we learned a command for viewing the contents of a file in the last section). Then, open the file, add some more text to it, save it, and exit.</p>
 <h2 id="manipulating-the-file-system">Manipulating the file system</h2>
 <p>Make directories with <code>mkdir</code>. This will create a new directory within the current directory.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">mkdir</span> software-carpentry</code></pre>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">mkdir</span> swc-wsu</code></pre>
 <p>You can create as many folders as you like in a single call.</p>
 <pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">mkdir</span> directory_name_1 directory_name_2 directory_name_3</code></pre>
 <p>To copy and move files, we use the commands <code>cp</code> and <code>mv</code>, followed by the file you want to copy/move, and then the location that you want to copy/move it to.</p>
 <pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cp</span> file1 file2
 $ <span class="kw">mv</span> file1 file2</code></pre>
 <p>So if I am in my data directory and I want to copy or move one of the data files to my desktop, I would do. <em>(Do these, then show them on the Desktop. Do rm ~/Desktop/car-speeds.csv in between.)</em></p>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cp</span> gapminder.csv software-carpentry/
-$ <span class="kw">mv</span> gapminder.csv software-carpentry/</code></pre>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cp</span> gapminder.csv swc-wsu/
+$ <span class="kw">mv</span> gapminder.csv swc-wsu/</code></pre>
 <p><code>cp</code> and <code>mv</code> can also rename files. If you want to rename a file in place, just do:</p>
 <pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">mv</span> file_oldname file_newname</code></pre>
-<p>When we moved <code>gapminder.csv</code> to the <code>software-carpentry</code> folder, if we'd wanted to rename it at the same time we could have done:</p>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cp</span> gapminder.csv software-carpentry/gapminder-2.csv</code></pre>
+<p>When we moved <code>gapminder.csv</code> to the <code>swc-wsu</code> folder, if we'd wanted to rename it at the same time we could have done:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cp</span> gapminder.csv swc-wsu/gapminder-2.csv</code></pre>
 <p>Both <code>cp</code> and <code>mv</code> can be used with directories in addition to files.</p>
 <p>See the <code>man</code> command to get help on options you can use with these commands.</p>
 <p>Remove files with <code>rm</code>.</p>
+<div id="challenge" class="challenge panel panel-success">
+<div class="panel-heading">
+<h3 id="challenge" class="challenge panel panel-success"><span class="glyphicon glyphicon-pencil"></span>Challenge</h3>
+</div>
+<div class="panel-body">
+<p>In the <code>swc-wsu</code> folder create two subdirectories: one called <code>R</code> and one called <code>figures</code>.</p>
+</div>
+</div>
 <h2 id="lets-try-out-some-of-the-commands-above">Let's try out some of the commands above</h2>
 <p>First create a temporary directory on your desktop. <em>Ask for people to call out commands to make directory and navigate into it.</em></p>
 <pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cd</span> ~/Desktop
@@ -84,42 +92,32 @@ $ <span class="kw">cp</span> ~/Desktop/swc-data/*.png .</code></pre>
 <pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">rm</span> scratchpad</code></pre>
 <p>What just happened? If you want to remove everything within scratchpad no matter what, you will need to add the <code>-r</code> argument to function <code>rm</code></p>
 <pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">rm</span> -r scratchpad</code></pre>
-<p><em>Maybe skip the below since it won't work for Windows users</em></p>
-<p>You can also create an entire directory structure with a single call (unfortunately this shortcut does not work in GitBash). e.g.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">cd</span>
-<span class="kw">mkdir</span> -p test_project/<span class="dt">{R,data,output/{data,figures},doc}</span>
-<span class="kw">ls</span> test_project/</code></pre>
-<p>This will create a project called <code>test_project</code> with the following structure:</p>
-<pre class="output"><code>|-- R/
-|-- data/
-|-- output/
-|-- |-- data/
-|-- |-- figures/
-|-- doc/</code></pre>
-<p>One could also create lots of subdirectories at once using curly brackets expansions.</p>
+<p>One could also create lots of subdirectories at once using curly brackets expansions (not entirely sure if this works on Windows).</p>
 <pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">mkdir</span> temp
 <span class="kw">cd</span> temp
 <span class="kw">ls</span>
 <span class="kw">mkdir</span> dir-<span class="dt">{0..10}</span>
 <span class="kw">ls</span>
 <span class="kw">rm</span> -r temp</code></pre>
-<div id="challenge" class="challenge panel panel-success">
+<div id="challenge-1" class="challenge panel panel-success">
 <div class="panel-heading">
-<h3><span class="glyphicon glyphicon-pencil"></span>Challenge</h3>
+<h3 id="challenge-1" class="challenge panel panel-success"><span class="glyphicon glyphicon-pencil"></span>Challenge</h3>
 </div>
 <div class="panel-body">
-<p>Using the shell, create a folder on your desktop for materials from this workshop that looks like this <em>(Draw on the board)</em>.</p>
-</div>
-</div>
-<pre class="output"><code>|-- software-carpentry/
+<p>Using the shell, create a folder on your desktop for materials from this workshop that looks like this:</p>
+<pre class="output"><code>|-- swc-wsu/
 |-- |-- data/
 |-- |-- |-- (data here)
+|-- |-- figures/
+|-- |-- |-- (figures here)
+|-- |-- notes/
 |-- |-- R/
 |-- |-- |-- (R scripts here)
-|-- |-- notes/
-|-- |-- figures/
-|-- |-- |-- (figures here)</code></pre>
+|-- |-- swc-wsu.Rproj</code></pre>
+</div>
+</div>
 <p>Note that this will break read.csv in your R script <em>go to RStudio and demonstrate, then use relative paths to fix loading of data</em></p>
+<p>It is a good idea to keep all the materials for a given project or analysis organized. Separating data (raw vs cleaned), scripts, figures, and manuscript text in a logical project structure will help you and your collaborators understand what is</p>
 <hr />
 <p>Acknowledgments: these lessons were adapted by Kara Woo from materials by <a href="http://nicercode.github.io/2014-02-13-UNSW/lessons/60-shell/">Diego Barneche</a>.</p>
         </div>
