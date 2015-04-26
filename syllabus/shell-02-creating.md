@@ -5,7 +5,8 @@ Title: Creating, moving, and deleting files and directories
 
 # Creating, moving, and deleting files and directories
 
-I'm going to be working mainly in the `Desktop` directory -- recommend that people follow along.
+I'm going to be working mainly in the `Desktop` directory -- recommend that
+people follow along.
 
 ## Creating an empty file
 
@@ -78,7 +79,7 @@ Now use `ls` to view the contents of your desktop. Do you see the file you creat
 Make directories with `mkdir`. This will create a new directory within the current directory.
 
 ~~~ {.bash}
-$ mkdir software-carpentry
+$ mkdir swc-wsu
 ~~~
 
 
@@ -100,8 +101,8 @@ $ mv file1 file2
 So if I am in my data directory and I want to copy or move one of the data files to my desktop, I would do. *(Do these, then show them on the Desktop. Do rm ~/Desktop/car-speeds.csv in between.)*
 
 ~~~ {.bash}
-$ cp gapminder.csv software-carpentry/
-$ mv gapminder.csv software-carpentry/
+$ cp gapminder.csv swc-wsu/
+$ mv gapminder.csv swc-wsu/
 ~~~
 
 
@@ -112,10 +113,10 @@ $ mv file_oldname file_newname
 ~~~
 
 
-When we moved `gapminder.csv` to the `software-carpentry` folder, if we'd wanted to rename it at the same time we could have done:
+When we moved `gapminder.csv` to the `swc-wsu` folder, if we'd wanted to rename it at the same time we could have done:
 
 ~~~ {.bash}
-$ cp gapminder.csv software-carpentry/gapminder-2.csv
+$ cp gapminder.csv swc-wsu/gapminder-2.csv
 ~~~
 
 
@@ -124,6 +125,11 @@ Both `cp` and `mv` can be used with directories in addition to files.
 See the `man` command to get help on options you can use with these commands.
 
 Remove files with `rm`.
+
+> ### Challenge {.challenge}
+>
+> In the `swc-wsu` folder create two subdirectories: one called `R` and one
+> called `figures`.
 
 ## Let's try out some of the commands above
 
@@ -161,31 +167,7 @@ What just happened? If you want to remove everything within scratchpad no matter
 rm -r scratchpad
 ~~~
 
-
-*Maybe skip the below since it won't work for Windows users*
-
-You can also create an entire directory structure with a single call (unfortunately this shortcut does not work in GitBash). e.g.
-
-~~~ {.bash}
-cd
-mkdir -p test_project/{R,data,output/{data,figures},doc}
-ls test_project/
-~~~
-
-
-This will create a project called `test_project` with the following structure:
-
-~~~ {.output}
-|-- R/
-|-- data/
-|-- output/
-|-- |-- data/
-|-- |-- figures/
-|-- doc/
-~~~
-
-
-One could also create lots of subdirectories at once using curly brackets expansions.
+One could also create lots of subdirectories at once using curly brackets expansions (not entirely sure if this works on Windows).
 
 ~~~ {.bash}
 mkdir temp
@@ -200,21 +182,27 @@ rm -r temp
 > ### Challenge {.challenge}
 >
 > Using the shell, create a folder on your desktop for materials from this
-> workshop that looks like this *(Draw on the board)*.
+> workshop that looks like this:
+>
+> ~~~ {.output}
+> |-- swc-wsu/
+> |-- |-- data/
+> |-- |-- |-- (data here)
+> |-- |-- figures/
+> |-- |-- |-- (figures here)
+> |-- |-- notes/
+> |-- |-- R/
+> |-- |-- |-- (R scripts here)
+> |-- |-- swc-wsu.Rproj
+> ~~~
 
-~~~ {.output}
-|-- software-carpentry/
-|-- |-- data/
-|-- |-- |-- (data here)
-|-- |-- R/
-|-- |-- |-- (R scripts here)
-|-- |-- notes/
-|-- |-- figures/
-|-- |-- |-- (figures here)
-~~~
+Note that this will break read.csv in your R script *go to RStudio and
+demonstrate, then use relative paths to fix loading of data*
 
-
-Note that this will break read.csv in your R script *go to RStudio and demonstrate, then use relative paths to fix loading of data*
+It is a good idea to keep all the materials for a given project or analysis
+organized. Separating data (raw vs cleaned), scripts, figures, and manuscript
+text in a logical project structure will help you and your collaborators
+understand what is 
 
 ***
 Acknowledgments: these lessons were adapted by Kara Woo from materials by [Diego Barneche](http://nicercode.github.io/2014-02-13-UNSW/lessons/60-shell/).

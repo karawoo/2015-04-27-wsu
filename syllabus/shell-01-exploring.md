@@ -161,10 +161,10 @@ $ ls ~ /usr
 > 4. Now, without changing your directory (i.e. without using `cd`), list the contents of the data directory again.
 
 ~~~ {.bash}
-$ cd ~/Desktop/swc-data/
+$ cd ~/Desktop/
 $ ls
 $ cd ~
-$ ls ~/Desktop/swc-data
+$ ls ~/Desktop/
 ~~~
 
 ### Arguments
@@ -173,7 +173,7 @@ Now we can start adding more options. Recall that commands can take both options
 
 ~~~ {.bash}
 $ cd
-$ cd ~/Desktop/swc-data
+$ cd ~/Desktop/swc-wsu
 $ ls -l
 ~~~
 
@@ -261,7 +261,10 @@ total 2288
 * Name of file.
 
 
-**Quick exercise:** List the files in your data directory in long format, by file size, with human readable file sizes.
+> ### Challenge {.challenge}
+>
+> Pick a directory and list the files in that directory in long format, by file
+> size, with human readable file sizes.
 
 **Arguments**
 
@@ -304,11 +307,11 @@ $ file <filename>
 e.g.
 
 ~~~ {.bash}
-$ file surveys.csv
+$ file gapminder.csv
 ~~~
 
 ~~~ {.output}
-surveys.csv: ASCII text
+gapminder.csv: ASCII text
 ~~~
 
 Notice that the function `file` is unfortunately not defined in GitBash.

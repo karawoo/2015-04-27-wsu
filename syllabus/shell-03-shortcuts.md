@@ -20,14 +20,14 @@ $ ls ~
 This prints the contents of your home directory, without you having to type the
 absolute path. The shortcut `..` always refers to the directory above your
 current directory. If I'm located at
-`/Users/Kara/Desktop/software-carpentry/data/`, thus:
+`/Users/Kara/Desktop/swc-wsu/data/`, thus:
 
 ~~~ {.bash}
 $ ls ..
 ~~~
 
 
-prints the contents of the `/Users/Kara/Desktop/software-carpentry/`. You can
+prints the contents of the `/Users/Kara/Desktop/swc-wsu/`. You can
 chain these together, so:
 
 ~~~ {.bash}
@@ -49,7 +49,7 @@ entering the text. If there are multiple matches, the shell will show you all
 available options.
 
 ~~~ {.bash}
-$ cd ~/Desktop/software-carpentry
+$ cd ~/Desktop/swc-wsu
 $ cd f<tab>
 ~~~
 
@@ -111,7 +111,7 @@ If your history looked like this:
 
 ~~~ {.output}
 259  cd
-260  ls ~/Desktop/software-carpentry
+260  ls ~/Desktop/swc-wsu
 261  history
 ~~~
 
