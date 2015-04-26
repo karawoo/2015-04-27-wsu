@@ -23,11 +23,36 @@ R is an open source language for statistics and visualization. R is free and
 has a large (and growing) community, making it a popular choice for data
 analysis.
 
+Our real goal isn't to teach you R, but to teach you the basic concepts that all
+programming depends on. We use R in our lessons because:
+
+* we have to use something for examples;
+* it's free, well-documented, and runs almost everywhere;
+* it has a large (and growing) user base among scientists; and
+* it has a large library of external packages available for performing diverse tasks.
+
 RStudio is an IDE, or "integrated development environment" for R. You don't
 need to use RStudio to use R, but it comes with a lot of handy features.
 
-*Point out different RStudio panes and show inputing basic commands directly
-into console; explain difference between console and script*
+Let's start by creating a new RStudio
+[project](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects)
+on our desktop. RStudio helps you organize your work into discrete projects,
+each with their own files and history. You can use RStudio projects to easily
+pick up where you left off with a project or analysis.
+
+Now that we're in our project, let's get familiar with RStudio's layout. First
+there is the R console, which will evaluate the commands we give it. You can
+type directly into the console. For example, R can do arithmetic:
+
+```{r}
+2 + 2
+5 * 6
+10 / 4
+```
+
+The Files tab shows files that are in the directory we are currently in,
+e.g. `Home/Desktop/swc-wsu` -- since we are using an RStudio project, that
+directory should be the same directory that the project is in.
 
 ### Creating objects
 
@@ -52,16 +77,41 @@ y
 You can overwrite an object's value at any time.
 
 ```{r}
-y
-y <- 15
-y
+x
+x <- 15
+x
 ```
+
+Since `y` was defined as `x / 2`, has it changed now that we have changed `x`?
+The answer is **no**. We assigned the value of `x / 2` to `y` when `x` was 8, so
+the *value* that actually got assigned to `y` was 4. This will not change unless
+we reassign `y`.
 
 To view the objects that are in your current environment, use `ls()`.
 
 ```{r}
 ls()
 ```
+
+RStudio also shows thee objects in the Environment panel.
+
+### Writing scripts
+
+One of the major reasons to write code is to keep a record of what you have done
+so that you can repeat it. This way, if a reviewer asks you to slightly modify a
+figure in a manuscript or to clarify how you found a particular result, you
+don't need to remember and recreate every button click, you can just re-run the
+script or modify it if necessary. So far we have been typing directly into the
+console, but to save our work for future use we should write a script. Let's
+create a new script and copy the commands we have already executed from the
+History tab in RStudio.
+
+To execute code in the console from a script you use Ctrl-Enter (or Cmd-Enter on
+a Mac). If code is highlighted it will execute the entire selection; if nothing
+is highlighted it will execute the current line.
+
+From now on we'll be working in a script and executing the code from there. This
+way you will have a record of everything we did in this lesson.
 
 ### Vectors and data types
 
@@ -94,8 +144,8 @@ argument to a function will be an object that you are working with.
 If you want to learn more about a function you can look up the help file for it
 by typing `?functionname`.
 
-There are many functions that allow you to inspect the content of a
-vector. `length()` tells you how many elements are in a particular vector:
+There are many functions that allow you to inspect the content of an
+object. `length()` tells you how many elements are in a particular vector:
 
 ```{r}
 length(weights)
@@ -148,5 +198,6 @@ factors (`factor`).
 
 > ### Challenge {.challenge}
 >
-> Combine objects `x`, `y`, and `weights` into a vector called `z`. Find the
-> mean of this set of numbers (hint: there is a function called `mean()`).
+> * Combine objects `x`, `y`, and `weights` into a vector called `z`.
+> * Find the mean of this set of numbers (hint: there is a function called
+> `mean()`).

@@ -21,7 +21,7 @@ We're now going to work with some actual data. The data we'll be using is the
 information on life expectancy, population, and GDP over time for 142 countries.
 You should have downloaded this data and placed it on your desktop for now.
 
-**A word about working directories**
+### A word about working directories
 
 To load data, R needs to know where to find it. We can use the `getwd()`
 function to figure out what our current *working directory* is.
@@ -45,6 +45,9 @@ However beware that if you write a script that uses `setwd()`, others may not be
 able to run that script on their computers if they have organized their
 directories differently from you.
 
+For now, let's set the working directory back to our project directory since
+that is where the data is.
+
 To load the data into R, we use a function called `read.csv()`.
 
 ```{r, echo = FALSE}
@@ -61,6 +64,9 @@ A very useful function for examining the first few rows of your data is
 ```{r}
 head(gapminder)
 ```
+
+Many of the functions we used to examine vectors can also be applied to data
+frames.
 
 > ### Challenge {.challenge}
 >
