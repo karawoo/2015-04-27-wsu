@@ -75,7 +75,9 @@ especially for complicated operations. Enter `dplyr`. `dplyr` is a package for
 making data manipulation easier.
 
 Packages in R are basically sets of additional functions that let you do more
-stuff in R. You need to install a package and then load it to be able to use it.
+stuff in R. The functions we've been using, like `str()`, come built into R;
+packages give you access to more functions. You need to install a package and
+then load it to be able to use it.
 
 ```{r, eval = FALSE}
 install.packages("dplyr") ## install
@@ -154,7 +156,9 @@ gapminder %>%
 
 In the above we use the pipe to send the `gapminder` data set first through
 `filter`, to keep rows where `pop` was less than 100000, and then through
-`select` to keep the `country` and `year` columns.
+`select` to keep the `country` and `year` columns. When the data frame is being
+passed to the `filter()` and `select()` functions through a pipe, we don't need
+to include it as an argument to these functions anymore.
 
 If we wanted to create a new object with this smaller version of the data we
 could do so by assigning it a new name:
@@ -238,5 +242,10 @@ gapminder %>%
 >
 > Use `group_by()` and `summarize()` to find the mean, min, and max life
 > expectancy for each year.
+
+> ### Challenge {.challenge}
+>
+> Pick a country and find the population for each year in the data prior to
+> 1982. Return a data frame with the columns `country`, `year`, and `pop`.
 
 [Handy dplyr cheatsheet](http://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
