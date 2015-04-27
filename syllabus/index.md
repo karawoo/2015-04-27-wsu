@@ -34,7 +34,7 @@ root: ..
 2. [A better kind of backup](git-01-backup.html)
 3. [Collaborating](git-02-collab.html)
 4. [Conflicts](git-03-conflict.html)
-5. [Open science](git-04-open.html) (optional)
+5. [Open science](git-04-open.html) (if there's time)
 
 #### R
 1. [Functions in R](functions.html)
