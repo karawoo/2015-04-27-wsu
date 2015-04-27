@@ -10,6 +10,7 @@ title: Intro to ggplot2
 >
 > * Basics of ggplot2: aes vs geom
 > * Making scatterplots
+> * Layers and groups
 > * Various one-dimensional summaries
 > * Faceting
 > * Saving plots to a file
@@ -40,13 +41,6 @@ You then need to load the package:
 library(ggplot2)
 ~~~
 
-
-
-~~~{.output}
-Loading required package: methods
-
-~~~
-
 We'll consider the gapminder data from the last lesson. If it's not
 within your R workspace, load it again with `read.csv`.
 
@@ -70,7 +64,7 @@ ggplot(gapminder, aes(x=gdpPercap, y=lifeExp)) + geom_point()
 
 Two key concepts in the grammar of graphics: _aesthetics_ map
 features of the data (for example, the `lifeExp` variable) to features
-of the visualization (for example, the y-axis coordinate, and _geoms_
+of the visualization (for example, the y-axis coordinate), and _geoms_
 concern what actually gets plotted (here, each data point becomes a
 point in the plot).
 
@@ -106,9 +100,13 @@ We could also have used the following:
 p2 + scale_x_log10()
 ~~~
 
+_Scales_ control the aesthetics (the mapping between a column in the
+data and a feature on the plot). More on this later.
+
+
 > ### Challenge {.challenge}
 >
-> Make a scatterplot of `lifeExp` vs `gdpPercap` just for the data for
+> Make a scatterplot of `lifeExp` vs `gdpPercap` with only for the data for
 > China.
 
 
@@ -138,6 +136,16 @@ ggplot(gm_1952, aes(x=gdpPercap, y=lifeExp)) +
 
 <img src="fig/ggplot2-color_by_continent-1.png" title="plot of chunk color_by_continent" alt="plot of chunk color_by_continent" style="display: block; margin: auto;" />
 
+Note that we could have put `color=continent` within the call to
+`ggplot()`: the following is equivalent to the above.
+
+
+~~~{.r}
+ggplot(gm_1952, aes(x=gdpPercap, y=lifeExp, color=continent)) +
+    geom_point() + scale_x_log10()
+~~~
+
+
 > ### Challenge {.challenge}
 >
 > Try out the `size`, `shape`, and `color` aesthetics, both with
@@ -145,7 +153,7 @@ ggplot(gm_1952, aes(x=gdpPercap, y=lifeExp)) +
 > (such as `pop`).
 
 
-### Other geoms
+### Layers
 
 You can use `geom_line` to make a line plot, for example, for China:
 
@@ -158,7 +166,7 @@ p + geom_line()
 
 <img src="fig/ggplot2-china_line-1.png" title="plot of chunk china_line" alt="plot of chunk china_line" style="display: block; margin: auto;" />
 
-You can use both `geom_line` and `geom_point` to make a line plot with
+You can use _both_ `geom_line` and `geom_point` to make a line plot with
 points at the data values.
 
 
@@ -168,14 +176,98 @@ p + geom_line() + geom_point()
 
 <img src="fig/ggplot2-china_line_and_point-1.png" title="plot of chunk china_line_and_point" alt="plot of chunk china_line_and_point" style="display: block; margin: auto;" />
 
-You can color the points by the year
+This brings up another important concept with ggplot2: _layers_. A
+given plot can have multiple layers of geometric objects, plotted one
+on top of the other.
+
+If you make the lines and points different colors, we can see that points are placed
+_on top of_ the lines, since they are in the second layer.
 
 
 ~~~{.r}
-p + geom_point() + aes(color=year) + geom_line()
+p + geom_line(color="lightblue") + geom_point(color="violetred")
 ~~~
 
-<img src="fig/ggplot2-china_line_and_point_color_by_year-1.png" title="plot of chunk china_line_and_point_color_by_year" alt="plot of chunk china_line_and_point_color_by_year" style="display: block; margin: auto;" />
+<img src="fig/ggplot2-china_line_and_point_colored-1.png" title="plot of chunk china_line_and_point_colored" alt="plot of chunk china_line_and_point_colored" style="display: block; margin: auto;" />
+
+If we switch the order of `geom_point()` and `geom_line()`, we'll
+reverse the layers.
+
+
+~~~{.r}
+p + geom_point(color="violetred") + geom_line(color="lightblue")
+~~~
+
+<img src="fig/ggplot2-china_line_and_point_reversed-1.png" title="plot of chunk china_line_and_point_reversed" alt="plot of chunk china_line_and_point_reversed" style="display: block; margin: auto;" />
+
+Note that aesthetics that are included in the call to `ggplot2()` (or
+completely separately) are made to be the defaults for all layers, but
+we can separately control the aesthetics for each layer. For example,
+we could color the points by year:
+
+
+~~~{.r}
+p + geom_line() + geom_point(aes(color=year))
+~~~
+
+<img src="fig/ggplot2-china_line_and_point_colorpointsbyyear-1.png" title="plot of chunk china_line_and_point_colorpointsbyyear" alt="plot of chunk china_line_and_point_colorpointsbyyear" style="display: block; margin: auto;" />
+
+Compare that result to the following:
+
+
+~~~{.r}
+p + geom_line() + geom_point() + aes(color=year)
+~~~
+
+<img src="fig/ggplot2-china_line_and_point_colorallbyyear-1.png" title="plot of chunk china_line_and_point_colorallbyyear" alt="plot of chunk china_line_and_point_colorallbyyear" style="display: block; margin: auto;" />
+
+> ### Challenge {.challenge}
+>
+> Make a plot of `lifeExp` vs `gdpPercap` for China and India, with
+> lines in black but points colored by country.
+
+### Groups
+
+One's first attempt at the previous challenge may look like this:
+
+
+~~~{.r}
+india_china <- filter(gapminder, country=="India" | country=="China")
+p <- ggplot(india_china, aes(y=lifeExp, x=gdpPercap))
+p + geom_line() + geom_point(aes(color=country))
+~~~
+
+<img src="fig/ggplot2-india_china_nogroup-1.png" title="plot of chunk india_china_nogroup" alt="plot of chunk india_china_nogroup" style="display: block; margin: auto;" />
+
+The points get connected left-to-right, which is not what we want.
+
+If we were to make the `color=country` aesthetic _global_, we wouldn't
+have this problem.
+
+
+~~~{.r}
+p + aes(color=country) + geom_line() + geom_point()
+~~~
+
+<img src="fig/ggplot2-india_china_global_color-1.png" title="plot of chunk india_china_global_color" alt="plot of chunk india_china_global_color" style="display: block; margin: auto;" />
+
+Alternatively, we can use the `group` aesthetic, which indicates that
+certain data points go together. This way the lines can be
+a constant color.
+
+
+~~~{.r}
+p + geom_line(aes(group=country)) + geom_point(aes(color=country))
+~~~
+
+<img src="fig/ggplot2-india_china_global_group-1.png" title="plot of chunk india_china_global_group" alt="plot of chunk india_china_global_group" style="display: block; margin: auto;" />
+
+We could also make the group aesthetic global.
+
+
+~~~{.r}
+p + aes(group=country) + geom_line() + geom_point(aes(color=country))
+~~~
 
 
 ### Univariate geoms
@@ -183,7 +275,7 @@ p + geom_point() + aes(color=year) + geom_line()
 We've focused so far on scatterplots, but one can also create
 one-dimensional summaries, such as histograms or boxplots.
 
-For a histogram, you want just the `x` aesthetic, and then use
+For a histogram, you want only the `x` aesthetic, and then use
 `geom_histogram()`, with `binwidth` to define the width of the bins.
 Here's a histogram of `lifeExp` for 2007.
 
@@ -195,8 +287,8 @@ ggplot(gm_2007, aes(x=lifeExp)) + geom_histogram(binwidth=2)
 
 <img src="fig/ggplot2-example_histogram-1.png" title="plot of chunk example_histogram" alt="plot of chunk example_histogram" style="display: block; margin: auto;" />
 
-If you want to compare the distributions for the different continents, it's
-probably best to look at density estimates rather than
+If you want to compare the distributions for the different continents, you
+might look at density estimates rather than
 histograms. `alpha` indicates the _opacity_ (`alpha=1` is completely opaque).
 
 
@@ -216,7 +308,18 @@ ggplot(gm_2007, aes(y=lifeExp, x=continent)) + geom_boxplot()
 
 <img src="fig/ggplot2-boxplot_by_continent-1.png" title="plot of chunk boxplot_by_continent" alt="plot of chunk boxplot_by_continent" style="display: block; margin: auto;" />
 
-But I actually prefer a scatterplot for this:
+> ### Tip {.callout}
+>
+> What if we wanted these to be horizontal rather than vertical?
+>
+> If you [google "`ggplot2 rotate boxplot`"](https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=ggplot2+rotate+boxplot), the first result will get
+> you to the [ggplot2 documentation for `coord_flip()`](http://docs.ggplot2.org/0.9.3.1/coord_flip.html).
+>
+> Try `last_plot() + coord_flip()`.
+
+
+
+I actually prefer a scatterplot for these data:
 
 
 ~~~{.r}
@@ -600,6 +703,7 @@ tick marks and add a black border. You create this as follows.
 theme_karl <-
     function(...)
     theme(panel.border=element_rect(fill=NA, color="black"),
+          strip.background=element_rect(fill="gray80", color="black"),
           axis.ticks.length = grid::unit(0, "cm"), ...)
 ~~~
 
