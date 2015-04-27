@@ -95,6 +95,10 @@ We could also have used the following:
 p2 + scale_x_log10()
 ```
 
+_Scales_ control the aesthetics (the mapping between a column in the
+data and a feature on the plot). More on this later.
+
+
 > ### Challenge {.challenge}
 >
 > Make a scatterplot of `lifeExp` vs `gdpPercap` just for the data for
@@ -120,6 +124,15 @@ ggplot(gm_1952, aes(x=gdpPercap, y=lifeExp)) +
     geom_point() + scale_x_log10() +
     aes(color=continent)
 ```
+
+Note that we could have put `color=continent` within the call to
+`ggplot()`: the following is equivalent to the above.
+
+```{r color_by_continent_alt, eval=FALSE}
+ggplot(gm_1952, aes(x=gdpPercap, y=lifeExp, color=continent)) +
+    geom_point() + scale_x_log10()
+```
+
 
 > ### Challenge {.challenge}
 >
