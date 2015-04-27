@@ -141,7 +141,7 @@ ggplot(gm_1952, aes(x=gdpPercap, y=lifeExp, color=continent)) +
 > (such as `pop`).
 
 
-### Other geoms
+### Layers
 
 You can use `geom_line` to make a line plot, for example, for China:
 
@@ -151,17 +151,82 @@ p <- ggplot(filter(gapminder, country=="China"),
 p + geom_line()
 ```
 
-You can use both `geom_line` and `geom_point` to make a line plot with
+You can use _both_ `geom_line` and `geom_point` to make a line plot with
 points at the data values.
 
 ```{r china_line_and_point}
 p + geom_line() + geom_point()
 ```
 
-You can color the points by the year
+This brings up another important concept with ggplot2: _layers_. A
+given plot can have multiple layers of geometric objects, plotted one
+on top of the other.
 
-```{r china_line_and_point_color_by_year}
-p + geom_point() + aes(color=year) + geom_line()
+If you make the lines and points different colors, we can see that points are placed
+_on top of_ the lines, since they are in the second layer.
+
+```{r china_line_and_point_colored}
+p + geom_line(color="lightblue") + geom_point(color="violetred")
+```
+
+If we switch the order of `geom_point()` and `geom_line()`, we'll
+reverse the layers.
+
+```{r china_line_and_point_reversed}
+p + geom_point(color="violetred") + geom_line(color="lightblue")
+```
+
+Note that aesthetics that are included in the call to `ggplot2()` (or
+completely separately) are made to be the defaults for all layers, but
+we can separately control the aesthetics for each layer. For example,
+we could color the points by year:
+
+```{r china_line_and_point_colorpointsbyyear}
+p + geom_line() + geom_point(aes(color=year))
+```
+
+Compare that result to the following:
+
+```{r china_line_and_point_colorallbyyear}
+p + geom_line() + geom_point() + aes(color=year)
+```
+
+> ### Challenge {.challenge}
+>
+> Make a plot of `lifeExp` vs `gdpPercap` for China and India, with
+> lines in black but points colored by country.
+
+### Groups
+
+One's first attempt at the previous challenge may look like this:
+
+```{r india_china_nogroup}
+india_china <- filter(gapminder, country=="India" | country=="China")
+p <- ggplot(india_china, aes(y=lifeExp, x=gdpPercap))
+p + geom_line() + geom_point(aes(color=country))
+```
+
+The points get connected left-to-right, which is not what we want.
+
+If we were to make the `color=country` aesthetic _global_, we wouldn't
+have this problem.
+
+```{r india_china_global_color}
+p + aes(color=country) + geom_line() + geom_point()
+```
+
+Alternatively, we can use the `group` aesthetic, which indicates that
+certain data points go together. This way the lines can be
+a constant color.
+
+```{r india_china_global_group}
+p + geom_line(aes(group=country)) + geom_point(aes(color=country))
+```
+
+We could also make the group aesthetic global.
+
+```{r india_china_global_globalgroup, eval=FALSE}
+p + aes(group=country) + geom_line() + geom_point(aes(color=country))
 ```
 
 
