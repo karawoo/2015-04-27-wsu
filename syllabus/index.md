@@ -15,6 +15,7 @@ root: ..
 2. [Data in R](R_intro_01_data.html)
 3. [Subsetting and Summarizing data](R_intro_02_subsetting_summarizing.html)
 4. [Graphics with ggplot2](ggplot2.html)
+5. [Control flow](R_intro_03_controlflow.html) (if there's time)
 
 #### Shell
 1. [Introduction](shell-00-intro.html)
@@ -33,7 +34,7 @@ root: ..
 2. [A better kind of backup](git-01-backup.html)
 3. [Collaborating](git-02-collab.html)
 4. [Conflicts](git-03-conflict.html)
-5. [Open science](git-04-open.html) (optional)
+5. [Open science](git-04-open.html) (if there's time)
 
 #### R
 1. [Functions in R](functions.html)
