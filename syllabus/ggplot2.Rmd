@@ -13,6 +13,7 @@ opts_chunk$set(fig.path="fig/ggplot2-", fig.width=11, fig.height=8)
 >
 > * Basics of ggplot2: aes vs geom
 > * Making scatterplots
+> * Layers and groups
 > * Various one-dimensional summaries
 > * Faceting
 > * Saving plots to a file
@@ -101,7 +102,7 @@ data and a feature on the plot). More on this later.
 
 > ### Challenge {.challenge}
 >
-> Make a scatterplot of `lifeExp` vs `gdpPercap` just for the data for
+> Make a scatterplot of `lifeExp` vs `gdpPercap` with only for the data for
 > China.
 
 ```{r china, message=FALSE}
@@ -235,7 +236,7 @@ p + aes(group=country) + geom_line() + geom_point(aes(color=country))
 We've focused so far on scatterplots, but one can also create
 one-dimensional summaries, such as histograms or boxplots.
 
-For a histogram, you want just the `x` aesthetic, and then use
+For a histogram, you want only the `x` aesthetic, and then use
 `geom_histogram()`, with `binwidth` to define the width of the bins.
 Here's a histogram of `lifeExp` for 2007.
 
@@ -244,8 +245,8 @@ gm_2007 <- filter(gapminder, year==2007)
 ggplot(gm_2007, aes(x=lifeExp)) + geom_histogram(binwidth=2)
 ```
 
-If you want to compare the distributions for the different continents, it's
-probably best to look at density estimates rather than
+If you want to compare the distributions for the different continents, you
+might look at density estimates rather than
 histograms. `alpha` indicates the _opacity_ (`alpha=1` is completely opaque).
 
 ```{r example_density}
