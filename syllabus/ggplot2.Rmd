@@ -580,6 +580,7 @@ tick marks and add a black border. You create this as follows.
 theme_karl <-
     function(...)
     theme(panel.border=element_rect(fill=NA, color="black"),
+          strip.background=element_rect(fill="gray80", color="black"),
           axis.ticks.length = grid::unit(0, "cm"), ...)
 ```
 
