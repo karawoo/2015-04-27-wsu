@@ -27,11 +27,11 @@ on Leland Wilkinson's
 learning curve is a bit steep, but ultimately you'll be able to
 produce complex graphs more quickly and easily.
 
-You first need to install the ggplot2 package, including all dependencies:
+You first need to install the ggplot2 package:
 
 
 ~~~{.r}
-install.packages("ggplot2", dependencies=TRUE)
+install.packages("ggplot2")
 ~~~
 
 You then need to load the package:
