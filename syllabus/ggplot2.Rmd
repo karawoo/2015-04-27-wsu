@@ -260,7 +260,18 @@ continuous variable for `y` and a categorical variable for `x`.
 ggplot(gm_2007, aes(y=lifeExp, x=continent)) + geom_boxplot()
 ```
 
-But I actually prefer a scatterplot for this:
+> ### Tip {.callout}
+>
+> What if we wanted these to be horizontal rather than vertical?
+>
+> If you [google "`ggplot2 rotate boxplot`"](https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=ggplot2+rotate+boxplot), the first result will get
+> you to the [ggplot2 documentation for `coord_flip()`](http://docs.ggplot2.org/0.9.3.1/coord_flip.html).
+>
+> Try `last_plot() + coord_flip()`.
+
+
+
+I actually prefer a scatterplot for these data:
 
 ```{r dotplot_by_continent}
 ggplot(gm_2007, aes(y=lifeExp, x=continent)) + geom_point()
