@@ -37,7 +37,7 @@ install.packages("ggplot2", dependencies=TRUE)
 
 You then need to load the package:
 
-```{r load_ggplot2}
+```{r load_ggplot2, message=FALSE}
 library(ggplot2)
 ```
 
