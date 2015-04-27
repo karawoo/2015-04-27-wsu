@@ -15,6 +15,7 @@ root: ..
 2. [Data in R](R_intro_01_data.html)
 3. [Subsetting and Summarizing data](R_intro_02_subsetting_summarizing.html)
 4. [Graphics with ggplot2](ggplot2.html)
+5. [Control flow](R_intro_03_controlflow.html) (if there's time)
 
 #### Shell
 1. [Introduction](shell-00-intro.html)
