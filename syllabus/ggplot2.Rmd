@@ -64,7 +64,7 @@ ggplot(gapminder, aes(x=gdpPercap, y=lifeExp)) + geom_point()
 
 Two key concepts in the grammar of graphics: _aesthetics_ map
 features of the data (for example, the `lifeExp` variable) to features
-of the visualization (for example, the y-axis coordinate, and _geoms_
+of the visualization (for example, the y-axis coordinate), and _geoms_
 concern what actually gets plotted (here, each data point becomes a
 point in the plot).
 
