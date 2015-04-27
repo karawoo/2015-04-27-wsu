@@ -5,7 +5,7 @@ subtitle: Control flow
 minutes: 30
 ---
 
-> ## Learning Objectives {.objectives}
+> ### Learning Objectives {.objectives}
 >
 > * Write conditional statements with `if` and `else`.
 > * Write and understand `while` and `for` loops.
@@ -74,7 +74,7 @@ if (x >= 10) {
 ~~~
 
 
-> #### Tip: pseudo-random numbers {.callout}
+> ### Tip: pseudo-random numbers {.callout}
 >
 > In the above case, the function `rpois` generates a random number following a
 > Poisson distribution with a mean (i.e. lambda) of 8. The function `set.seed`
@@ -107,7 +107,7 @@ x
 [1] FALSE
 ~~~
 
-> #### Challenge 1 {.challenge}
+> ### Challenge 1 {.challenge}
 >
 > Use an `if` statement to print a suitable message
 > reporting whether there are any records from 2002 in
@@ -127,7 +127,7 @@ If your condition evaluates to a vector with more than one logical element,
 the function `if` will still run, but will only evaluate the condition in the first
 element. Here you need to make sure your condition is of length 1.
 
-> #### Tip: `any` and `all` {.callout}
+> ### Tip: `any` and `all` {.callout}
 > The `any` function will return TRUE if at least one
 > TRUE value is found within a vector, otherwise it will return `FALSE`.
 > This can be used in a similar way to the `%in%` operator.
@@ -177,7 +177,7 @@ while(z > 0.1) {
 }
 ~~~
 
-> #### Challenge 2 {.challenge}
+> ### Challenge 2 {.challenge}
 >
 > Use a `while` loop to construct a vector called 'pet_list'
 > with the value:
@@ -248,7 +248,7 @@ This approach can be useful, but 'growing your results' (building
 the result object incrementally) is computationally inefficient, so avoid
 it when you are iterating through a lot of values.
 
-> #### Tip: don't grow your results {.callout}
+> ### Tip: don't grow your results {.callout}
 >
 > One of the biggest things that trips up novices and
 > experienced R users alike, is building a results object
@@ -278,7 +278,7 @@ output_vector2 <- as.vector(output_matrix)
 output_vector2
 ~~~
 
-> #### Challenge 3 {.challenge}
+> ### Challenge 3 {.challenge}
 >
 > Compare the objects output_vector and
 > output_vector2. Are they the same? If not, why not?
@@ -286,21 +286,21 @@ output_vector2
 > the same as output_vector?
 
 
-> #### Challenge 4 {.challenge}
+> ### Challenge 4 {.challenge}
 >
 > Write a script that loops through the `gapminder` data by continent and prints out
 > whether the mean life expectancy is smaller or larger than 50
 > years.
 >
 
-> #### Challenge 5 {.challenge}
+> ### Challenge 5 {.challenge}
 >
 > Modify the script from Challenge 4 to also loop over each
 > country. This time print out whether the life expectancy is
 > smaller than 50, between 50 and 70, or greater than 70.
 >
 
-> #### Challenge 6 - Advanced {.challenge}
+> ### Challenge 6 - Advanced {.challenge}
 >
 > Write a script that loops over each country in the `gapminder` dataset,
 > tests whether the country starts with a 'B', and graphs life expectancy
