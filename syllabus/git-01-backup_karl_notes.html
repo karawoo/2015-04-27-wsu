@@ -40,12 +40,23 @@
 <li>Easy collaboration</li>
 <li><a href="https://github.com/hadley/ggplot2/pull/1089">Contribute to the community</a></li>
 </ul>
+<h3 id="pains-in-git">Pains in git</h3>
+<ul>
+<li>Written by and for very savvy programmers</li>
+<li>Almost useless error messages</li>
+<li>manuals amusingly bad (See the <a href="http://git-man-page-generator.lokaltog.net/">git man page generator</a>)</li>
+</ul>
 <h3 id="explore-github-repositories">Explore GitHub repositories</h3>
 <ul>
-<li>Big</li>
+<li>Big:</li>
+<li><a href="github.com/hadley/ggplot2">ggplot2</a></li>
+<li><a href="https://github.com/hadley/dplyr">dplyr</a></li>
+<li><a href="https://github.com/kbroman/qtl">R/qtl</a></li>
 <li>Small</li>
+<li><code>~/Projects/FuadSurv</code></li>
+<li><a href="https://github.com/kbroman/ProgrammingNotes"><code>ProgrammingNotes</code></a></li>
+<li><a href="https://github.com/kbroman/FruitSnacks"><code>FruitSnacks</code></a></li>
 </ul>
-<h3 id="section"></h3>
 <h3 id="setting-up">Setting Up</h3>
 <p>The first time we use Git on a new machine, we need to configure a few things. Here's how Dracula sets up his new laptop:</p>
 <pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> config --global user.name <span class="st">&quot;Vlad Dracula&quot;</span>
@@ -60,6 +71,7 @@ $ <span class="kw">git</span> config --global core.editor <span class="st">&quot
 <li>that we want to use these settings globally (i.e., for every project),</li>
 </ul>
 <p>The four commands above only need to be run once: the flag <code>--global</code> tells Git to use the settings for every project on this machine.</p>
+<p>The commands modify the file <code>~/.gitconfig</code>. Type <code>less ~/.gitconfig</code> (or <code>cat ~/.gitconfig</code>) to see what they did.</p>
 <h3 id="creating-a-repository">Creating a Repository</h3>
 <pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">mkdir</span> my_new_project
 $ <span class="kw">cd</span> my_new_project
@@ -67,7 +79,8 @@ $ <span class="kw">git</span> init</code></pre>
 <pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cd</span> ~/Desktop/SWC_2015-04-27
 $ <span class="kw">git</span> init</code></pre>
 <p><strong>Whenever you start a new project</strong>, your first thought should be &quot;<code>git init</code>&quot;.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">ls</span> -a</code></pre>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">ls</span> -A
+$ <span class="kw">ls</span> -A .git</code></pre>
 <pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> status</code></pre>
 <h3 id="key-commands">Key commands</h3>
 <ul>
@@ -78,6 +91,25 @@ $ <span class="kw">git</span> init</code></pre>
 <li><p><code>git log</code></p></li>
 <li><code>git add</code></li>
 <li><p><code>git commit</code></p></li>
+</ul>
+<h3 id="play-with-that-fresh-repository">Play with that fresh repository</h3>
+<ul>
+<li>Add a ReadMe file</li>
+<li>status</li>
+<li>add</li>
+<li>status</li>
+<li>commit</li>
+<li>status</li>
+<li>log</li>
+<li>add some more text</li>
+<li>status</li>
+<li>add</li>
+<li>status</li>
+<li>commit</li>
+</ul>
+<h3 id="how-to-get-rid-of-the-whole-git-repository-thing">How to get rid of the whole git repository thing</h3>
+<ul>
+<li><code>rm -rf .git</code></li>
 </ul>
 <h3 id="add-files-from-yesterday">Add files from yesterday</h3>
 <pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> add R/*.R
