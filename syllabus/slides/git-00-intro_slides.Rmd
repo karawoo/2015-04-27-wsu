@@ -1,0 +1,28 @@
+---
+output: slidy_presentation
+---
+
+### Take 30 sec and explain to your neighbor what your project workflow is.
+
+- What tools do you use?
+- How do you keep notes on what you did?
+- Does your workflow change when you collaborate with other people?
+- How do you communicate with your collaboratoes?
+
+---
+
+### What is version control?
+
+---
+
+![PhDComics](../img/phd101212s.gif)
+
+---
+
+### Version control systems
+
+- Automated hard drive backups
+- Copies of folders
+- Numbered zip files
+- Cup of USB sticks
+- Dropbox

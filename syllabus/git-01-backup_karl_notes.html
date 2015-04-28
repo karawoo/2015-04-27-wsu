@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="pandoc">
+    <title>Software Carpentry: Karl notes for git tutorial</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-theme.css" />
+    <link rel="stylesheet" type="text/css" href="css/swc.css" />
+    <link rel="alternate" type="application/rss+xml" title="Software Carpentry Blog" href="http://software-carpentry.org/feed.xml"/>
+    <meta charset="UTF-8" />
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body class="lesson">
+    <div class="container card">
+      <div class="banner">
+        <a href="http://software-carpentry.org" title="Software Carpentry">
+          <img alt="Software Carpentry banner" src="img/software-carpentry-banner.png" />
+        </a>
+      </div>
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+          <h1 class="title">Karl notes for git tutorial</h1>
+          
+<h3 id="why-use-git">Why use git?</h3>
+<ul>
+<li>Keep track of entire history of code</li>
+<li>Easy to explore that history</li>
+<li>Investigate the state of things at any particular time</li>
+<li>Suppose you just realized your script isn't working any more</li>
+<li>What happened? When?</li>
+<li>Collaborate on analysis projects</li>
+<li>Merge simultaneous changes</li>
+<li>Github</li>
+<li>Easy collaboration</li>
+<li><a href="https://github.com/hadley/ggplot2/pull/1089">Contribute to the community</a></li>
+</ul>
+<h3 id="explore-github-repositories">Explore GitHub repositories</h3>
+<ul>
+<li>Big</li>
+<li>Small</li>
+</ul>
+<h3 id="section"></h3>
+<h3 id="setting-up">Setting Up</h3>
+<p>The first time we use Git on a new machine, we need to configure a few things. Here's how Dracula sets up his new laptop:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> config --global user.name <span class="st">&quot;Vlad Dracula&quot;</span>
+$ <span class="kw">git</span> config --global user.email <span class="st">&quot;vlad@tran.sylvan.ia&quot;</span>
+$ <span class="kw">git</span> config --global color.ui <span class="st">&quot;auto&quot;</span>
+$ <span class="kw">git</span> config --global core.editor <span class="st">&quot;nano&quot;</span></code></pre>
+<p>Git commands are written <code>git verb</code>, where <code>verb</code> is what we actually want it to do. In this case, we're telling Git:</p>
+<ul>
+<li>our name and email address,</li>
+<li>to colorize output,</li>
+<li>what our favorite text editor is, and</li>
+<li>that we want to use these settings globally (i.e., for every project),</li>
+</ul>
+<p>The four commands above only need to be run once: the flag <code>--global</code> tells Git to use the settings for every project on this machine.</p>
+<h3 id="creating-a-repository">Creating a Repository</h3>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">mkdir</span> my_new_project
+$ <span class="kw">cd</span> my_new_project
+$ <span class="kw">git</span> init</code></pre>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">cd</span> ~/Desktop/SWC_2015-04-27
+$ <span class="kw">git</span> init</code></pre>
+<p><strong>Whenever you start a new project</strong>, your first thought should be &quot;<code>git init</code>&quot;.</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">ls</span> -a</code></pre>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> status</code></pre>
+<h3 id="key-commands">Key commands</h3>
+<ul>
+<li><code>git config</code></li>
+<li><p><code>git init</code></p></li>
+<li><code>git status</code></li>
+<li><code>git diff</code></li>
+<li><p><code>git log</code></p></li>
+<li><code>git add</code></li>
+<li><p><code>git commit</code></p></li>
+</ul>
+<h3 id="add-files-from-yesterday">Add files from yesterday</h3>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> add R/*.R
+$ <span class="kw">git</span> status
+$ <span class="kw">git</span> add data/gapminder.csv
+$ <span class="kw">git</span> status
+$ <span class="kw">git</span> commit -m <span class="st">&quot;Initial commit&quot;</span></code></pre>
+<h3 id="start-a-new-script">Start a new script</h3>
+<ul>
+<li>First, create an R file and add an outline</li>
+<li>Load data and packages</li>
+<li>Five countries with lowest lifeExp in 1952</li>
+<li>Five countries with highest lifeExp in 1952</li>
+<li>Five countries with lowest lifeExp in 2007</li>
+<li>Five countries with highest lifeExp in 2007</li>
+<li>Plot data for these groups</li>
+<li>Second, add code for 5 lowest and 5 highest in 1952</li>
+<li>Third, add code for...</li>
+<li>Fourth, plot over time</li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r">gapminder %&gt;%
+<span class="st">    </span><span class="kw">filter</span>(year==<span class="dv">1952</span>) %&gt;%
+<span class="st">    </span><span class="kw">arrange</span>(lifeExp) %&gt;%
+<span class="st">    </span><span class="kw">select</span>(country) %&gt;%
+<span class="st">    </span><span class="kw">head</span>(<span class="dv">5</span>)</code></pre>
+<h3 id="commits">Commits</h3>
+<ul>
+<li>What to commit (and what not to commit)?</li>
+<li>How often to commit?</li>
+<li>What should the commit messages be like?</li>
+</ul>
+<h3 id="why-the-addcommit-separation">Why the add/commit separation?</h3>
+<h3 id="looking-at-the-history-with-git-log">Looking at the history with <code>git log</code></h3>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> log
+$ <span class="kw">git</span> log --stat
+$ <span class="kw">git</span> log -3 --stat
+$ <span class="kw">git</span> log -3 --oneline</code></pre>
+<h3 id="changes-to-a-file-with-git-diff">Changes to a file with <code>git diff</code></h3>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> diff
+$ <span class="kw">git</span> diff --staged
+$ <span class="kw">git</span> diff blah.txt
+$ <span class="kw">git</span> diff HEAD~1 blah.R
+$ <span class="kw">git</span> diff HEAD~2 blah.R
+$ <span class="kw">git</span> diff --stat</code></pre>
+<h3 id="fixing-things">Fixing things</h3>
+<ul>
+<li>unstaging files</li>
+<li>fix that last commit message</li>
+<li>dump these changes</li>
+<li>checkout some previous state</li>
+</ul>
+<h3 id="ignoring-things">Ignoring Things</h3>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">nano</span> .gitignore</code></pre>
+        </div>
+      </div>
+      <div class="footer">
+        <a class="label swc-blue-bg" href="http://software-carpentry.org">Software Carpentry</a>
+        <a class="label swc-blue-bg" href="https://github.com/karawoo/2015-04-27-wsu">Source</a>
+        <a class="label swc-blue-bg" href="mailto:admin@software-carpentry.org">Contact</a>
+        <a class="label swc-blue-bg" href="../LICENSE.html">License</a>
+      </div>
+    </div>
+    <!-- Javascript placed at the end of the document so the pages load faster -->
+    <script src="http://software-carpentry.org/v5/js/jquery-1.9.1.min.js"></script>
+    <script src="css/bootstrap/bootstrap-js/bootstrap.js"></script>
+  </body>
+</html>
