@@ -19,13 +19,24 @@ title: Karl notes for git tutorial
   - [Contribute to the community](https://github.com/hadley/ggplot2/pull/1089)
 
 
+### Pains in git
+
+- Written by and for very savvy programmers
+- Almost useless error messages
+- manuals amusingly bad (See the [git man page generator](http://git-man-page-generator.lokaltog.net/))
+
+
 ### Explore GitHub repositories
 
-- Big
+- Big:
+  - [ggplot2](github.com/hadley/ggplot2)
+  - [dplyr](https://github.com/hadley/dplyr)
+  - [R/qtl](https://github.com/kbroman/qtl)
 - Small
+  - `~/Projects/FuadSurv`
+  - [`ProgrammingNotes`](https://github.com/kbroman/ProgrammingNotes)
+  - [`FruitSnacks`](https://github.com/kbroman/FruitSnacks)
 
-
-###
 
 
 ### Setting Up
@@ -54,6 +65,9 @@ we're telling Git:
 The four commands above only need to be run once:
 the flag `--global` tells Git to use the settings for every project on this machine.
 
+The commands modify the file `~/.gitconfig`. Type `less ~/.gitconfig`
+(or `cat ~/.gitconfig`) to see what they did.
+
 
 ### Creating a Repository
 
@@ -73,7 +87,8 @@ $ git init
 
 
 ~~~ {.bash}
-$ ls -a
+$ ls -A
+$ ls -A .git
 ~~~
 
 
@@ -92,6 +107,27 @@ $ git status
 
 - `git add`
 - `git commit`
+
+
+### Play with that fresh repository
+
+- Add a ReadMe file
+- status
+- add
+- status
+- commit
+- status
+- log
+- add some more text
+- status
+- add
+- status
+- commit
+
+### How to get rid of the whole git repository thing
+
+- `rm -rf .git`
+
 
 
 ### Add files from yesterday
@@ -178,4 +214,55 @@ $ git diff --stat
 
 ~~~ {.bash}
 nano .gitignore
+~~~
+
+
+### Notes on R stuff
+
+~~~ {.r}
+gapminder <- read.csv("data/gapminder")
+library(dplyr)
+library(ggplot2)
+
+lo1952 <- gapminder %>%
+              filter(year==1952) %>%
+              arrange(lifeExp) %>%
+              head(5)
+
+hi1952 <- gapminder %>%
+              filter(year==1952) %>%
+              arrange(lifeExp) %>%
+              tail(5)
+
+lo2007 <- gapminder %>%
+              filter(year==2007) %>%
+              arrange(lifeExp) %>%
+              head(5)
+
+hi2007 <- gapminder %>%
+              filter(year==2007) %>%
+              arrange(lifeExp) %>%
+              tail(5)
+
+of_interest <- rbind(lo1952, lo2007, hi1952, hi2007)$country %>% unique
+
+gapminder %>%
+    filter(country %in% of_interest) %>%
+    ggplot(aes(x=year, y=lifeExp, group=country)) +
+    geom_line() +
+    facet_wrap(~country)
+
+ave_lifeExp <- gapminder %>%
+                   group_by(country) %>%
+                   summarize(ave_lifeExp=mean(lifeExp)) %>%
+                   arrange(ave_lifeExp)
+
+gapminder_ro <- gapminder
+gapminder_ro$country <- factor(gapminder$country, levels=ave_lifeExp$country)
+
+gapminder_ro %>%
+    filter(country %in% of_interest) %>%
+    ggplot(aes(x=year, y=lifeExp, group=country)) +
+    geom_line() +
+    facet_wrap(~country)
 ~~~
