@@ -179,3 +179,54 @@ $ git diff --stat
 ~~~ {.bash}
 nano .gitignore
 ~~~
+
+
+### Notes on R stuff
+
+~~~ {.r}
+gapminder <- read.csv("data/gapminder")
+library(dplyr)
+library(ggplot2)
+
+lo1952 <- gapminder %>%
+              filter(year==1952) %>%
+              arrange(lifeExp) %>%
+              head(5)
+
+hi1952 <- gapminder %>%
+              filter(year==1952) %>%
+              arrange(lifeExp) %>%
+              tail(5)
+
+lo2007 <- gapminder %>%
+              filter(year==2007) %>%
+              arrange(lifeExp) %>%
+              head(5)
+
+hi2007 <- gapminder %>%
+              filter(year==2007) %>%
+              arrange(lifeExp) %>%
+              tail(5)
+
+of_interest <- rbind(lo1952, lo2007, hi1952, hi2007)$country %>% unique
+
+gapminder %>%
+    filter(country %in% of_interest) %>%
+    ggplot(aes(x=year, y=lifeExp, group=country)) +
+    geom_line() +
+    facet_wrap(~country)
+
+ave_lifeExp <- gapminder %>%
+                   group_by(country) %>%
+                   summarize(ave_lifeExp=mean(lifeExp)) %>%
+                   arrange(ave_lifeExp)
+
+gapminder_ro <- gapminder
+gapminder_ro$country <- factor(gapminder$country, levels=ave_lifeExp$country)
+
+gapminder_ro %>%
+    filter(country %in% of_interest) %>%
+    ggplot(aes(x=year, y=lifeExp, group=country)) +
+    geom_line() +
+    facet_wrap(~country)
+~~~

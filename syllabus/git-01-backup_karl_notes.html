@@ -131,6 +131,52 @@ $ <span class="kw">git</span> diff --stat</code></pre>
 </ul>
 <h3 id="ignoring-things">Ignoring Things</h3>
 <pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">nano</span> .gitignore</code></pre>
+<h3 id="notes-on-r-stuff">Notes on R stuff</h3>
+<pre class="sourceCode r"><code class="sourceCode r">gapminder &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/gapminder&quot;</span>)
+<span class="kw">library</span>(dplyr)
+<span class="kw">library</span>(ggplot2)
+
+lo1952 &lt;-<span class="st"> </span>gapminder %&gt;%
+<span class="st">              </span><span class="kw">filter</span>(year==<span class="dv">1952</span>) %&gt;%
+<span class="st">              </span><span class="kw">arrange</span>(lifeExp) %&gt;%
+<span class="st">              </span><span class="kw">head</span>(<span class="dv">5</span>)
+
+hi1952 &lt;-<span class="st"> </span>gapminder %&gt;%
+<span class="st">              </span><span class="kw">filter</span>(year==<span class="dv">1952</span>) %&gt;%
+<span class="st">              </span><span class="kw">arrange</span>(lifeExp) %&gt;%
+<span class="st">              </span><span class="kw">tail</span>(<span class="dv">5</span>)
+
+lo2007 &lt;-<span class="st"> </span>gapminder %&gt;%
+<span class="st">              </span><span class="kw">filter</span>(year==<span class="dv">2007</span>) %&gt;%
+<span class="st">              </span><span class="kw">arrange</span>(lifeExp) %&gt;%
+<span class="st">              </span><span class="kw">head</span>(<span class="dv">5</span>)
+
+hi2007 &lt;-<span class="st"> </span>gapminder %&gt;%
+<span class="st">              </span><span class="kw">filter</span>(year==<span class="dv">2007</span>) %&gt;%
+<span class="st">              </span><span class="kw">arrange</span>(lifeExp) %&gt;%
+<span class="st">              </span><span class="kw">tail</span>(<span class="dv">5</span>)
+
+of_interest &lt;-<span class="st"> </span><span class="kw">rbind</span>(lo1952, lo2007, hi1952, hi2007)$country %&gt;%<span class="st"> </span>unique
+
+gapminder %&gt;%
+<span class="st">    </span><span class="kw">filter</span>(country %in%<span class="st"> </span>of_interest) %&gt;%
+<span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>year, <span class="dt">y=</span>lifeExp, <span class="dt">group=</span>country)) +
+<span class="st">    </span><span class="kw">geom_line</span>() +
+<span class="st">    </span><span class="kw">facet_wrap</span>(~country)
+
+ave_lifeExp &lt;-<span class="st"> </span>gapminder %&gt;%
+<span class="st">                   </span><span class="kw">group_by</span>(country) %&gt;%
+<span class="st">                   </span><span class="kw">summarize</span>(<span class="dt">ave_lifeExp=</span><span class="kw">mean</span>(lifeExp)) %&gt;%
+<span class="st">                   </span><span class="kw">arrange</span>(ave_lifeExp)
+
+gapminder_ro &lt;-<span class="st"> </span>gapminder
+gapminder_ro$country &lt;-<span class="st"> </span><span class="kw">factor</span>(gapminder$country, <span class="dt">levels=</span>ave_lifeExp$country)
+
+gapminder_ro %&gt;%
+<span class="st">    </span><span class="kw">filter</span>(country %in%<span class="st"> </span>of_interest) %&gt;%
+<span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>year, <span class="dt">y=</span>lifeExp, <span class="dt">group=</span>country)) +
+<span class="st">    </span><span class="kw">geom_line</span>() +
+<span class="st">    </span><span class="kw">facet_wrap</span>(~country)</code></pre>
         </div>
       </div>
       <div class="footer">
