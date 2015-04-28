@@ -4,11 +4,13 @@ title: Capstone exercise
 root: ..
 ---
 
-#### Using an Rmd file, create a short analysis report using R of the gapminder dataset.
+### Using an Rmd file, create a short analysis report of the gapminder dataset.
 
-1. Pick three countries you are interested in
+Feel free to collaborate!
+
+1. Pick three countries you are interested in.
 2. Write an Rmd script to load the gapminder data file, select all the data for
-   that country (hint, use the filter() function), and use ggplot to make a
+   those countries (hint, use the filter() function), and use ggplot to make a
    three scatter plots (one for each country) that has year on the x-axis and
    GDP on the y axis. Make sure you load all the libraries you might need
    (dplyr, ggplot2, etc). Describe any trends you see for each country using
