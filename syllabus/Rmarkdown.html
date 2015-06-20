@@ -186,7 +186,7 @@ knitr::opts_chunk$set(fig.path="Figs/", message=FALSE, warning=FALSE,
 <p>You can make <em>every</em> number in your report reproducible. Use <code>`r</code> and <code>`</code> for an in-line code chunk, like so: <code>`r round(some_value, 2)`</code>. The code will be executed and replaced with the <em>value</em> of the result.</p>
 <p>Don't let these in-line chunks get split across lines.</p>
 <p>Perhaps precede the paragraph with a larger code chunk that does calculations and defines things, with <code>include=FALSE</code> for that larger chunk (which is the same as <code>echo=FALSE</code> and <code>results=&quot;hide&quot;</code>).</p>
-<p>I'm very particularly about rounding in such situations. I may want <code>2.0</code>, but <code>round(2.03, 1)</code> will give just <code>2</code>.</p>
+<p>I'm very particular about rounding in such situations. I may want <code>2.0</code>, but <code>round(2.03, 1)</code> will give just <code>2</code>.</p>
 <p>The <a href="https://github.com/kbroman/broman/blob/master/R/myround.R"><code>myround</code></a> function in my <a href="https://github.com/kbroman">R/broman</a> package handles this.</p>
 <div id="challenge-3" class="challenge panel panel-success">
 <div class="panel-heading">
